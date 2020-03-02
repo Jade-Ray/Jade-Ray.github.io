@@ -2,3 +2,5 @@
 
 name: Jady Ray, Chd University
 markdown: kramdown
+
+permalink: /blog/:year/:month/:day/:title
