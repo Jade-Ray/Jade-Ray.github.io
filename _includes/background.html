@@ -15,18 +15,19 @@
         for (var x=0; x<columns; x++) {
             drops[x] = 1;
         }
-        setInterval(draw, 20)
+        setInterval(draw, 20);
     }
 
     function draw() {
         ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
         ctx.fillRect(0, 0, c.width, c.height);
+        ctx.fillStyle = "#490";
         ctx.font = font_size + "px arial";
         for (var i = 0; i < drops.length; i++) {
             var text = txts[Math.floor(Math.random() * txts.length)];
-            ctx.fillText(text, i * font_size,  drops[i] * font_size)
+            ctx.fillText(text, i * font_size,  drops[i] * font_size);
             if (drops[i] * font_size > c.height || Math.random() > 0.98) drops[i] = 0;
-            drops[i]++
+            drops[i]++;
         }
     }
     

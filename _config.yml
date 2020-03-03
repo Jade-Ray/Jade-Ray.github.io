@@ -1,11 +1,11 @@
 ## Settings
 markdown: kramdown
-theme: jekyll-theme-hacker
+# theme: jekyll-theme-hacker
 
 ## Global Variables
 title: Jady Ray, Chang'an University
-description: "行百里者半九十<br>
-　∧＿∧<br>
+description: "
+    ∧＿∧ <br>
 （｡･ω･｡)つ━☆.. ・*。<br>
 ⊂　　 ノ 　 　　・゜+.<br>
 　しーＪ　 　　°。+ *´¨)<br>

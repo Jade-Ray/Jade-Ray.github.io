@@ -1,0 +1,61 @@
+@charset "utf-8";
+@import "default_colors";
+
+$color-primary: rgb(52, 165, 7);
+$color-warning: rgb(194, 5, 5);
+$color-bg: rgb(0, 0, 0);
+$color-postbg: rgb(0, 0, 0);
+$image-background: none;
+
+@font-face {
+    font-family: "Fira Code Online";
+    src: url("../assets/fonts/FiraCode-Regular.woff");
+}
+
+$font-family: "Fira Code",
+"Source Code Pro",
+"Fira Code Online",
+"Source-Han-Sans-Medium",
+"PingFang SC",
+"Hiragino Sans GB",
+"Heiti SC",
+"Microsoft YaHei",
+"WenQuanYi Micro Hei",
+Helvetica,
+Tahoma,
+Arial,
+sans-serif;
+$font-size-primary: 18.5px;
+
+.page {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    text-align: center;
+    line-height: 1.2;
+    background-color: $cod-grey;
+    background-image: $image-background;
+    font-size: $font-size-primary;
+    color: $color-primary;
+    font-family: $font-family;
+    .div_bg {
+      top: -4px;
+      height: 100%;
+      width: 100% !important;
+      text-align: left;
+      position: absolute;
+    }
+    .container {
+        overflow: none;
+        top: 2%;
+        margin: 0 auto;
+        height: 97%;
+        width: 84%;
+        max-width: 1240px;
+        position: relative;
+        box-sizing: border-box;
+        background-color: rgba($cod-grey, $alpha: 0.72);
+    }
+}
