@@ -1,23 +1,37 @@
-<!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+---
+common-css:
+- "/assets/css/bootstrap.min.css"
+- "/assets/css/bootstrap-social.css"
+- "/assets/css/style.css"
+common-ext-css:
+- "//maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css"
+common-googlefonts:
+- "Lora:400,700,400italic,700italic"
+- "Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+common-js:
+- "/assets/js/jquery-1.11.2.min.js"
+- "/assets/js/bootstrap.min.js"
+---
 
-    {%- include head.html -%}
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Beautiful Jekyll | MIT license | Copyright Dean Attali 2016 -->
+    {% include head.html %}
 
     <body class="page">
+
         {%- include background.html -%}
-        {%- include header.html -%}
+        {% include nav.html %}
 
         <div class="container">
-            
+
             <div id="main_contant">
                 {{ content }}
             </div>
-
-            {%- include footer.html -%}
-
+            {% include footer.html %}
         </div>
 
-        {%- include scripts.html -%}
+        {% include footer-scripts.html %}
 
     </body>
 

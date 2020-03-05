@@ -6,6 +6,8 @@ $color-warning: rgb(194, 5, 5);
 $color-bg: rgb(0, 0, 0);
 $color-postbg: rgb(0, 0, 0);
 $image-background: none;
+$blockquote-color: $silver-chalice !default;
+$blockquote-border: $dove-grey !default;
 
 @font-face {
     font-family: "Fira Code Online";
@@ -32,8 +34,8 @@ $font-size-primary: 18.5px;
     width: 100%;
     margin: 0;
     padding: 0;
-    position: fixed;
-    text-align: center;
+    position: relative;
+    //text-align: center;
     line-height: 1.2;
     background-color: $cod-grey;
     background-image: $image-background;
@@ -46,10 +48,10 @@ $font-size-primary: 18.5px;
         height: 100%;
         width: 100% !important;
         text-align: left;
-        position: absolute;
+        position: fixed;
     }
 
-    #nav_bar {
+    #navbar-custom {
         text-align: justify;
         margin: 2%;
     }
@@ -58,6 +60,7 @@ $font-size-primary: 18.5px;
         overflow: none;
         top: 2%;
         margin: 0 auto;
+        margin-bottom: 1%;
         height: 97%;
         width: 80%;
         max-width: 1240px;
@@ -67,6 +70,9 @@ $font-size-primary: 18.5px;
 
         #main_contant {
             height: 85%;
+            padding: 2% 5%;
+            text-align: start;
+            line-height: 1.3;
 
             #profile_left {
                 text-align: center;
@@ -89,6 +95,61 @@ $font-size-primary: 18.5px;
                     0 0 5px rgba(181, 232, 83, 0.1),
                     0 0 10px rgba(181, 232, 83, 0.1);
             }
+
+            h1 {
+                text-align: center;
+            }
+
+            dt {
+                font-style: italic;
+                font-weight: bold;
+            }
+
+            ul li {
+                list-style-image: url('../images/bullet.png');
+            }
+
+            blockquote {
+                color: $blockquote-color;
+                padding-left: 10px;
+                border-left: 1px dotted $blockquote-border;
+            }
+
+            pre {
+                background: rgba(0, 0, 0, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                padding: 10px;
+                font-size: 16px;
+                color: #b5e853;
+                border-radius: 2px;
+                word-wrap: normal;
+                overflow: auto;
+                overflow-y: hidden;
+            }
+
+            code.highlighter-rouge {
+                background: rgba(0, 0, 0, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                padding: 0px 3px;
+                margin: 0px -3px;
+                color: #aa759f;
+                border-radius: 2px;
+            }
+
+            table {
+                width: 100%;
+                margin: 0 0 20px 0;
+            }
+
+            th {
+                text-align: left;
+                border-bottom: 1px dashed #b5e853;
+                padding: 5px 10px;
+            }
+
+            td {
+                padding: 5px 10px;
+            }
         }
 
         .footer {
@@ -97,11 +158,18 @@ $font-size-primary: 18.5px;
             position: relative;
             text-align: justify;
         }
+
         hr {
             height: 0;
             border: 0;
             border-bottom: 1px dashed #b5e853;
             color: #b5e853;
-          }
+        }
+
+        a {
+            color: #63c0f5;
+            text-shadow: 0 0 5px rgba(104, 182, 255, 0.5);
+        }
     }
 }
+

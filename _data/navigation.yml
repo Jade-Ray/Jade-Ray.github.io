@@ -1,7 +1,6 @@
 - name: Home
   link: /
-- name: About
-  link: /about.html
-- name: CV
-  link: /cv.html
+- name: Blog
+  link: /blog
 - name: Contect 
+  link: /contect

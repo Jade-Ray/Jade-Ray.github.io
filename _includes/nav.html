@@ -1,0 +1,15 @@
+<div class="container">
+
+    <div id="navbar-custom">
+        <ul class="nav nav-pills pull-right">
+            {%- for item in site.data.navigation -%}
+            <li class{%- if page.url == item.link -%}="active" {%- endif -%}>
+                <a href="{{ item.link | relative_url }}" title="{{ item.name }}">
+                    {{ item.name }}
+                </a>
+            </li>
+            {%- endfor -%}
+        </ul>
+        <h2 class="text-muted"><a href="/">Jade Ray</a></h2>
+    </div>
+</div>
