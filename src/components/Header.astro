@@ -1,0 +1,33 @@
+---
+const nav = [
+  { name: "Home", href: "/" },
+  { name: "Blog", href: "/blog" },
+  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
+] as const;
+---
+
+<header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg">
+  <div
+    class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"
+  >
+    <!-- 站点标题 -->
+    <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
+      Jade-Ray
+    </a>
+
+    <!-- 导航菜单 -->
+    <nav class="flex gap-6">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="text-gray-300 hover:text-blue-400 transition-colors text-lg"
+          >
+            {item.name}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

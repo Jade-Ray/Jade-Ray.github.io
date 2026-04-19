@@ -1,0 +1,67 @@
+---
+import type { CollectionEntry } from "astro:content";
+import RootLayout from "../../layouts/RootLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<RootLayout title={`${post.data.title} | Jade-Ray`}>
+  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8">
+    <!-- Post header -->
+    <header class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-blue-300 mb-3">{post.data.title}</h1>
+      {post.data.subtitle && (
+        <p class="text-xl text-gray-400 mb-3">{post.data.subtitle}</p>
+      )}
+      <time class="text-gray-400">
+        {post.data.date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+      </time>
+    </header>
+
+    <!-- Post body -->
+    <div class="prose prose-invert max-w-none
+      prose-headings:text-blue-200
+      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-white
+      prose-code:text-green-300
+      prose-pre:bg-gray-800
+      prose-blockquote:border-blue-400 prose-blockquote:text-gray-300
+      prose-img:rounded-lg prose-img:mx-auto
+      prose-table:text-sm
+      prose-th:text-blue-200 prose-td:text-gray-300">
+      <Content />
+    </div>
+
+    <!-- Tags -->
+    {
+      post.data.tags && post.data.tags.length > 0 && (
+        <div class="mt-8 flex flex-wrap gap-2">
+          <span class="text-gray-400 text-sm">Tags:</span>
+          {post.data.tags.map((tag: string) => (
+            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-300">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )
+    }
+
+    <!-- Back link -->
+    <div class="mt-10 pt-6 border-t border-gray-700">
+      <a href="/" class="text-blue-400 hover:text-white transition-colors">← Back to Home</a>
+    </div>
+  </article>
+</RootLayout>

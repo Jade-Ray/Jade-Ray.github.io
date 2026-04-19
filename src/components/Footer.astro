@@ -1,0 +1,25 @@
+---
+const config = {
+  github: "https://github.com/Jade-Ray",
+  copyright: `©Jade Ray ${new Date().getFullYear()}`,
+};
+---
+
+<footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10">
+  <div class="max-w-4xl mx-auto px-4 text-center text-gray-400">
+    <p class="mb-2">{config.copyright}</p>
+    <div class="flex justify-center gap-6">
+      <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+        About this site
+      </a>
+      <a
+        href={config.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-blue-400 hover:text-white transition-colors"
+      >
+        GitHub
+      </a>
+    </div>
+  </div>
+</footer>

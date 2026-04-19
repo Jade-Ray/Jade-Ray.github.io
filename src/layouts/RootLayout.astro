@@ -1,0 +1,42 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ThreeBackground from "../components/ThreeBackground.astro";
+import MatrixBackground from "../components/MatrixBackground.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "个人技术博客" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 -->
+  <body class="bg-gray-900 text-white min-h-screen flex flex-col">
+    <!-- Matrix 字符雨背景（底层） -->
+    <MatrixBackground />
+    <!-- 3D 星空背景（备用，如需启用可取消注释） -->
+    {/* <ThreeBackground /> */}
+
+    <!-- 头部导航（内容层） -->
+    <Header />
+
+    <!-- 页面主体内容（居中容器，Tailwind响应式） -->
+    <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">
+      <slot />
+    </main>
+
+    <!-- 底部Footer（新增！Tailwind样式） -->
+    <Footer />
+  </body>
+</html>
