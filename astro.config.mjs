@@ -5,6 +5,8 @@ import remarkGithubAlerts from 'remark-github-alerts';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://jade-ray.github.io',
+  base: '/',
   markdown: {
     remarkPlugins: [remarkGithubAlerts],
   },
