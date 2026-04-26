@@ -1,6 +1,7 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
 import PostList from "../components/PostList.astro";
+import HomeHeroPanel from "../components/HomeHeroPanel.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
@@ -9,39 +10,12 @@ const posts = (await getCollection("posts")).sort(
   (a: CollectionEntry<"posts">, b: CollectionEntry<"posts">) =>
     b.data.date.getTime() - a.data.date.getTime(),
 );
+const latestPosts = posts.slice(0, 8);
 ---
 
 <RootLayout title="Jade-Ray | Home">
-  <!-- Profile card -->
-  <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 mb-10">
-    <div class="flex flex-col md:flex-row gap-8">
-      <!-- ASCII art (left column) -->
-      <div class="md:w-1/3 flex items-center justify-center">
-        <pre class="text-blue-300 text-xs leading-tight select-none whitespace-pre">{`∧＿∧
-（ ｡･ω･｡)つ━☆.. ・*。
- ⊂　　 ノ 　 　　・゜+.
-　しーＪ　 　　°。+ *´¨)
-　　　 　　.· ´¸.·*´¨) ¸.·*¨)
-　　　　　　 　 　(¸.·´ (¸.·'*`}</pre>
-      </div>
-
-      <!-- Bio (right column) -->
-      <div class="md:w-2/3">
-        <hr class="border-gray-600 mb-4" />
-        <p class="text-gray-300 mb-3" style="text-indent: 2em;">
-          Hi there, I'm Jade Ray and a postgraduate in Chang'an University, China, Shaanxi.
-        </p>
-        <p class="text-gray-300 mb-3" style="text-indent: 2em;">
-          The Fool and a breaker of predestination <s>The king in the North!</s> (<em>in my dream</em>).
-          A big fan of intriguing technology, prefer reading and painting.
-        </p>
-        <p class="text-gray-300" style="text-indent: 2em;">
-          Anyway, <s>Winter Is Coming.</s>
-        </p>
-      </div>
-    </div>
-  </div>
+  <HomeHeroPanel />
 
   <!-- Post list -->
-  <PostList posts={posts} />
+  <PostList posts={latestPosts} showAllLink={true} />
 </RootLayout>

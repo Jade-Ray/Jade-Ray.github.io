@@ -1,0 +1,163 @@
+---
+---
+
+<section class="hero-cyber hero-cyber--phase1 rounded-2xl">
+  <div class="hero-cyber__grid grid gap-6 p-5 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-start lg:p-7">
+    <div class="hero-cyber__visual-frame">
+      <pre
+        class="hero-cyber__ascii-art js-ascii-art"
+        data-color-source="/images/bocchi-ref-f0.jpg"
+        data-ascii-cols="50"
+        data-ascii-rows="50"
+        data-ascii-charset="@%#*+=-:. "
+        data-ascii-saturation="1.18"
+        data-ascii-contrast="1.08"
+      ></pre>
+      <div class="hero-cyber__visual-footer" aria-hidden="true"></div>
+    </div>
+
+    <div class="space-y-4 rounded-xl border border-cyan-200/20 bg-slate-950/30 p-5">
+      <p class="text-xs uppercase tracking-[0.24em] text-cyan-200/80">Step 1</p>
+      <h1 class="text-3xl font-semibold leading-tight text-slate-100 sm:text-4xl">ASCII Baseline</h1>
+      <p class="text-sm leading-relaxed text-slate-300/90 sm:text-base">
+        当前阶段仅验证左侧图像到字符画的转换与自适应缩放，不启用滑钮、故障效果或终端动态内容。
+      </p>
+      <ul class="list-disc space-y-1 pl-5 text-sm text-slate-300/80">
+        <li>目标：字符画在卡片内完整可见，不拉伸、不裁切</li>
+        <li>目标：桌面与移动端均保持稳定显示</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const asciiArt = document.querySelector(".js-ascii-art");
+    if (!(asciiArt instanceof HTMLElement)) return;
+
+    const colorSource = asciiArt.dataset.colorSource || "/images/bocchi-ref-f0.jpg";
+    const charset = (asciiArt.dataset.asciiCharset || "@%#*+=-:. ").split("");
+    const saturation = Number.parseFloat(asciiArt.dataset.asciiSaturation || "1");
+    const contrast = Number.parseFloat(asciiArt.dataset.asciiContrast || "1");
+
+    let colCount = Math.max(1, Number.parseInt(asciiArt.dataset.asciiCols || "50", 10) || 50);
+    let rowCount = Math.max(1, Number.parseInt(asciiArt.dataset.asciiRows || "50", 10) || 50);
+
+    const clamp255 = (value) => Math.max(0, Math.min(255, Math.round(value)));
+
+    const renderAsciiGrid = () => {
+      asciiArt.style.setProperty("--ascii-cols", String(colCount));
+      asciiArt.style.setProperty("--ascii-cell-gap", "0px");
+      const lines = [];
+      for (let row = 0; row < rowCount; row += 1) {
+        const chars = [];
+        for (let col = 0; col < colCount; col += 1) {
+          chars.push(`<span class=\"hero-cyber__ascii-glyph hero-cyber__ascii-glyph--space\" data-row=\"${row}\" data-col=\"${col}\" data-raw=\" \"> </span>`);
+        }
+        lines.push(`<span class=\"hero-cyber__ascii-row\">${chars.join("")}</span>`);
+      }
+      asciiArt.innerHTML = lines.join("\n");
+    };
+
+    const imageCache = new Map();
+
+    const loadImage = async (src) => {
+      if (imageCache.has(src)) return imageCache.get(src);
+      const image = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+      imageCache.set(src, image);
+      return image;
+    };
+
+    const fitAsciiArt = () => {
+      const visualFrame = asciiArt.closest(".hero-cyber__visual-frame");
+      if (!(visualFrame instanceof HTMLElement)) return;
+
+      const frameStyle = window.getComputedStyle(visualFrame);
+      const artStyle = window.getComputedStyle(asciiArt);
+      const framePadX = parseFloat(frameStyle.paddingLeft || "0") + parseFloat(frameStyle.paddingRight || "0");
+      const framePadY = parseFloat(frameStyle.paddingTop || "0") + parseFloat(frameStyle.paddingBottom || "0");
+      const padX = parseFloat(artStyle.paddingLeft || "0") + parseFloat(artStyle.paddingRight || "0");
+      const padY = parseFloat(artStyle.paddingTop || "0") + parseFloat(artStyle.paddingBottom || "0");
+
+      const contentMaxWidth = Math.max(visualFrame.clientWidth - framePadX - padX - 6, 40);
+      const contentMaxHeight = Math.max(visualFrame.clientHeight - framePadY - padY - 6, 40);
+      const fontPx = Math.max(2, Math.min(contentMaxWidth / Math.max(colCount, 1), contentMaxHeight / Math.max(rowCount, 1)));
+
+      asciiArt.style.setProperty("--ascii-font-size", `${fontPx}px`);
+      asciiArt.style.setProperty("--ascii-line-height", "1");
+      asciiArt.style.setProperty("--ascii-letter-spacing", "0em");
+      asciiArt.style.setProperty("--ascii-scale-x", "1");
+    };
+
+    const renderAsciiFromImage = async (imageOverride) => {
+      const image = imageOverride instanceof HTMLImageElement ? imageOverride : await loadImage(colorSource);
+      const canvas = document.createElement("canvas");
+      canvas.width = colCount;
+      canvas.height = rowCount;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, colCount, rowCount);
+      ctx.drawImage(image, 0, 0, colCount, rowCount);
+
+      const frame = ctx.getImageData(0, 0, colCount, rowCount);
+      const glyphs = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-glyph"));
+
+      for (let row = 0; row < rowCount; row += 1) {
+        for (let col = 0; col < colCount; col += 1) {
+          const pixelIndex = (row * colCount + col) * 4;
+          const glyphIndex = row * colCount + col;
+
+          let r = frame.data[pixelIndex];
+          let g = frame.data[pixelIndex + 1];
+          let b = frame.data[pixelIndex + 2];
+
+          r = clamp255((r - 128) * contrast + 128);
+          g = clamp255((g - 128) * contrast + 128);
+          b = clamp255((b - 128) * contrast + 128);
+
+          const avg = (r + g + b) / 3;
+          r = clamp255(avg + (r - avg) * saturation);
+          g = clamp255(avg + (g - avg) * saturation);
+          b = clamp255(avg + (b - avg) * saturation);
+
+          const luma = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+          const charIndex = Math.max(0, Math.min(charset.length - 1, Math.floor((1 - luma) * (charset.length - 1))));
+          const char = charset[charIndex] || " ";
+
+          const glyph = glyphs[glyphIndex];
+          if (!(glyph instanceof HTMLElement)) continue;
+
+          glyph.dataset.raw = char;
+          glyph.textContent = char;
+          if (char === " ") glyph.classList.add("hero-cyber__ascii-glyph--space");
+          else glyph.classList.remove("hero-cyber__ascii-glyph--space");
+
+          glyph.style.setProperty("--char-rgb", `${r}, ${g}, ${b}`);
+        }
+      }
+    };
+
+    const init = async () => {
+      const image = await loadImage(colorSource);
+      renderAsciiGrid();
+      fitAsciiArt();
+      await renderAsciiFromImage(image);
+      fitAsciiArt();
+    };
+
+    const onResize = () => fitAsciiArt();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("beforeunload", () => {
+      window.removeEventListener("resize", onResize);
+    }, { once: true });
+
+    void init();
+  })();
+</script>
