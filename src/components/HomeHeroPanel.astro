@@ -123,6 +123,67 @@
       </ul>
     </div>
   </div>
+
+  <!-- Step 4: Terminal-style Introduction -->
+  <div class="hero-cyber hero-cyber--terminal rounded-2xl mt-6">
+    <div class="hero-cyber__terminal-outer">
+      <div class="hero-cyber__terminal-header">
+        <span class="hero-cyber__terminal-title">ascii_hero_terminal.sh</span>
+        <div class="hero-cyber__terminal-controls">
+          <span class="hero-cyber__terminal-dot" style="background-color: #ef4444;"></span>
+          <span class="hero-cyber__terminal-dot" style="background-color: #eab308;"></span>
+          <span class="hero-cyber__terminal-dot" style="background-color: #22c55e;"></span>
+        </div>
+      </div>
+      <div class="hero-cyber__terminal-body js-terminal-body">
+        <div class="hero-cyber__terminal-line js-terminal-output-init">
+          <span class="hero-cyber__terminal-prompt">$ </span><span class="hero-cyber__terminal-command">./boot_ascii_hero.sh</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-1">
+          <span class="hero-cyber__terminal-text">Loading character encoding system...</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-2">
+          <span class="hero-cyber__terminal-text">✓ Charset optimized: @%#*+=-:. </span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-3">
+          <span class="hero-cyber__terminal-text">Building tone mapping cache...</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-4">
+          <span class="hero-cyber__terminal-text">✓ Palette generated: 16 → 256 colors</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-5">
+          <span class="hero-cyber__terminal-text">Initializing dynamic effects engine...</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-6">
+          <span class="hero-cyber__terminal-text">✓ Glitch patterns loaded: rgb, swap, ghost, tear, scan</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-7">
+          <span class="hero-cyber__terminal-text">&nbsp;</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-8">
+          <span class="hero-cyber__terminal-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-9">
+          <span class="hero-cyber__terminal-text">PROJECT: Image-to-ASCII Real-time Converter</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-10">
+          <span class="hero-cyber__terminal-text">TECH: Astro + Canvas API + Dynamic CSS</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-11">
+          <span class="hero-cyber__terminal-text">FEATURES: Resolution Control | Palette Quantization | Glitch Effects</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-12">
+          <span class="hero-cyber__terminal-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-13">
+          <span class="hero-cyber__terminal-text">&nbsp;</span>
+        </div>
+        <div class="hero-cyber__terminal-line js-terminal-output-14">
+          <span class="hero-cyber__terminal-prompt">$ </span><span class="hero-cyber__terminal-command js-terminal-cursor">▎</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script is:inline>
@@ -1158,5 +1219,30 @@
     }, { once: true });
 
     void init();
+  })();
+
+  // Terminal intro animation
+  (() => {
+    const terminalBody = document.querySelector(".js-terminal-body");
+    if (!(terminalBody instanceof HTMLElement)) return;
+
+    const lines = Array.from(terminalBody.querySelectorAll(".js-terminal-output-init, [class*='js-terminal-output-']"));
+    const startDelays = [0, 300, 480, 780, 960, 1260, 1440, 1800, 2040, 2280, 2520, 2760, 3000, 3240];
+
+    lines.forEach((line, index) => {
+      if (!(line instanceof HTMLElement)) return;
+      line.style.opacity = "0";
+      line.style.transition = "opacity 240ms ease-in-out";
+      
+      setTimeout(() => {
+        line.style.opacity = "1";
+      }, startDelays[index] || 0);
+    });
+
+    // Blink cursor at the end
+    const cursor = terminalBody.querySelector(".js-terminal-cursor");
+    if (cursor instanceof HTMLElement) {
+      cursor.style.animation = "hero-cursor-blink 1.2s steps(2) infinite";
+    }
   })();
 </script>
