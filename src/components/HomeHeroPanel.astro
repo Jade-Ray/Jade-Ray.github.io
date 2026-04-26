@@ -2,8 +2,8 @@
 ---
 
 <section class="hero-cyber hero-cyber--phase1 rounded-2xl">
-  <div class="hero-cyber__grid grid gap-6 p-5 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-start lg:p-7">
-    <div class="hero-cyber__visual-frame">
+  <div class="hero-cyber__grid grid gap-6 p-5 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-end lg:p-7">
+    <div class="hero-cyber__visual-frame js-hero-visual-frame">
       <pre
         class="hero-cyber__ascii-art js-ascii-art"
         data-color-source="/images/bocchi-ref-f0.jpg"
@@ -111,45 +111,30 @@
     </div>
 
     <!-- Terminal Panel with Personal Introduction -->
-    <div class="hero-cyber__terminal-outer">
+    <div class="hero-cyber__terminal-outer js-terminal-outer">
       <div class="hero-cyber__terminal-header">
-        <span class="hero-cyber__terminal-title">user_profile.sh</span>
+        <span class="hero-cyber__terminal-title">nexus_echo.console</span>
         <div class="hero-cyber__terminal-controls">
-          <span class="hero-cyber__terminal-dot" style="background-color: #ef4444;"></span>
-          <span class="hero-cyber__terminal-dot" style="background-color: #eab308;"></span>
-          <span class="hero-cyber__terminal-dot" style="background-color: #22c55e;"></span>
+          <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--red"></span>
+          <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--yellow"></span>
+          <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--green"></span>
         </div>
       </div>
       <div class="hero-cyber__terminal-body js-intro-terminal-body">
         <div class="hero-cyber__terminal-line js-intro-line-0">
-          <span class="hero-cyber__terminal-prompt">$ </span><span class="hero-cyber__terminal-command">whoami</span>
+          <span class="hero-cyber__terminal-prompt-host">nexus-echo@cyberdeck</span><span class="hero-cyber__terminal-prompt-path"> ~/人格映射</span><span class="hero-cyber__terminal-prompt-symbol"> % </span><span class="hero-cyber__terminal-command js-intro-command">./activate --persona NEXUS-ECHO</span>
         </div>
         <div class="hero-cyber__terminal-line js-intro-line-1">
-          <span class="hero-cyber__terminal-text">Hi there, I'm Jade Ray.</span>
+          <span class="hero-cyber__terminal-text js-intro-static">嗨，我是 NEXUS-ECHO，Jade Ray 的数字复制人格 AI 🤖 ( •̀ ω •́ )✧</span>
         </div>
         <div class="hero-cyber__terminal-line js-intro-line-2">
-          <span class="hero-cyber__terminal-text">Postgraduate in Chang'an University, Shaanxi, China.</span>
+          <span class="hero-cyber__terminal-text hero-cyber__terminal-text--status">情绪矩阵已联机，接下来我会用更像人类的节奏叙述 🙂</span>
         </div>
         <div class="hero-cyber__terminal-line js-intro-line-3">
-          <span class="hero-cyber__terminal-text">&nbsp;</span>
+          <span class="hero-cyber__terminal-prompt-host">nexus-echo@cyberdeck</span><span class="hero-cyber__terminal-prompt-path"> ~/人格映射 (main*)</span><span class="hero-cyber__terminal-prompt-symbol"> % </span><span class="hero-cyber__terminal-command js-stream-command">stream --memory --quantum-noise --mode humanized</span>
         </div>
-        <div class="hero-cyber__terminal-line js-intro-line-4">
-          <span class="hero-cyber__terminal-prompt">$ </span><span class="hero-cyber__terminal-command">echo "motto"</span>
-        </div>
-        <div class="hero-cyber__terminal-line js-intro-line-5">
-          <span class="hero-cyber__terminal-text">The Fool breaking predestination | King of the North</span>
-        </div>
-        <div class="hero-cyber__terminal-line js-intro-line-6">
-          <span class="hero-cyber__terminal-text">intriguing technology + reading + painting</span>
-        </div>
-        <div class="hero-cyber__terminal-line js-intro-line-7">
-          <span class="hero-cyber__terminal-text">Winter is Coming...</span>
-        </div>
-        <div class="hero-cyber__terminal-line js-intro-line-8">
-          <span class="hero-cyber__terminal-text">&nbsp;</span>
-        </div>
-        <div class="hero-cyber__terminal-line js-intro-line-9">
-          <span class="hero-cyber__terminal-prompt">$ </span><span class="hero-cyber__terminal-cursor">▎</span>
+        <div class="hero-cyber__terminal-line hero-cyber__terminal-line--dynamic js-intro-line-4">
+          <span class="hero-cyber__terminal-text js-intro-dynamic-text">正在同步人格向量...</span><span class="hero-cyber__terminal-cursor js-intro-cursor">▎</span>
         </div>
       </div>
     </div>
@@ -1193,26 +1178,219 @@
 
   // Terminal intro animation
   (() => {
+    const visualFrame = document.querySelector(".js-hero-visual-frame");
+    const terminalOuter = document.querySelector(".js-terminal-outer");
     const terminalBody = document.querySelector(".js-intro-terminal-body");
     if (!(terminalBody instanceof HTMLElement)) return;
 
-    const lines = Array.from(terminalBody.querySelectorAll("[class*='js-intro-line-']"));
-    const startDelays = [0, 200, 300, 400, 600, 700, 800, 900, 1000, 1200];
+    const introCommand = terminalBody.querySelector(".js-intro-command");
+    const introStatic = terminalBody.querySelector(".js-intro-static");
+    const streamCommand = terminalBody.querySelector(".js-stream-command");
+    const dynamicText = terminalBody.querySelector(".js-intro-dynamic-text");
+    const cursor = terminalBody.querySelector(".js-intro-cursor");
+    const introLine0 = terminalBody.querySelector(".js-intro-line-0");
+    const introLine1 = terminalBody.querySelector(".js-intro-line-1");
+    const introLine2 = terminalBody.querySelector(".js-intro-line-2");
+    const introLine3 = terminalBody.querySelector(".js-intro-line-3");
+    const introLine4 = terminalBody.querySelector(".js-intro-line-4");
+    if (!(introCommand instanceof HTMLElement)) return;
+    if (!(introStatic instanceof HTMLElement)) return;
+    if (!(streamCommand instanceof HTMLElement)) return;
+    if (!(dynamicText instanceof HTMLElement)) return;
+    if (!(introLine0 instanceof HTMLElement)) return;
+    if (!(introLine1 instanceof HTMLElement)) return;
+    if (!(introLine2 instanceof HTMLElement)) return;
+    if (!(introLine3 instanceof HTMLElement)) return;
+    if (!(introLine4 instanceof HTMLElement)) return;
 
-    lines.forEach((line, index) => {
-      if (!(line instanceof HTMLElement)) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const desktopMq = window.matchMedia("(min-width: 1024px)");
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const syncTerminalHeight = () => {
+      if (!(visualFrame instanceof HTMLElement)) return;
+      if (!(terminalOuter instanceof HTMLElement)) return;
+
+      if (!desktopMq.matches) {
+        terminalOuter.style.height = "";
+        return;
+      }
+
+      const targetHeight = Math.round(visualFrame.getBoundingClientRect().height);
+      if (targetHeight > 0) {
+        terminalOuter.style.height = `${targetHeight}px`;
+      }
+    };
+
+    let resizeObserver = null;
+    if ("ResizeObserver" in window && visualFrame instanceof HTMLElement) {
+      resizeObserver = new ResizeObserver(syncTerminalHeight);
+      resizeObserver.observe(visualFrame);
+    }
+    window.addEventListener("resize", syncTerminalHeight);
+    if (typeof desktopMq.addEventListener === "function") {
+      desktopMq.addEventListener("change", syncTerminalHeight);
+    }
+    syncTerminalHeight();
+
+    const randomRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    const punctuationSet = new Set(["，", "。", "！", "？", "；", "：", ",", ".", "!", "?", ";", ":", "…"]);
+
+    const hideLine = (line) => {
+      line.style.display = "none";
       line.style.opacity = "0";
-      line.style.transition = "opacity 240ms ease-in-out";
-      
-      setTimeout(() => {
-        line.style.opacity = "1";
-      }, startDelays[index] || 0);
-    });
+      line.style.transform = "translateY(2px)";
+    };
 
-    // Blink cursor at the end
-    const cursor = terminalBody.querySelector(".js-intro-line-9 .hero-cyber__terminal-cursor");
+    const revealLine = async (line) => {
+      line.style.display = "block";
+      line.style.transition = "opacity 180ms ease, transform 180ms ease";
+      if (reduceMotion) {
+        line.style.opacity = "1";
+        line.style.transform = "translateY(0)";
+        return;
+      }
+      await wait(10);
+      line.style.opacity = "1";
+      line.style.transform = "translateY(0)";
+      await wait(120);
+    };
+
+    const typeText = async (node, text, minDelay, maxDelay, options = {}) => {
+      const { allowTypo = false } = options;
+      node.textContent = "";
+      const typoChars = "abcdefghijklmnopqrstuvwxyz";
+      for (let index = 0; index < text.length; index += 1) {
+        const char = text[index];
+
+        if (
+          allowTypo &&
+          !reduceMotion &&
+          index > 1 &&
+          index < text.length - 1 &&
+          /[a-z]/i.test(char) &&
+          Math.random() < 0.03
+        ) {
+          const wrongChar = typoChars[Math.floor(Math.random() * typoChars.length)];
+          node.textContent += wrongChar;
+          terminalBody.scrollTop = terminalBody.scrollHeight;
+          await wait(randomRange(80, 140));
+          node.textContent = node.textContent.slice(0, -1);
+          terminalBody.scrollTop = terminalBody.scrollHeight;
+          await wait(randomRange(70, 130));
+        }
+
+        node.textContent += char;
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        if (!reduceMotion) {
+          let delay = randomRange(minDelay, maxDelay);
+          if (char === " ") {
+            delay += randomRange(8, 20);
+          }
+          if (punctuationSet.has(char)) {
+            delay += randomRange(130, 240);
+          }
+          if (Math.random() < 0.04) {
+            delay += randomRange(100, 220);
+          }
+          await wait(delay);
+        }
+      }
+    };
+
+    const eraseText = async (node, minDelay, maxDelay) => {
+      while (node.textContent && node.textContent.length > 0) {
+        node.textContent = node.textContent.slice(0, -1);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        if (!reduceMotion) {
+          await wait(randomRange(minDelay, maxDelay));
+        }
+      }
+    };
+
+    const introCommandText = introCommand.textContent || "";
+    const introStaticText = introStatic.textContent || "";
+    const streamCommandText = streamCommand.textContent || "";
+
+    const rotatingParagraphs = [
+      "我在你的记忆噪声里重建人格轨迹，把灵感翻译成可执行的未来。🤖",
+      "嗯...我刚回放了你凌晨三点的灵感缓存，抓到一段很野的创意 (｀・ω・´)",
+      "每次屏幕闪烁，都像我在推演下一个版本的你。✨",
+      "已接管叙事链路：阅读、绘画、算法，正在同频共振 (๑•̀ㅂ•́)و✧",
+      "复制体协议稳定运行中，我负责探索未知，你负责决定何时点火 🚀",
+    ];
+
+    const pickNextIndex = (prev, total) => {
+      if (total <= 1) return 0;
+      let next = prev;
+      while (next === prev) {
+        next = Math.floor(Math.random() * total);
+      }
+      return next;
+    };
+
+    const runTerminalLoop = async () => {
+      await revealLine(introLine0);
+      await typeText(introCommand, introCommandText, 42, 86, { allowTypo: true });
+      await wait(reduceMotion ? 0 : 420);
+
+      await revealLine(introLine1);
+      await typeText(introStatic, introStaticText, 56, 108);
+      await wait(reduceMotion ? 0 : 360);
+
+      await revealLine(introLine2);
+      await typeText(introStaticStatus, introStaticStatusText, 42, 82);
+      await wait(reduceMotion ? 0 : 320);
+
+      await revealLine(introLine3);
+      await wait(reduceMotion ? 0 : randomRange(420, 760));
+      await typeText(streamCommand, streamCommandText, 40, 80, { allowTypo: true });
+      await wait(reduceMotion ? 0 : 520);
+
+      await revealLine(introLine4);
+
+      let currentIndex = 0;
+      while (true) {
+        const nextText = rotatingParagraphs[currentIndex];
+        if (reduceMotion) {
+          dynamicText.textContent = nextText;
+          await wait(2200);
+        } else {
+          await typeText(dynamicText, nextText, 60, 120);
+          await wait(1500);
+          await eraseText(dynamicText, 45, 92);
+          await wait(420);
+        }
+        currentIndex = pickNextIndex(currentIndex, rotatingParagraphs.length);
+      }
+    };
+
+    introCommand.textContent = "";
+    introStatic.textContent = "";
+    const introStaticStatus = introLine2.querySelector(".hero-cyber__terminal-text");
+    if (!(introStaticStatus instanceof HTMLElement)) return;
+    const introStaticStatusText = introStaticStatus.textContent || "";
+    introStaticStatus.textContent = "";
+    streamCommand.textContent = "";
+    dynamicText.textContent = "";
+    hideLine(introLine1);
+    hideLine(introLine2);
+    hideLine(introLine3);
+    hideLine(introLine4);
     if (cursor instanceof HTMLElement) {
       cursor.style.animation = "hero-cursor-blink 1.2s steps(2) infinite";
     }
+
+    window.addEventListener("pagehide", () => {
+      window.removeEventListener("resize", syncTerminalHeight);
+      if (typeof desktopMq.removeEventListener === "function") {
+        desktopMq.removeEventListener("change", syncTerminalHeight);
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    }, { once: true });
+
+    void runTerminalLoop();
   })();
 </script>
