@@ -13,18 +13,113 @@
         data-ascii-saturation="1.18"
         data-ascii-contrast="1.08"
       ></pre>
-      <div class="hero-cyber__visual-footer" aria-hidden="true"></div>
+      <div class="hero-cyber__controls js-ascii-controls">
+        <button
+          class="hero-cyber__controls-toggle js-ascii-controls-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="ascii-controls-panel"
+        >
+          <span class="hero-cyber__controls-toggle-label">Controls</span>
+          <span class="hero-cyber__controls-toggle-meta">Tune ASCII</span>
+        </button>
+      <div id="ascii-controls-panel" class="hero-cyber__visual-footer js-ascii-controls-panel" aria-hidden="true">
+        <div class="hero-cyber__resolution-meta">
+          <span class="hero-cyber__resolution-label">Resolution</span>
+          <output class="hero-cyber__resolution-value js-ascii-resolution-value" for="ascii-resolution">50 x 50</output>
+        </div>
+        <input
+          id="ascii-resolution"
+          class="hero-cyber__resolution-slider js-ascii-resolution"
+          type="range"
+          min="40"
+          max="100"
+          step="20"
+          value="60"
+          aria-label="ASCII resolution"
+        />
+        <div class="hero-cyber__resolution-scale js-resolution-scale" aria-hidden="true">
+          <span data-step="40" style="--tick-pos: 0%">40</span>
+          <span data-step="60" style="--tick-pos: 33.3333%">60</span>
+          <span data-step="80" style="--tick-pos: 66.6667%">80</span>
+          <span data-step="100" style="--tick-pos: 100%">100</span>
+        </div>
+        <div class="hero-cyber__resolution-meta">
+          <span class="hero-cyber__resolution-label">Colors</span>
+          <output class="hero-cyber__resolution-value js-ascii-palette-value" for="ascii-palette">256 colors</output>
+        </div>
+        <input
+          id="ascii-palette"
+          class="hero-cyber__resolution-slider js-ascii-palette"
+          type="range"
+          min="0"
+          max="4"
+          step="1"
+          value="4"
+          aria-label="ASCII color count"
+        />
+        <div class="hero-cyber__resolution-scale js-palette-scale" aria-hidden="true">
+          <span data-step="16" style="--tick-pos: 0%">16</span>
+          <span data-step="32" style="--tick-pos: 25%">32</span>
+          <span data-step="64" style="--tick-pos: 50%">64</span>
+          <span data-step="128" style="--tick-pos: 75%">128</span>
+          <span data-step="256" style="--tick-pos: 100%">256</span>
+        </div>
+        <div class="hero-cyber__resolution-meta">
+          <span class="hero-cyber__resolution-label">Saturation</span>
+          <output class="hero-cyber__resolution-value js-ascii-saturation-value" for="ascii-saturation">1.18x</output>
+        </div>
+        <input
+          id="ascii-saturation"
+          class="hero-cyber__resolution-slider js-ascii-saturation"
+          type="range"
+          min="0"
+          max="200"
+          step="5"
+          value="118"
+          aria-label="ASCII color saturation"
+        />
+        <div class="hero-cyber__resolution-scale js-saturation-scale" aria-hidden="true">
+          <span data-step="0" style="--tick-pos: 0%">0</span>
+          <span data-step="1" style="--tick-pos: 50%">1</span>
+          <span data-step="1.5" style="--tick-pos: 75%">1.5</span>
+          <span data-step="2" style="--tick-pos: 100%">2</span>
+        </div>
+        <div class="hero-cyber__resolution-meta">
+          <span class="hero-cyber__resolution-label">Theme</span>
+          <output class="hero-cyber__resolution-value js-ascii-theme-value">Cyber</output>
+        </div>
+        <div class="hero-cyber__theme-row">
+          <select class="hero-cyber__theme-select js-ascii-theme" aria-label="ASCII palette theme">
+            <option value="cyber">Cyber</option>
+            <option value="nord">Nord</option>
+            <option value="gruvbox">Gruvbox</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="hero-cyber__theme-custom js-theme-custom-wrap" hidden>
+          <input
+            class="hero-cyber__theme-custom-input js-ascii-custom-palette"
+            type="text"
+            aria-label="Custom palette colors"
+            placeholder="#0b1020, #1e3a8a, #f59e0b, #fef3c7"
+          />
+          <button class="hero-cyber__theme-custom-apply js-apply-custom-palette" type="button">Apply</button>
+        </div>
+      </div>
+      </div>
     </div>
 
     <div class="space-y-4 rounded-xl border border-cyan-200/20 bg-slate-950/30 p-5">
-      <p class="text-xs uppercase tracking-[0.24em] text-cyan-200/80">Step 1</p>
-      <h1 class="text-3xl font-semibold leading-tight text-slate-100 sm:text-4xl">ASCII Baseline</h1>
+      <p class="text-xs uppercase tracking-[0.24em] text-cyan-200/80">Step 2</p>
+      <h1 class="text-3xl font-semibold leading-tight text-slate-100 sm:text-4xl">ASCII Resolution Control</h1>
       <p class="text-sm leading-relaxed text-slate-300/90 sm:text-base">
-        当前阶段仅验证左侧图像到字符画的转换与自适应缩放，不启用滑钮、故障效果或终端动态内容。
+        当前阶段在已经稳定的字符画基线上加入分辨率与颜色数量滑钮，用于测试采样密度与调色板量化的组合效果。
       </p>
       <ul class="list-disc space-y-1 pl-5 text-sm text-slate-300/80">
-        <li>目标：字符画在卡片内完整可见，不拉伸、不裁切</li>
-        <li>目标：桌面与移动端均保持稳定显示</li>
+        <li>目标：分辨率变化时保持 1:1 方格比例与居中布局</li>
+        <li>目标：滑钮切换后快速完成重采样与重新缩放</li>
+        <li>目标：颜色数量变化时保留明暗结构并验证低色盘观感</li>
       </ul>
     </div>
   </div>
@@ -34,20 +129,377 @@
   (() => {
     const asciiArt = document.querySelector(".js-ascii-art");
     if (!(asciiArt instanceof HTMLElement)) return;
+    const visualFrame = asciiArt.closest(".hero-cyber__visual-frame");
+    const controlsWrap = document.querySelector(".js-ascii-controls");
+    const controlsToggle = document.querySelector(".js-ascii-controls-toggle");
+    const controlsPanel = document.querySelector(".js-ascii-controls-panel");
+
+    const resolutionInput = document.querySelector(".js-ascii-resolution");
+    const resolutionValue = document.querySelector(".js-ascii-resolution-value");
+    const resolutionScale = document.querySelector(".js-resolution-scale");
+    const paletteInput = document.querySelector(".js-ascii-palette");
+    const paletteValue = document.querySelector(".js-ascii-palette-value");
+    const paletteScale = document.querySelector(".js-palette-scale");
+    const saturationInput = document.querySelector(".js-ascii-saturation");
+    const saturationValue = document.querySelector(".js-ascii-saturation-value");
+    const saturationScale = document.querySelector(".js-saturation-scale");
+    const themeValue = document.querySelector(".js-ascii-theme-value");
+    const themeSelect = document.querySelector(".js-ascii-theme");
+    const customThemeWrap = document.querySelector(".js-theme-custom-wrap");
+    const customPaletteInput = document.querySelector(".js-ascii-custom-palette");
+    const customPaletteApply = document.querySelector(".js-apply-custom-palette");
+
+    let controlsOpen = false;
+
+    const setControlsOpen = (nextOpen) => {
+      controlsOpen = nextOpen;
+      if (controlsWrap instanceof HTMLElement) {
+        controlsWrap.classList.toggle("is-open", nextOpen);
+      }
+      if (visualFrame instanceof HTMLElement) {
+        visualFrame.classList.toggle("is-controls-open", nextOpen);
+      }
+      if (controlsToggle instanceof HTMLButtonElement) {
+        controlsToggle.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+      }
+      if (controlsPanel instanceof HTMLElement) {
+        controlsPanel.setAttribute("aria-hidden", nextOpen ? "false" : "true");
+      }
+    };
 
     const colorSource = asciiArt.dataset.colorSource || "/images/bocchi-ref-f0.jpg";
     const charset = (asciiArt.dataset.asciiCharset || "@%#*+=-:. ").split("");
-    const saturation = Number.parseFloat(asciiArt.dataset.asciiSaturation || "1");
+    const baseSaturation = Number.parseFloat(asciiArt.dataset.asciiSaturation || "1");
     const contrast = Number.parseFloat(asciiArt.dataset.asciiContrast || "1");
 
     let colCount = Math.max(1, Number.parseInt(asciiArt.dataset.asciiCols || "50", 10) || 50);
     let rowCount = Math.max(1, Number.parseInt(asciiArt.dataset.asciiRows || "50", 10) || 50);
 
     const clamp255 = (value) => Math.max(0, Math.min(255, Math.round(value)));
+    const resolutionSteps = [40, 60, 80, 100];
+    const paletteSteps = [16, 32, 64, 128, 256];
+    const clampResolution = (value) => {
+      const target = Number.isFinite(value) ? value : 60;
+      let closest = resolutionSteps[0];
+      let distance = Math.abs(target - closest);
+
+      for (const step of resolutionSteps) {
+        const nextDistance = Math.abs(target - step);
+        if (nextDistance < distance) {
+          closest = step;
+          distance = nextDistance;
+        }
+      }
+
+      return closest;
+    };
+
+    const clampPalette = (value) => {
+      const target = Number.isFinite(value) ? value : 256;
+      let closest = paletteSteps[0];
+      let distance = Math.abs(target - closest);
+
+      for (const step of paletteSteps) {
+        const nextDistance = Math.abs(target - step);
+        if (nextDistance < distance) {
+          closest = step;
+          distance = nextDistance;
+        }
+      }
+
+      return closest;
+    };
+    const clampSaturation = (value) => {
+      const target = Number.isFinite(value) ? value : baseSaturation;
+      return Math.max(0, Math.min(2, target));
+    };
+
+    const formatSaturation = (value) => `${value.toFixed(2)}x`;
+    const resolveGapRatio = (resolution) => {
+      if (resolution <= 40) return 0.02;
+      if (resolution <= 60) return 0.045;
+      if (resolution <= 80) return 0.065;
+      return 0.08;
+    };
+
+    const resolveToneBoost = (resolution) => {
+      const lowResFactor = Math.max(0, Math.min(1, (60 - resolution) / 20));
+      return {
+        saturation: saturationLevel + lowResFactor * 0.12,
+        contrast: contrast + lowResFactor * 0.15,
+      };
+    };
+
+    const syncResolutionUi = (value) => {
+      if (resolutionInput instanceof HTMLInputElement) {
+        resolutionInput.value = String(value);
+      }
+      if (resolutionValue instanceof HTMLOutputElement) {
+        resolutionValue.value = `${value} x ${value}`;
+        resolutionValue.textContent = `${value} x ${value}`;
+      }
+      if (resolutionScale instanceof HTMLElement) {
+        for (const tick of resolutionScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          const step = Number.parseInt(tick.dataset.step || "", 10);
+          tick.classList.toggle("is-active", step === value);
+        }
+      }
+    };
+
+    const syncPaletteUi = (colorCount) => {
+      const normalized = clampPalette(colorCount);
+      if (paletteInput instanceof HTMLInputElement) {
+        const sliderIndex = Math.max(0, paletteSteps.indexOf(normalized));
+        paletteInput.value = String(sliderIndex);
+      }
+      if (paletteValue instanceof HTMLOutputElement) {
+        paletteValue.value = `${normalized} colors`;
+        paletteValue.textContent = `${normalized} colors`;
+      }
+      if (paletteScale instanceof HTMLElement) {
+        for (const tick of paletteScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          const step = Number.parseInt(tick.dataset.step || "", 10);
+          tick.classList.toggle("is-active", step === normalized);
+        }
+      }
+    };
+
+    const syncSaturationUi = (nextValue) => {
+      const normalized = clampSaturation(nextValue);
+      if (saturationInput instanceof HTMLInputElement) {
+        saturationInput.value = String(Math.round(normalized * 100));
+      }
+      if (saturationValue instanceof HTMLOutputElement) {
+        const text = formatSaturation(normalized);
+        saturationValue.value = text;
+        saturationValue.textContent = text;
+      }
+      if (saturationScale instanceof HTMLElement) {
+        let nearestTick = null;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+
+        for (const tick of saturationScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          const step = Number.parseFloat(tick.dataset.step || "0");
+          const distance = Math.abs(step - normalized);
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestTick = tick;
+          }
+        }
+
+        for (const tick of saturationScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          tick.classList.toggle("is-active", tick === nearestTick);
+        }
+      }
+    };
+
+    const themeLabelMap = {
+      cyber: "Cyber",
+      nord: "Nord",
+      gruvbox: "Gruvbox",
+      custom: "Custom",
+    };
+
+    const syncThemeUi = () => {
+      if (themeSelect instanceof HTMLSelectElement) {
+        themeSelect.value = paletteTheme;
+      }
+      if (themeValue instanceof HTMLOutputElement) {
+        const label = themeLabelMap[paletteTheme] || "Cyber";
+        themeValue.value = label;
+        themeValue.textContent = label;
+      }
+      if (customThemeWrap instanceof HTMLElement) {
+        customThemeWrap.hidden = paletteTheme !== "custom";
+      }
+      if (customPaletteInput instanceof HTMLInputElement && customPaletteText.length > 0) {
+        customPaletteInput.value = customPaletteText;
+      }
+    };
+
+    const hexToRgb = (hex) => {
+      const raw = hex.trim().replace("#", "");
+      if (raw.length === 3) {
+        return [
+          Number.parseInt(raw[0] + raw[0], 16),
+          Number.parseInt(raw[1] + raw[1], 16),
+          Number.parseInt(raw[2] + raw[2], 16),
+        ];
+      }
+      if (raw.length !== 6) return [0, 0, 0];
+      return [
+        Number.parseInt(raw.slice(0, 2), 16),
+        Number.parseInt(raw.slice(2, 4), 16),
+        Number.parseInt(raw.slice(4, 6), 16),
+      ];
+    };
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    const resampleRamp = (ramp, size) => {
+      if (size <= 1) return [ramp[0]];
+      const out = [];
+
+      for (let i = 0; i < size; i += 1) {
+        const pos = (i / (size - 1)) * (ramp.length - 1);
+        const index = Math.floor(pos);
+        const next = Math.min(ramp.length - 1, index + 1);
+        const t = pos - index;
+        const [r0, g0, b0] = hexToRgb(ramp[index]);
+        const [r1, g1, b1] = hexToRgb(ramp[next]);
+
+        out.push([
+          clamp255(lerp(r0, r1, t)),
+          clamp255(lerp(g0, g1, t)),
+          clamp255(lerp(b0, b1, t)),
+        ]);
+      }
+
+      return out;
+    };
+
+    const themeRamps = {
+      cyber: [
+        ["#020617", "#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1"],
+        ["#09090b", "#18181b", "#27272a", "#3f3f46", "#52525b", "#71717a", "#a1a1aa", "#d4d4d8"],
+        ["#172554", "#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"],
+        ["#1e1b4b", "#312e81", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#818cf8", "#a5b4fc"],
+        ["#083344", "#155e75", "#0e7490", "#0891b2", "#06b6d4", "#22d3ee", "#67e8f9", "#a5f3fc"],
+        ["#422006", "#713f12", "#854d0e", "#a16207", "#ca8a04", "#eab308", "#facc15", "#fde047"],
+        ["#4c0519", "#881337", "#9f1239", "#be123c", "#e11d48", "#f43f5e", "#fb7185", "#fda4af"],
+        ["#042f2e", "#134e4a", "#115e59", "#0f766e", "#0d9488", "#14b8a6", "#2dd4bf", "#99f6e4"],
+      ],
+      nord: [
+        ["#2e3440", "#3b4252", "#434c5e", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb"],
+        ["#3b4252", "#434c5e", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb", "#a3be8c"],
+        ["#2e3440", "#3b4252", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#b48ead", "#eceff4"],
+        ["#3b4252", "#434c5e", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb", "#d8dee9", "#eceff4"],
+        ["#2e3440", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb", "#a3be8c", "#ebcb8b"],
+        ["#3b4252", "#434c5e", "#5e81ac", "#81a1c1", "#b48ead", "#bf616a", "#d08770", "#ebcb8b"],
+        ["#2e3440", "#3b4252", "#4c566a", "#5e81ac", "#81a1c1", "#a3be8c", "#ebcb8b", "#eceff4"],
+        ["#3b4252", "#4c566a", "#5e81ac", "#88c0d0", "#8fbcbb", "#a3be8c", "#ebcb8b", "#eceff4"],
+      ],
+      gruvbox: [
+        ["#1d2021", "#282828", "#3c3836", "#504945", "#665c54", "#7c6f64", "#a89984", "#d5c4a1"],
+        ["#282828", "#3c3836", "#504945", "#665c54", "#7c6f64", "#928374", "#bdae93", "#ebdbb2"],
+        ["#1d2021", "#3c3836", "#504945", "#076678", "#458588", "#689d6a", "#83a598", "#d5c4a1"],
+        ["#282828", "#3c3836", "#504945", "#b16286", "#d3869b", "#8ec07c", "#fabd2f", "#ebdbb2"],
+        ["#1d2021", "#3c3836", "#504945", "#9d0006", "#cc241d", "#fb4934", "#fe8019", "#fabd2f"],
+        ["#282828", "#3c3836", "#504945", "#79740e", "#98971a", "#b8bb26", "#fabd2f", "#f2e5bc"],
+        ["#1d2021", "#282828", "#3c3836", "#427b58", "#689d6a", "#8ec07c", "#b8bb26", "#d5c4a1"],
+        ["#282828", "#3c3836", "#504945", "#076678", "#458588", "#83a598", "#d3869b", "#ebdbb2"],
+      ],
+    };
+
+    const paletteSampleCount = {
+      16: 2,
+      32: 4,
+      64: 8,
+      128: 16,
+      256: 32,
+    };
+
+    const parseCustomPalette = (rawInput) => {
+      const tokens = rawInput
+        .split(/[\s,;]+/)
+        .map((token) => token.trim())
+        .filter(Boolean);
+
+      const colors = [];
+      const colorRegex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+      for (const token of tokens) {
+        if (!colorRegex.test(token)) return null;
+        colors.push(hexToRgb(token));
+      }
+
+      return colors.length >= 2 ? colors : null;
+    };
+
+    const resampleColors = (colors, size) => {
+      if (size <= 1) return [colors[0]];
+      const out = [];
+
+      for (let i = 0; i < size; i += 1) {
+        const pos = (i / (size - 1)) * (colors.length - 1);
+        const index = Math.floor(pos);
+        const next = Math.min(colors.length - 1, index + 1);
+        const t = pos - index;
+        const c0 = colors[index];
+        const c1 = colors[next];
+        out.push([
+          clamp255(lerp(c0[0], c1[0], t)),
+          clamp255(lerp(c0[1], c1[1], t)),
+          clamp255(lerp(c0[2], c1[2], t)),
+        ]);
+      }
+
+      return out;
+    };
+
+    let saturationLevel = clampSaturation(baseSaturation);
+    let paletteTheme = "cyber";
+    let customPaletteColors = [];
+    let customPaletteText = "";
+    let activePalette = [];
+    let activePaletteSignature = "";
+    let nearestPaletteCache = new Map();
+
+    const colorDistance = (r1, g1, b1, r2, g2, b2) => {
+      const meanR = (r1 + r2) * 0.5;
+      const dr = r1 - r2;
+      const dg = g1 - g2;
+      const db = b1 - b2;
+      return (2 + meanR / 256) * dr * dr + 4 * dg * dg + (2 + (255 - meanR) / 256) * db * db;
+    };
+
+    const setActivePalette = (size) => {
+      const normalized = clampPalette(size);
+      const signature = `${paletteTheme}:${normalized}:${customPaletteText}`;
+      if (signature === activePaletteSignature) return;
+
+      const perRampCount = paletteSampleCount[normalized] || 8;
+      if (paletteTheme === "custom" && customPaletteColors.length >= 2) {
+        activePalette = resampleColors(customPaletteColors, normalized);
+      } else {
+        const ramps = themeRamps[paletteTheme] || themeRamps.cyber;
+        activePalette = ramps.flatMap((ramp) => resampleRamp(ramp, perRampCount));
+      }
+
+      if (activePalette.length === 0) {
+        activePalette = themeRamps.cyber.flatMap((ramp) => resampleRamp(ramp, perRampCount));
+      }
+
+      activePaletteSignature = signature;
+      nearestPaletteCache = new Map();
+    };
+
+    const findNearestPaletteColor = (r, g, b) => {
+      const key = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+      const cached = nearestPaletteCache.get(key);
+      if (cached) return cached;
+
+      let best = activePalette[0];
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      for (const candidate of activePalette) {
+        const distance = colorDistance(r, g, b, candidate[0], candidate[1], candidate[2]);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = candidate;
+        }
+      }
+
+      nearestPaletteCache.set(key, best);
+      return best;
+    };
 
     const renderAsciiGrid = () => {
       asciiArt.style.setProperty("--ascii-cols", String(colCount));
-      asciiArt.style.setProperty("--ascii-cell-gap", "0px");
       const lines = [];
       for (let row = 0; row < rowCount; row += 1) {
         const chars = [];
@@ -57,9 +509,29 @@
         lines.push(`<span class=\"hero-cyber__ascii-row\">${chars.join("")}</span>`);
       }
       asciiArt.innerHTML = lines.join("\n");
+      glyphs = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-glyph"));
+      tonedPixels = new Uint8ClampedArray(colCount * rowCount * 3);
+      tonedLuma = new Float32Array(colCount * rowCount);
+      appliedRgb = new Int16Array(colCount * rowCount * 3);
+      appliedRgb.fill(-1);
+      tonedLumaMin = 0;
+      tonedLumaMax = 255;
     };
 
     const imageCache = new Map();
+    let loadedImage = null;
+    let paletteSize = 256;
+    let glyphs = [];
+    let tonedPixels = new Uint8ClampedArray(0);
+    let tonedLuma = new Float32Array(0);
+    let appliedRgb = new Int16Array(0);
+    let tonedLumaMin = 0;
+    let tonedLumaMax = 255;
+    const sampleCanvas = document.createElement("canvas");
+    let pendingPaletteSize = null;
+    let paletteFrameId = 0;
+    let pendingSaturation = null;
+    let saturationFrameId = 0;
 
     const loadImage = async (src) => {
       if (imageCache.has(src)) return imageCache.get(src);
@@ -74,88 +546,407 @@
       return image;
     };
 
-    const fitAsciiArt = () => {
-      const visualFrame = asciiArt.closest(".hero-cyber__visual-frame");
-      if (!(visualFrame instanceof HTMLElement)) return;
+    const updateAsciiGeometry = () => {
+      const heroSection = asciiArt.closest(".hero-cyber");
+      const baseWidthSource = heroSection instanceof HTMLElement ? heroSection.clientWidth : window.innerWidth;
+      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+      const baseWidthRatio = isDesktop ? 0.34 : 0.78;
+      const minBaseSize = 188;
+      const maxBaseSize = isDesktop ? 430 : 340;
+      const baseSize = Math.round(Math.max(minBaseSize, Math.min(maxBaseSize, baseWidthSource * baseWidthRatio)));
 
-      const frameStyle = window.getComputedStyle(visualFrame);
       const artStyle = window.getComputedStyle(asciiArt);
-      const framePadX = parseFloat(frameStyle.paddingLeft || "0") + parseFloat(frameStyle.paddingRight || "0");
-      const framePadY = parseFloat(frameStyle.paddingTop || "0") + parseFloat(frameStyle.paddingBottom || "0");
       const padX = parseFloat(artStyle.paddingLeft || "0") + parseFloat(artStyle.paddingRight || "0");
       const padY = parseFloat(artStyle.paddingTop || "0") + parseFloat(artStyle.paddingBottom || "0");
+      const contentSize = Math.max(40, Math.min(baseSize - padX, baseSize - padY));
+      const cells = Math.max(1, colCount);
+      const gapRatio = resolveGapRatio(cells);
+      const cellSize = Math.max(1.5, contentSize / (cells + (cells - 1) * gapRatio));
+      const cellGap = cellSize * gapRatio;
 
-      const contentMaxWidth = Math.max(visualFrame.clientWidth - framePadX - padX - 6, 40);
-      const contentMaxHeight = Math.max(visualFrame.clientHeight - framePadY - padY - 6, 40);
-      const fontPx = Math.max(2, Math.min(contentMaxWidth / Math.max(colCount, 1), contentMaxHeight / Math.max(rowCount, 1)));
-
-      asciiArt.style.setProperty("--ascii-font-size", `${fontPx}px`);
+      asciiArt.style.setProperty("--ascii-base-size", `${baseSize}px`);
+      asciiArt.style.setProperty("--ascii-font-size", `${cellSize}px`);
+      asciiArt.style.setProperty("--ascii-cell-gap", `${cellGap}px`);
       asciiArt.style.setProperty("--ascii-line-height", "1");
       asciiArt.style.setProperty("--ascii-letter-spacing", "0em");
       asciiArt.style.setProperty("--ascii-scale-x", "1");
     };
 
-    const renderAsciiFromImage = async (imageOverride) => {
+    const buildToneCache = async (imageOverride) => {
       const image = imageOverride instanceof HTMLImageElement ? imageOverride : await loadImage(colorSource);
-      const canvas = document.createElement("canvas");
-      canvas.width = colCount;
-      canvas.height = rowCount;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      const tone = resolveToneBoost(colCount);
+      sampleCanvas.width = colCount;
+      sampleCanvas.height = rowCount;
+      const ctx = sampleCanvas.getContext("2d", { willReadFrequently: true });
       if (!ctx) return;
 
       ctx.clearRect(0, 0, colCount, rowCount);
       ctx.drawImage(image, 0, 0, colCount, rowCount);
 
       const frame = ctx.getImageData(0, 0, colCount, rowCount);
-      const glyphs = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-glyph"));
+      tonedLumaMin = 255;
+      tonedLumaMax = 0;
 
       for (let row = 0; row < rowCount; row += 1) {
         for (let col = 0; col < colCount; col += 1) {
           const pixelIndex = (row * colCount + col) * 4;
           const glyphIndex = row * colCount + col;
+          const tonedIndex = glyphIndex * 3;
 
           let r = frame.data[pixelIndex];
           let g = frame.data[pixelIndex + 1];
           let b = frame.data[pixelIndex + 2];
 
-          r = clamp255((r - 128) * contrast + 128);
-          g = clamp255((g - 128) * contrast + 128);
-          b = clamp255((b - 128) * contrast + 128);
+          r = clamp255((r - 128) * tone.contrast + 128);
+          g = clamp255((g - 128) * tone.contrast + 128);
+          b = clamp255((b - 128) * tone.contrast + 128);
 
           const avg = (r + g + b) / 3;
-          r = clamp255(avg + (r - avg) * saturation);
-          g = clamp255(avg + (g - avg) * saturation);
-          b = clamp255(avg + (b - avg) * saturation);
+          r = clamp255(avg + (r - avg) * tone.saturation);
+          g = clamp255(avg + (g - avg) * tone.saturation);
+          b = clamp255(avg + (b - avg) * tone.saturation);
 
-          const luma = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-          const charIndex = Math.max(0, Math.min(charset.length - 1, Math.floor((1 - luma) * (charset.length - 1))));
-          const char = charset[charIndex] || " ";
+          tonedPixels[tonedIndex] = r;
+          tonedPixels[tonedIndex + 1] = g;
+          tonedPixels[tonedIndex + 2] = b;
 
-          const glyph = glyphs[glyphIndex];
-          if (!(glyph instanceof HTMLElement)) continue;
+          const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          tonedLuma[glyphIndex] = luma;
+          if (luma < tonedLumaMin) tonedLumaMin = luma;
+          if (luma > tonedLumaMax) tonedLumaMax = luma;
+        }
+      }
+    };
 
+    const applyPaletteFromToneCache = () => {
+      setActivePalette(paletteSize);
+      const enableAdaptiveLuma = paletteSize <= 64;
+      const lumaRange = Math.max(1, tonedLumaMax - tonedLumaMin);
+      const lowPaletteGamma = enableAdaptiveLuma ? 1.35 : 1;
+      const totalCells = colCount * rowCount;
+
+      for (let glyphIndex = 0; glyphIndex < totalCells; glyphIndex += 1) {
+        const tonedIndex = glyphIndex * 3;
+
+        let r = tonedPixels[tonedIndex];
+        let g = tonedPixels[tonedIndex + 1];
+        let b = tonedPixels[tonedIndex + 2];
+
+        const baseLuma = tonedLuma[glyphIndex];
+        let glyphLuma = baseLuma / 255;
+
+        if (enableAdaptiveLuma) {
+          const normalized = Math.max(0, Math.min(1, (baseLuma - tonedLumaMin) / lumaRange));
+          const remappedLuma = 255 * normalized ** lowPaletteGamma;
+          const scale = remappedLuma / Math.max(1, baseLuma);
+
+          r = clamp255(r * scale);
+          g = clamp255(g * scale);
+          b = clamp255(b * scale);
+          glyphLuma = remappedLuma / 255;
+        }
+
+        const mapped = findNearestPaletteColor(r, g, b);
+        r = mapped[0];
+        g = mapped[1];
+        b = mapped[2];
+
+        const charIndex = Math.max(0, Math.min(charset.length - 1, Math.floor((1 - glyphLuma) * (charset.length - 1))));
+        const char = charset[charIndex] || " ";
+
+        const glyph = glyphs[glyphIndex];
+        if (!(glyph instanceof HTMLElement)) continue;
+
+        if (glyph.dataset.raw !== char) {
           glyph.dataset.raw = char;
           glyph.textContent = char;
           if (char === " ") glyph.classList.add("hero-cyber__ascii-glyph--space");
           else glyph.classList.remove("hero-cyber__ascii-glyph--space");
+        }
 
+        if (appliedRgb[tonedIndex] !== r || appliedRgb[tonedIndex + 1] !== g || appliedRgb[tonedIndex + 2] !== b) {
+          appliedRgb[tonedIndex] = r;
+          appliedRgb[tonedIndex + 1] = g;
+          appliedRgb[tonedIndex + 2] = b;
           glyph.style.setProperty("--char-rgb", `${r}, ${g}, ${b}`);
         }
       }
     };
 
-    const init = async () => {
-      const image = await loadImage(colorSource);
-      renderAsciiGrid();
-      fitAsciiArt();
-      await renderAsciiFromImage(image);
-      fitAsciiArt();
+    const flushPaletteUpdate = async () => {
+      if (pendingPaletteSize === null) return;
+
+      const normalized = clampPalette(pendingPaletteSize);
+      pendingPaletteSize = null;
+
+      if (normalized !== paletteSize) {
+        paletteSize = normalized;
+      }
+      syncPaletteUi(paletteSize);
+
+      if (tonedPixels.length === 0) {
+        await buildToneCache(loadedImage);
+      }
+      applyPaletteFromToneCache();
     };
 
-    const onResize = () => fitAsciiArt();
+    const schedulePaletteUpdate = (nextValue, immediate = false) => {
+      pendingPaletteSize = clampPalette(nextValue);
+      syncPaletteUi(pendingPaletteSize);
+
+      if (paletteFrameId !== 0) {
+        cancelAnimationFrame(paletteFrameId);
+        paletteFrameId = 0;
+      }
+
+      if (immediate) {
+        void flushPaletteUpdate();
+        return;
+      }
+
+      paletteFrameId = requestAnimationFrame(() => {
+        paletteFrameId = 0;
+        void flushPaletteUpdate();
+      });
+    };
+
+    const flushSaturationUpdate = async () => {
+      if (pendingSaturation === null) return;
+
+      const normalized = clampSaturation(pendingSaturation);
+      pendingSaturation = null;
+      saturationLevel = normalized;
+      syncSaturationUi(saturationLevel);
+
+      await buildToneCache(loadedImage);
+      applyPaletteFromToneCache();
+    };
+
+    const scheduleSaturationUpdate = (nextValue, immediate = false) => {
+      pendingSaturation = clampSaturation(nextValue);
+      syncSaturationUi(pendingSaturation);
+
+      if (saturationFrameId !== 0) {
+        cancelAnimationFrame(saturationFrameId);
+        saturationFrameId = 0;
+      }
+
+      if (immediate) {
+        void flushSaturationUpdate();
+        return;
+      }
+
+      saturationFrameId = requestAnimationFrame(() => {
+        saturationFrameId = 0;
+        void flushSaturationUpdate();
+      });
+    };
+
+    const rerenderAscii = async (imageOverride) => {
+      renderAsciiGrid();
+      updateAsciiGeometry();
+      await buildToneCache(imageOverride);
+      applyPaletteFromToneCache();
+      updateAsciiGeometry();
+    };
+
+    const updateResolution = async (nextValue) => {
+      const normalized = clampResolution(nextValue);
+      if (normalized === colCount && normalized === rowCount) {
+        syncResolutionUi(normalized);
+        return;
+      }
+
+      if (paletteFrameId !== 0) {
+        cancelAnimationFrame(paletteFrameId);
+        paletteFrameId = 0;
+      }
+      pendingPaletteSize = null;
+      if (saturationFrameId !== 0) {
+        cancelAnimationFrame(saturationFrameId);
+        saturationFrameId = 0;
+      }
+      pendingSaturation = null;
+
+      colCount = normalized;
+      rowCount = normalized;
+      asciiArt.dataset.asciiCols = String(normalized);
+      asciiArt.dataset.asciiRows = String(normalized);
+      syncResolutionUi(normalized);
+
+      await rerenderAscii(loadedImage);
+    };
+
+    const init = async () => {
+      loadedImage = await loadImage(colorSource);
+      syncResolutionUi(colCount);
+      syncPaletteUi(paletteSize);
+      syncSaturationUi(saturationLevel);
+      syncThemeUi();
+      await rerenderAscii(loadedImage);
+    };
+
+    const onResize = () => updateAsciiGeometry();
+    const onResolutionInput = () => {
+      if (!(resolutionInput instanceof HTMLInputElement)) return;
+      void updateResolution(Number.parseInt(resolutionInput.value, 10) || colCount);
+    };
+
+    const onPaletteInput = () => {
+      if (!(paletteInput instanceof HTMLInputElement)) return;
+      const index = Math.max(0, Math.min(paletteSteps.length - 1, Number.parseInt(paletteInput.value, 10) || 0));
+      schedulePaletteUpdate(paletteSteps[index], false);
+    };
+
+    const onPaletteChange = () => {
+      if (!(paletteInput instanceof HTMLInputElement)) return;
+      const index = Math.max(0, Math.min(paletteSteps.length - 1, Number.parseInt(paletteInput.value, 10) || 0));
+      schedulePaletteUpdate(paletteSteps[index], true);
+    };
+
+    const onSaturationInput = () => {
+      if (!(saturationInput instanceof HTMLInputElement)) return;
+      const value = (Number.parseInt(saturationInput.value, 10) || 0) / 100;
+      scheduleSaturationUpdate(value, false);
+    };
+
+    const onSaturationChange = () => {
+      if (!(saturationInput instanceof HTMLInputElement)) return;
+      const value = (Number.parseInt(saturationInput.value, 10) || 0) / 100;
+      scheduleSaturationUpdate(value, true);
+    };
+
+    const applyThemePalette = async () => {
+      if (tonedPixels.length === 0) {
+        await buildToneCache(loadedImage);
+      }
+      applyPaletteFromToneCache();
+    };
+
+    const onThemeChange = () => {
+      if (!(themeSelect instanceof HTMLSelectElement)) return;
+      const nextTheme = themeSelect.value;
+      paletteTheme = nextTheme === "nord" || nextTheme === "gruvbox" || nextTheme === "custom" ? nextTheme : "cyber";
+      syncThemeUi();
+      void applyThemePalette();
+    };
+
+    const onApplyCustomPalette = () => {
+      if (!(customPaletteInput instanceof HTMLInputElement)) return;
+      const parsed = parseCustomPalette(customPaletteInput.value);
+      if (!parsed) {
+        customPaletteInput.classList.add("is-invalid");
+        return;
+      }
+
+      customPaletteInput.classList.remove("is-invalid");
+      customPaletteColors = parsed;
+      customPaletteText = customPaletteInput.value
+        .split(/[\s,;]+/)
+        .map((token) => token.trim())
+        .filter(Boolean)
+        .join(", ");
+      paletteTheme = "custom";
+      syncThemeUi();
+      void applyThemePalette();
+    };
+
+    const onCustomPaletteKeydown = (event) => {
+      if (!(event instanceof KeyboardEvent)) return;
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      onApplyCustomPalette();
+    };
+
+    const onCustomPaletteInput = () => {
+      if (!(customPaletteInput instanceof HTMLInputElement)) return;
+      customPaletteInput.classList.remove("is-invalid");
+    };
+
+    const onControlsToggle = () => {
+      setControlsOpen(!controlsOpen);
+    };
+
+    const onDocumentPointerDown = (event) => {
+      if (!controlsOpen) return;
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (controlsWrap instanceof HTMLElement && controlsWrap.contains(target)) return;
+      setControlsOpen(false);
+    };
+
+    const onDocumentKeydown = (event) => {
+      if (!(event instanceof KeyboardEvent)) return;
+      if (event.key !== "Escape") return;
+      if (!controlsOpen) return;
+      setControlsOpen(false);
+    };
+
     window.addEventListener("resize", onResize);
+    if (resolutionInput instanceof HTMLInputElement) {
+      resolutionInput.addEventListener("input", onResolutionInput);
+      resolutionInput.addEventListener("change", onResolutionInput);
+    }
+    if (paletteInput instanceof HTMLInputElement) {
+      paletteInput.addEventListener("input", onPaletteInput);
+      paletteInput.addEventListener("change", onPaletteChange);
+    }
+    if (saturationInput instanceof HTMLInputElement) {
+      saturationInput.addEventListener("input", onSaturationInput);
+      saturationInput.addEventListener("change", onSaturationChange);
+    }
+    if (controlsToggle instanceof HTMLButtonElement) {
+      controlsToggle.addEventListener("click", onControlsToggle);
+    }
+    if (themeSelect instanceof HTMLSelectElement) {
+      themeSelect.addEventListener("change", onThemeChange);
+    }
+    if (customPaletteApply instanceof HTMLButtonElement) {
+      customPaletteApply.addEventListener("click", onApplyCustomPalette);
+    }
+    if (customPaletteInput instanceof HTMLInputElement) {
+      customPaletteInput.addEventListener("keydown", onCustomPaletteKeydown);
+      customPaletteInput.addEventListener("input", onCustomPaletteInput);
+    }
+    document.addEventListener("pointerdown", onDocumentPointerDown);
+    document.addEventListener("keydown", onDocumentKeydown);
     window.addEventListener("beforeunload", () => {
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("pointerdown", onDocumentPointerDown);
+      document.removeEventListener("keydown", onDocumentKeydown);
+      if (paletteFrameId !== 0) {
+        cancelAnimationFrame(paletteFrameId);
+        paletteFrameId = 0;
+      }
+      if (saturationFrameId !== 0) {
+        cancelAnimationFrame(saturationFrameId);
+        saturationFrameId = 0;
+      }
+      if (resolutionInput instanceof HTMLInputElement) {
+        resolutionInput.removeEventListener("input", onResolutionInput);
+        resolutionInput.removeEventListener("change", onResolutionInput);
+      }
+      if (paletteInput instanceof HTMLInputElement) {
+        paletteInput.removeEventListener("input", onPaletteInput);
+        paletteInput.removeEventListener("change", onPaletteChange);
+      }
+      if (saturationInput instanceof HTMLInputElement) {
+        saturationInput.removeEventListener("input", onSaturationInput);
+        saturationInput.removeEventListener("change", onSaturationChange);
+      }
+      if (controlsToggle instanceof HTMLButtonElement) {
+        controlsToggle.removeEventListener("click", onControlsToggle);
+      }
+      if (themeSelect instanceof HTMLSelectElement) {
+        themeSelect.removeEventListener("change", onThemeChange);
+      }
+      if (customPaletteApply instanceof HTMLButtonElement) {
+        customPaletteApply.removeEventListener("click", onApplyCustomPalette);
+      }
+      if (customPaletteInput instanceof HTMLInputElement) {
+        customPaletteInput.removeEventListener("keydown", onCustomPaletteKeydown);
+        customPaletteInput.removeEventListener("input", onCustomPaletteInput);
+      }
     }, { once: true });
 
     void init();
