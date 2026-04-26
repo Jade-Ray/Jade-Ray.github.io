@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>End-to-End Object Detection with Transformers | Jade-Ray</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+
+  const canvas = document.getElementById("matrix-bg");
+  const ctx = canvas.getContext("2d");
+
+  const txts = bgtext.split("");
+  const fontSize = 12;
+
+  let columns, drops;
+
+  function resize() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    columns = Math.floor(canvas.width / fontSize);
+    // preserve existing drops positions on resize, fill new columns from top
+    const prev = drops ? [...drops] : [];
+    drops = Array.from({ length: columns }, (_, i) => prev[i] ?? 1);
+  }
+
+  function draw() {
+    // fading black overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#490";
+    ctx.font = fontSize + "px arial";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = txts[Math.floor(Math.random() * txts.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.98) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  setInterval(draw, 20);
+})();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
+Jade-Ray
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8"> <!-- Post header --> <header class="mb-8 text-center"> <h1 class="text-3xl font-bold text-blue-300 mb-3">End-to-End Object Detection with Transformers</h1>  <time class="text-gray-400"> January 16, 2026 </time> </header> <!-- Post body --> <div class="prose prose-invert max-w-none reading-prose
+      prose-headings:text-blue-200
+      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-white
+      prose-code:text-green-300
+      prose-pre:bg-gray-800
+      prose-blockquote:border-blue-400 prose-blockquote:text-gray-300
+      prose-img:rounded-lg prose-img:mx-auto
+      prose-table:text-sm
+      prose-th:text-blue-200 prose-td:text-gray-300"> <h2 id="object-detection">Object Detection</h2>
+<p>计算机视觉任务中目标检测不同于目标分类（常规分类任务）和目标分割（像素级分类任务），需要从图像特征中预测目标位置，该位置应该是图像的绝对位置，那么绝对位置信息又是从何而来的呢。对于 CNN 而言（平移等变），主流方法解耦绝对位置，变成相对于锚框或者锚点进行局部相对位置的回归，位置信息可以看作是卷积过程中 zero-padding 透露给网络的（使用零填充卷积输入以保持输出尺寸不变，也就是零填充指向了卷积核所在的位置）。对于 Transform 而言（全局注意力），DETR 直接求解位置信息，与 NLP 任务不同的是位置编码是没有顺序的，不需要 masked。（ps.全局注意力矩阵在编码器 self-attn 和解码器 cross-attn 会从平均初始快速稀疏化，最终希望学习到的注意力矩阵必然是高度稀疏的，而注意力模块的动态稀疏将导致网络收敛速度缓慢，此处不过多讨论）
+![[DecoderTransforrmVsDETR.excalidraw]]</p>
+<h2 id="set-prediction">Set Prediction</h2>
+<p>一种目标检测的新范式，不同于之前基于 anchor 的 dense prediction，无需预测大量的 candidates（anchor），直接暴力预测检测框，实现 Sparse 检测器。稀疏预测（取一个大于图像最多预测框个数即可）出目标框看起来运算简单、结构简单，但一个重点需要解决的问题是如何避免预测出几乎相同的目标框（dense prediction 通过海量预测框保证所有可能位置的访问，set prediciton 数量有限的预测框是不能浪费穷举的，要保证它们是置换不变的），DETR 采用匈牙利匹配做二分匹配，获取全局最优的匹配函数，强制每个位置编码学习不同的训练集位置框结构（小框、大框、竖直框、水平框）。（ps. 二分匹配不稳定的缺点也导致了网络收敛速度缓慢，此处不过多讨论）
+![[Dense&#x26;SetPredictionn.excalidraw]]
+每个 set 学习到的位置框结构可视化
+<img src="https://s2.loli.net/2023/04/19/b473BwvejmYXJdf.png" alt="|500"></p>
+<h3 id="what-do-decoder-queries-essentially-mean">What do decoder queries essentially mean?</h3>
+<p>DETR 最初设计采用 set prediciton 解决目标检测问题。因此最初只是并行多个可以学习到位置信息编码的解码对象（每个可学习的 embedding 都没有明确的意义，如上图位置结构可视化所示，各位置结构不同，但不能解释位置的偏好，它是完全随机的。一般为可学习的位置 embeddings 和不可学习初始为零的解码器 embeddings 构成）。但在后续的大多数工作中（deformable-DETR，Conditional-DETR，DAB-DETR 等）将 decoder queries 视作 anchor 位置（二维中心点<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>x</mi></msub><mo separator="true">,</mo><msub><mi>c</mi><mi>y</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_x,c_y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>或四维检测框<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mi>x</mi></msub><mo separator="true">,</mo><msub><mi>c</mi><mi>y</mi></msub><mo separator="true">,</mo><mi>w</mi><mo separator="true">,</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_x,c_y,w,h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span> 类似对应 anchor-free 和 anchor-base）的学习，每一层 decoer 中都会去预测相对偏移量并去更新检测框，得到一个更加精确的检测框并传入下一层。也就是学习下面两个参数：</p>
+<ul>
+<li>good anchors</li>
+<li>relative offset</li>
+</ul>
+<h3 id="what-does-the-cross-attn-in-decoder-actually-learn">What does the cross-attn in decoder actually learn?</h3>
+<p>Decoder 中的 cross-attention 模块计算图像特征和位置信息编码查询之间的注意力关系，其中，key-value 对来自编码的图像特征和其添加空间位置编码的特征，query 来自位置信息的内容编码。理想状态下，位置信息应该与图像中物体边缘（extremity）区域高度相关，即我们需要一个高质量的内容编码同时匹配 key-value 对中的图像内容编码和空间编码。因此，croos-attn 的每个 head 的 spatial attention map 都在尝试找物体的 extremity 区域。进而实现类似 NMS 的功能。</p>
+<ul>
+<li>物体内容</li>
+<li>物体边缘
+<img src="https://s2.loli.net/2023/04/22/QDoECIMSR15TV74.png" alt="|600"></li>
+</ul>
+<h2 id="detr-pipeline">DETR Pipeline</h2>
+<p><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*RRqclh6R_0yxp8G_yCw5sw.png" alt="|700"></p> </div> <script>
+      const syncKatexOverflow = () => {
+        document.querySelectorAll('.prose .katex-display').forEach((displayNode) => {
+          const katexNode = displayNode.querySelector(':scope > .katex');
+          if (!(katexNode instanceof HTMLElement) || !(displayNode instanceof HTMLElement)) {
+            return;
+          }
+
+          const contentWidth = katexNode.scrollWidth;
+          const containerWidth = displayNode.clientWidth;
+          const isOverflowing = contentWidth - containerWidth > 2;
+
+          displayNode.classList.toggle('is-overflowing', isOverflowing);
+        });
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const fallbackInput = document.createElement('textarea');
+        fallbackInput.value = text;
+        fallbackInput.setAttribute('readonly', 'true');
+        fallbackInput.style.position = 'fixed';
+        fallbackInput.style.left = '-9999px';
+        document.body.appendChild(fallbackInput);
+        fallbackInput.select();
+        document.execCommand('copy');
+        fallbackInput.remove();
+      };
+
+      const createKatexContextMenu = () => {
+        const menu = document.createElement('div');
+        menu.className = 'katex-context-menu';
+        menu.innerHTML = '<button type="button" class="katex-context-menu__item">复制 LaTeX</button>';
+        document.body.appendChild(menu);
+
+        let activeLatex = '';
+        let hideTimer = null;
+
+        const hideMenu = () => {
+          menu.classList.remove('is-open');
+          activeLatex = '';
+        };
+
+        const showCopiedState = () => {
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (!(button instanceof HTMLButtonElement)) return;
+          button.textContent = '已复制';
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            hideMenu();
+            button.textContent = '复制 LaTeX';
+          }, 850);
+        };
+
+        document.addEventListener('contextmenu', (event) => {
+          const trigger = event.target;
+          if (!(trigger instanceof Element)) return;
+
+          const katexNode = trigger.closest('.prose .katex');
+          if (!(katexNode instanceof HTMLElement)) {
+            hideMenu();
+            return;
+          }
+
+          const annotation = katexNode.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+          const latex = annotation?.textContent?.trim();
+          if (!latex) {
+            hideMenu();
+            return;
+          }
+
+          event.preventDefault();
+          activeLatex = latex;
+
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (button instanceof HTMLButtonElement) {
+            button.textContent = '复制 LaTeX';
+          }
+
+          const offset = 8;
+          menu.style.left = `${event.clientX + offset}px`;
+          menu.style.top = `${event.clientY + offset}px`;
+          menu.classList.add('is-open');
+
+          const rect = menu.getBoundingClientRect();
+          const maxLeft = window.innerWidth - rect.width - 8;
+          const maxTop = window.innerHeight - rect.height - 8;
+          menu.style.left = `${Math.max(8, Math.min(event.clientX + offset, maxLeft))}px`;
+          menu.style.top = `${Math.max(8, Math.min(event.clientY + offset, maxTop))}px`;
+        });
+
+        menu.addEventListener('click', async (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest('.katex-context-menu__item')) return;
+          if (!activeLatex) return;
+
+          try {
+            await copyText(activeLatex);
+            showCopiedState();
+          } catch {
+            hideMenu();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Element && target.closest('.katex-context-menu')) return;
+          hideMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') hideMenu();
+        });
+        window.addEventListener('resize', hideMenu);
+        window.addEventListener('scroll', hideMenu, true);
+      };
+
+      const syncPostNavTitleOverflow = () => {
+        document.querySelectorAll('[data-post-nav-title]').forEach((titleNode) => {
+          if (!(titleNode instanceof HTMLElement)) return;
+
+          const wrap = titleNode.closest('.post-nav-title-wrap');
+          if (!(wrap instanceof HTMLElement)) return;
+
+          wrap.classList.remove('is-overflowing');
+          wrap.style.removeProperty('--post-nav-title-overflow');
+          wrap.style.removeProperty('--post-nav-title-duration');
+
+          const overflow = Math.max(0, titleNode.scrollWidth - wrap.clientWidth);
+          if (overflow > 2) {
+            const overflowPx = Math.ceil(overflow);
+            const durationMs = Math.min(5200, Math.max(2400, 1800 + overflowPx * 14));
+            wrap.classList.add('is-overflowing');
+            wrap.style.setProperty('--post-nav-title-overflow', `${overflowPx}px`);
+            wrap.style.setProperty('--post-nav-title-duration', `${durationMs}ms`);
+          }
+        });
+      };
+
+      syncKatexOverflow();
+      syncPostNavTitleOverflow();
+      window.addEventListener('load', syncKatexOverflow);
+      window.addEventListener('load', syncPostNavTitleOverflow);
+      window.addEventListener('resize', syncKatexOverflow);
+      window.addEventListener('resize', syncPostNavTitleOverflow);
+      createKatexContextMenu();
+    </script> <!-- Tags --> <div class="mt-8 flex flex-wrap items-center gap-2"> <span class="text-xs uppercase tracking-[0.22em] text-gray-500">Tags</span> <a href="/tags/transformers" class="tag-chip">
+#Transformers </a><a href="/tags/detr" class="tag-chip">
+#DETR </a> </div> <!-- Post navigation --> <div class="mt-10 pt-6 border-t border-gray-700"> <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> <a href="/posts/conditioned-generation" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:-translate-x-1"> <div class="text-xs text-gray-400 mb-1">← 上一篇</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Conditioned Generation</span> </div> </a> <a href="/blog" class="rounded-xl border border-blue-400/35 bg-blue-500/15 hover:bg-blue-500/25 hover:border-blue-300/60 transition-all p-4 text-center flex items-center justify-center"> <span class="text-sm text-blue-200 font-semibold">返回博客列表</span> </a> <a href="/posts/kalman-filter" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 text-right transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:translate-x-1"> <div class="text-xs text-gray-400 mb-1">下一篇 →</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Kalman filter</span> </div> </a> </div> <div class="mt-4 text-center"> <a href="/" class="text-xs text-gray-400 hover:text-white transition-colors">返回首页</a> </div> </div> </article>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+About this site
+</a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
+GitHub
+</a> </div> </div> </footer> </body></html>

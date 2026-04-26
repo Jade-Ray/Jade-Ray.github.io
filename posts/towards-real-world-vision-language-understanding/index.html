@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Towards Real-World Vision-Language Understanding | Jade-Ray</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+
+  const canvas = document.getElementById("matrix-bg");
+  const ctx = canvas.getContext("2d");
+
+  const txts = bgtext.split("");
+  const fontSize = 12;
+
+  let columns, drops;
+
+  function resize() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    columns = Math.floor(canvas.width / fontSize);
+    // preserve existing drops positions on resize, fill new columns from top
+    const prev = drops ? [...drops] : [];
+    drops = Array.from({ length: columns }, (_, i) => prev[i] ?? 1);
+  }
+
+  function draw() {
+    // fading black overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#490";
+    ctx.font = fontSize + "px arial";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = txts[Math.floor(Math.random() * txts.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.98) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  setInterval(draw, 20);
+})();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
+Jade-Ray
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8"> <!-- Post header --> <header class="mb-8 text-center"> <h1 class="text-3xl font-bold text-blue-300 mb-3">Towards Real-World Vision-Language Understanding</h1>  <time class="text-gray-400"> February 17, 2025 </time> </header> <!-- Post body --> <div class="prose prose-invert max-w-none reading-prose
+      prose-headings:text-blue-200
+      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-white
+      prose-code:text-green-300
+      prose-pre:bg-gray-800
+      prose-blockquote:border-blue-400 prose-blockquote:text-gray-300
+      prose-img:rounded-lg prose-img:mx-auto
+      prose-table:text-sm
+      prose-th:text-blue-200 prose-td:text-gray-300"> <p>论文指出当前 VLM 模型主要存在的问题有：</p>
+<ul>
+<li>受训练 LLM 模型经验的启发，预训练流程对理解真实世界至关重要，无需在指令微调阶段投入太多算力，VLM 应利用广泛的视觉语言数据进行综合的预训练；</li>
+<li>指令微调阶段使用各种学术数据集的融合进行训练，虽然可以取得良好的结果，但在真实世界中使用仍有差距；</li>
+<li>此前的大多数视觉编码器都以低分辨率设计，这不足以感知复杂的真实世界信息，VLM 需要高分辨率图像处理能力；</li>
+<li>VLM 使用预训练流程获取语言能力后，通常随着后续长期多模态训练，模型语言能力会出现退化。保持至少 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>70</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">70\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">70%</span></span></span></span> 语言数据对于维持模型中语言知识的完整性至关重要。</li>
+</ul>
+<h2 id="混合视觉编码器">混合视觉编码器</h2>
+<p>结合负责高级语义提取的低分辨率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>384</mn><mo>×</mo><mn>384</mn></mrow><annotation encoding="application/x-tex">384 \times 384</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">384</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">384</span></span></span></span> 编码器 <a href="/posts/sigmoid-loss-for-language-image-pre-training/">SigLIP</a> 和处理低级视觉特征（如边缘、纹理）的高分辨率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1024</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">1024\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span>编码器 <a href="/posts/segment-anything/">SAM</a>，对于高分辨率视觉特征图 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mo>×</mo><mn>64</mn><mo>×</mo><mn>256</mn></mrow><annotation encoding="application/x-tex">64\times 64\times 256</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">64</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">64</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">256</span></span></span></span>，首先通过差值到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>96</mn><mo>×</mo><mn>96</mn><mo>×</mo><mn>256</mn></mrow><annotation encoding="application/x-tex">96\times 96\times 256</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">96</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">96</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">256</span></span></span></span>，再通过两层步长 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> 的卷积下采样到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>24</mn><mo>×</mo><mn>24</mn><mo>×</mo><mn>1024</mn><mo>→</mo><mn>576</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">24\times 24\times 1024 \to 576 \times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">24</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">24</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">576</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span>，直接与低分辨率视觉特征图 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>576</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">576\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">576</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span> 拼接，构成 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>576</mn><mo>×</mo><mn>2048</mn></mrow><annotation encoding="application/x-tex">576\times 2048</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">576</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2048</span></span></span></span> 视觉令牌，通过 GELU 输入到 LLM 中。
+增强高级语义视觉认知和低级视觉 grounding 能力的混合视觉 tokens，可以避免传统 CLIP 系列模型的“模糊编码”问题。</p>
+<h3 id="clip-的模糊编码问题"><a href="/posts/contrastive-language-image-pre-trainging/">CLIP</a> 的“模糊编码”问题</h3>
+<p>传统 CLIP 的“模糊编码”问题源于:</p>
+<ul>
+<li>全局向量表示：通过视觉编码器将整张图像压缩为单一全局向量（如 ViT 的<code>[CLS]</code> token），仅能捕捉图像的整体语义，而忽略局部细节和细粒度特征；</li>
+<li>数据局限性：CLIP 依赖互联网爬取的图像-文本对，其中文本描述往往简短、不完整或存在噪声；</li>
+<li>对比学习机制的单一性：CLIP 的对比损失仅强制正样本对的相似性最大化，但对图像的多视角、多语义对齐缺乏建模。</li>
+<li>多模态信息不平衡：在跨模态对齐中，文本描述的语义主导了对比学习过程，可能掩盖图像的视觉复杂性。
+这些限制导致模型在细粒度任务和多样化语义理解中表现不足，并往往在真实世界问题中生成”模棱两可“的视觉编码。</li>
+</ul>
+<h2 id="训练过程">训练过程</h2>
+<p><img src="https://s2.loli.net/2025/02/15/L5oFlVkE1tudWi4.png" alt="image.png"></p>
+<ul>
+<li>步骤 1：Vision-Language Adaptor 训练，关联视觉嵌入空间和文本嵌入空间，使用有 125 万图像-文本对的 ShareGPT4V 以及 250 万对文档 ORC 数据。论文认为相较于 LLM，较小规模的 Vision-Language Adaptor（如 2 层 NLP）限制了此阶段的学习能力，并通过实验证明在此阶段扩展数据无法获得性能上的提升，因此冻结 LLM。</li>
+<li>步骤 2：Vision-Language 联合预训练，</li>
+<li>论文发现直接使用多模态数据进行训练会导致模型的语言能力出现灾难性遗忘，其认为这是由于多模态数据集与自然语言数据集信息复杂度差异，以及多模态任务与自然语言任务存在对抗导致的。因此采用 7：3 自然语言-多模态混合数据集进行训练。</li>
+<li>在使用 <a href="/posts/supervised-fine-tuning-trainer/">SFT</a> 技术将 1.3B 小模型参数传输到 7b 大参数模型中时，论文发现受小模型能力限制以及训练数据集缺乏 SFT 数据，导致大模型即使具有对应的知识，也很难准确的生成。因此在 1.3B 模型相应数据外，引入预定义的语法/语义校验规则筛选数据，通过加权混合为最终训练数据，此外，引入判别器网络区分 1.3B 生成数据与真实标注数据，迫使 7B 模型生成更接近真实分布的样本。</li>
+<li>步骤 3：Supervised Fine-tuning，考虑到 GPU 显存，除 SAM-B 外模块进行有监督微调，仅监督答案与特殊令牌。</li>
+</ul> </div> <script>
+      const syncKatexOverflow = () => {
+        document.querySelectorAll('.prose .katex-display').forEach((displayNode) => {
+          const katexNode = displayNode.querySelector(':scope > .katex');
+          if (!(katexNode instanceof HTMLElement) || !(displayNode instanceof HTMLElement)) {
+            return;
+          }
+
+          const contentWidth = katexNode.scrollWidth;
+          const containerWidth = displayNode.clientWidth;
+          const isOverflowing = contentWidth - containerWidth > 2;
+
+          displayNode.classList.toggle('is-overflowing', isOverflowing);
+        });
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const fallbackInput = document.createElement('textarea');
+        fallbackInput.value = text;
+        fallbackInput.setAttribute('readonly', 'true');
+        fallbackInput.style.position = 'fixed';
+        fallbackInput.style.left = '-9999px';
+        document.body.appendChild(fallbackInput);
+        fallbackInput.select();
+        document.execCommand('copy');
+        fallbackInput.remove();
+      };
+
+      const createKatexContextMenu = () => {
+        const menu = document.createElement('div');
+        menu.className = 'katex-context-menu';
+        menu.innerHTML = '<button type="button" class="katex-context-menu__item">复制 LaTeX</button>';
+        document.body.appendChild(menu);
+
+        let activeLatex = '';
+        let hideTimer = null;
+
+        const hideMenu = () => {
+          menu.classList.remove('is-open');
+          activeLatex = '';
+        };
+
+        const showCopiedState = () => {
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (!(button instanceof HTMLButtonElement)) return;
+          button.textContent = '已复制';
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            hideMenu();
+            button.textContent = '复制 LaTeX';
+          }, 850);
+        };
+
+        document.addEventListener('contextmenu', (event) => {
+          const trigger = event.target;
+          if (!(trigger instanceof Element)) return;
+
+          const katexNode = trigger.closest('.prose .katex');
+          if (!(katexNode instanceof HTMLElement)) {
+            hideMenu();
+            return;
+          }
+
+          const annotation = katexNode.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+          const latex = annotation?.textContent?.trim();
+          if (!latex) {
+            hideMenu();
+            return;
+          }
+
+          event.preventDefault();
+          activeLatex = latex;
+
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (button instanceof HTMLButtonElement) {
+            button.textContent = '复制 LaTeX';
+          }
+
+          const offset = 8;
+          menu.style.left = `${event.clientX + offset}px`;
+          menu.style.top = `${event.clientY + offset}px`;
+          menu.classList.add('is-open');
+
+          const rect = menu.getBoundingClientRect();
+          const maxLeft = window.innerWidth - rect.width - 8;
+          const maxTop = window.innerHeight - rect.height - 8;
+          menu.style.left = `${Math.max(8, Math.min(event.clientX + offset, maxLeft))}px`;
+          menu.style.top = `${Math.max(8, Math.min(event.clientY + offset, maxTop))}px`;
+        });
+
+        menu.addEventListener('click', async (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest('.katex-context-menu__item')) return;
+          if (!activeLatex) return;
+
+          try {
+            await copyText(activeLatex);
+            showCopiedState();
+          } catch {
+            hideMenu();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Element && target.closest('.katex-context-menu')) return;
+          hideMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') hideMenu();
+        });
+        window.addEventListener('resize', hideMenu);
+        window.addEventListener('scroll', hideMenu, true);
+      };
+
+      const syncPostNavTitleOverflow = () => {
+        document.querySelectorAll('[data-post-nav-title]').forEach((titleNode) => {
+          if (!(titleNode instanceof HTMLElement)) return;
+
+          const wrap = titleNode.closest('.post-nav-title-wrap');
+          if (!(wrap instanceof HTMLElement)) return;
+
+          wrap.classList.remove('is-overflowing');
+          wrap.style.removeProperty('--post-nav-title-overflow');
+          wrap.style.removeProperty('--post-nav-title-duration');
+
+          const overflow = Math.max(0, titleNode.scrollWidth - wrap.clientWidth);
+          if (overflow > 2) {
+            const overflowPx = Math.ceil(overflow);
+            const durationMs = Math.min(5200, Math.max(2400, 1800 + overflowPx * 14));
+            wrap.classList.add('is-overflowing');
+            wrap.style.setProperty('--post-nav-title-overflow', `${overflowPx}px`);
+            wrap.style.setProperty('--post-nav-title-duration', `${durationMs}ms`);
+          }
+        });
+      };
+
+      syncKatexOverflow();
+      syncPostNavTitleOverflow();
+      window.addEventListener('load', syncKatexOverflow);
+      window.addEventListener('load', syncPostNavTitleOverflow);
+      window.addEventListener('resize', syncKatexOverflow);
+      window.addEventListener('resize', syncPostNavTitleOverflow);
+      createKatexContextMenu();
+    </script> <!-- Tags --> <div class="mt-8 flex flex-wrap items-center gap-2"> <span class="text-xs uppercase tracking-[0.22em] text-gray-500">Tags</span> <a href="/tags/vlm" class="tag-chip">
+#VLM </a> </div> <!-- Post navigation --> <div class="mt-10 pt-6 border-t border-gray-700"> <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> <a href="/posts/supervised-fine-tuning-trainer" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:-translate-x-1"> <div class="text-xs text-gray-400 mb-1">← 上一篇</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Supervised Fine-tuning Trainer</span> </div> </a> <a href="/blog" class="rounded-xl border border-blue-400/35 bg-blue-500/15 hover:bg-blue-500/25 hover:border-blue-300/60 transition-all p-4 text-center flex items-center justify-center"> <span class="text-sm text-blue-200 font-semibold">返回博客列表</span> </a> <a href="/posts/depth-guided-transformer-for-monocular-3d-object-detection" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 text-right transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:translate-x-1"> <div class="text-xs text-gray-400 mb-1">下一篇 →</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Depth-guided Transformer for Monocular 3D Object Detection</span> </div> </a> </div> <div class="mt-4 text-center"> <a href="/" class="text-xs text-gray-400 hover:text-white transition-colors">返回首页</a> </div> </div> </article>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+About this site
+</a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
+GitHub
+</a> </div> </div> </footer> </body></html>

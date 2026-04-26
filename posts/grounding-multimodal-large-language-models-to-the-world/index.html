@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Grounding Multimodal Large Language Models to the World | Jade-Ray</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+
+  const canvas = document.getElementById("matrix-bg");
+  const ctx = canvas.getContext("2d");
+
+  const txts = bgtext.split("");
+  const fontSize = 12;
+
+  let columns, drops;
+
+  function resize() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    columns = Math.floor(canvas.width / fontSize);
+    // preserve existing drops positions on resize, fill new columns from top
+    const prev = drops ? [...drops] : [];
+    drops = Array.from({ length: columns }, (_, i) => prev[i] ?? 1);
+  }
+
+  function draw() {
+    // fading black overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#490";
+    ctx.font = fontSize + "px arial";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = txts[Math.floor(Math.random() * txts.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.98) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  setInterval(draw, 20);
+})();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
+Jade-Ray
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8"> <!-- Post header --> <header class="mb-8 text-center"> <h1 class="text-3xl font-bold text-blue-300 mb-3">Grounding Multimodal Large Language Models to the World</h1>  <time class="text-gray-400"> February 2, 2025 </time> </header> <!-- Post body --> <div class="prose prose-invert max-w-none reading-prose
+      prose-headings:text-blue-200
+      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-white
+      prose-code:text-green-300
+      prose-pre:bg-gray-800
+      prose-blockquote:border-blue-400 prose-blockquote:text-gray-300
+      prose-img:rounded-lg prose-img:mx-auto
+      prose-table:text-sm
+      prose-th:text-blue-200 prose-td:text-gray-300"> <p>Multimodal Large Language Model (MLLM)，实现目标感知描述（如边界框）和通用的文本-视觉关联感知。对于如何构建文本-视觉通用数据集，KOSMOS-2 期望通过类似 Markdown 中超文本标记的形式链接文本和对应描述的图像目标，即 <code>[text span](bounding boxes)</code>，将文本描述对象的图像位置转为文本 tokens 再加入到文本中。基于此理念构建的数据集 <a href="https://huggingface.co/datasets/zzliang/GRIT">GRIT</a>，其数据构成大致为：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#FDAEB7;font-style:italic">	#</span><span style="color:#FDAEB7;font-style:italic"> other</span><span style="color:#FDAEB7;font-style:italic"> params</span><span style="color:#FDAEB7;font-style:italic"> omit</span></span>
+<span class="line"><span style="color:#FDAEB7;font-style:italic">	'caption'</span><span style="color:#E1E4E8">: </span><span style="color:#FDAEB7;font-style:italic">'a</span><span style="color:#FDAEB7;font-style:italic"> wire</span><span style="color:#FDAEB7;font-style:italic"> hanger</span><span style="color:#FDAEB7;font-style:italic"> with</span><span style="color:#FDAEB7;font-style:italic"> a</span><span style="color:#FDAEB7;font-style:italic"> paper</span><span style="color:#FDAEB7;font-style:italic"> cover</span><span style="color:#FDAEB7;font-style:italic"> that</span><span style="color:#FDAEB7;font-style:italic"> reads</span><span style="color:#FDAEB7;font-style:italic"> we</span><span style="color:#FDAEB7;font-style:italic"> heart</span><span style="color:#FDAEB7;font-style:italic"> our</span><span style="color:#FDAEB7;font-style:italic"> customers'</span><span style="color:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#FDAEB7;font-style:italic">	'width'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1024</span><span style="color:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#FDAEB7;font-style:italic">	'height'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">693</span><span style="color:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#FDAEB7;font-style:italic">	'noun_chunks'</span><span style="color:#E1E4E8">: [[</span><span style="color:#79B8FF">19</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">32</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.019644069503434333</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.31054004033406574</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.9622142865754519</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.9603442351023356</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.79298526</span><span style="color:#E1E4E8">], [</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">13</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.019422357885505368</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.027634161214033764</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.9593302408854166</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.969467560450236</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.67520964</span><span style="color:#E1E4E8">]], </span></span>
+<span class="line"><span style="color:#FDAEB7;font-style:italic">	'ref_exps'</span><span style="color:#E1E4E8">: [[</span><span style="color:#79B8FF">19</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">66</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.019644069503434333</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.31054004033406574</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.9622142865754519</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.9603442351023356</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.79298526</span><span style="color:#E1E4E8">], [</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">66</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.019422357885505368</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.027634161214033764</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.9593302408854166</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.969467560450236</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.67520964</span><span style="color:#E1E4E8">]],</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>其中 <code>noun_chucks</code> 表示具有关联边界框的名词块列表，每个名词块包含 <code>开始位置</code>、<code>结束位置</code>、<code>x_min</code>、<code>y_min</code>、<code>x_max</code>、<code>y_max</code>、<code>置信分数</code>；此外 <code>ref_exps</code> 表示名词块的参考扩展，若无扩展即为本身的复制，具体构建管道如下图所示：
+<img src="https://s2.loli.net/2025/02/02/ynMT5g4qhZ6BSLC.png" alt="image.png">
+值得注意的是，对于所有扩展的名词块，只保留不包含其他的块，避免名词块的复杂归属关系扰乱文本主语指代的目标。</p>
+<h2 id="位置-tokens">位置 Tokens</h2>
+<p>显而易见，目标边界框位置由连续的数学坐标表示，这并不利于网络理解视觉信息，也不利于文本的统一建模，将连续坐标转化为一系列离散位置 tokens 是合理的选择，对于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>×</mo><mi>H</mi></mrow><annotation encoding="application/x-tex">W \times H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span> 图像，均分为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span> 段，得到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>×</mo><mi>P</mi></mrow><annotation encoding="application/x-tex">P \times P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span> 个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>W</mi><mi>P</mi></mfrac><mo>×</mo><mfrac><mi>H</mi><mi>P</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{W}{P}\times \frac{H}{P}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">P</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">W</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">P</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0813em;">H</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> 像素块，每个块为一个位置 token，表示该块内的所有坐标。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">s</span><span style="color:#E1E4E8">> &#x3C;</span><span style="color:#FDAEB7;font-style:italic">image</span><span style="color:#E1E4E8">> Image Embedding &#x3C;/</span><span style="color:#FDAEB7;font-style:italic">image</span><span style="color:#E1E4E8">> &#x3C;</span><span style="color:#FDAEB7;font-style:italic">grounding</span><span style="color:#E1E4E8">> &#x3C;</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">> It &#x3C;/</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#FDAEB7;font-style:italic">box</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#FDAEB7;font-style:italic">loc44</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#FDAEB7;font-style:italic">loc863</span><span style="color:#E1E4E8">>&#x3C;/</span><span style="color:#FDAEB7;font-style:italic">box</span><span style="color:#E1E4E8">> seats next to &#x3C;</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">> a campfire &#x3C;/</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#FDAEB7;font-style:italic">box</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#FDAEB7;font-style:italic">loc4</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#FDAEB7;font-style:italic">loc1007</span><span style="color:#E1E4E8">>&#x3C;/</span><span style="color:#FDAEB7;font-style:italic">box</span><span style="color:#E1E4E8">> &#x3C;/</span><span style="color:#85E89D">s</span><span style="color:#E1E4E8">></span></span></code></pre>
+<p>具体文本-图像对输入如上面所示，其中 <code>&#x3C;s> &#x3C;/s></code> 表示序列范围； <code>&#x3C;image> &#x3C;/image></code> 表示图像特征嵌入； <code>&#x3C;grounding></code> 表示后续文本将关联到视觉图像中； <code>&#x3C;p> &#x3C;/p></code> 表示文本名词块范围； <code>&#x3C;box> &#x3C;/box></code> 表示对应的目标位置，其中前一个位置 token 为左上角点，后一个为右下角点。</p>
+<h2 id="结果">结果</h2>
+<p><img src="https://s2.loli.net/2025/02/02/RUzgYSIl49WhbmT.png" alt="image.png">
+多目标检测
+<img src="https://s2.loli.net/2025/02/02/Unf1oVswJDvdzRQ.png" alt="image.png">
+图像描述</p> </div> <script>
+      const syncKatexOverflow = () => {
+        document.querySelectorAll('.prose .katex-display').forEach((displayNode) => {
+          const katexNode = displayNode.querySelector(':scope > .katex');
+          if (!(katexNode instanceof HTMLElement) || !(displayNode instanceof HTMLElement)) {
+            return;
+          }
+
+          const contentWidth = katexNode.scrollWidth;
+          const containerWidth = displayNode.clientWidth;
+          const isOverflowing = contentWidth - containerWidth > 2;
+
+          displayNode.classList.toggle('is-overflowing', isOverflowing);
+        });
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const fallbackInput = document.createElement('textarea');
+        fallbackInput.value = text;
+        fallbackInput.setAttribute('readonly', 'true');
+        fallbackInput.style.position = 'fixed';
+        fallbackInput.style.left = '-9999px';
+        document.body.appendChild(fallbackInput);
+        fallbackInput.select();
+        document.execCommand('copy');
+        fallbackInput.remove();
+      };
+
+      const createKatexContextMenu = () => {
+        const menu = document.createElement('div');
+        menu.className = 'katex-context-menu';
+        menu.innerHTML = '<button type="button" class="katex-context-menu__item">复制 LaTeX</button>';
+        document.body.appendChild(menu);
+
+        let activeLatex = '';
+        let hideTimer = null;
+
+        const hideMenu = () => {
+          menu.classList.remove('is-open');
+          activeLatex = '';
+        };
+
+        const showCopiedState = () => {
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (!(button instanceof HTMLButtonElement)) return;
+          button.textContent = '已复制';
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            hideMenu();
+            button.textContent = '复制 LaTeX';
+          }, 850);
+        };
+
+        document.addEventListener('contextmenu', (event) => {
+          const trigger = event.target;
+          if (!(trigger instanceof Element)) return;
+
+          const katexNode = trigger.closest('.prose .katex');
+          if (!(katexNode instanceof HTMLElement)) {
+            hideMenu();
+            return;
+          }
+
+          const annotation = katexNode.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+          const latex = annotation?.textContent?.trim();
+          if (!latex) {
+            hideMenu();
+            return;
+          }
+
+          event.preventDefault();
+          activeLatex = latex;
+
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (button instanceof HTMLButtonElement) {
+            button.textContent = '复制 LaTeX';
+          }
+
+          const offset = 8;
+          menu.style.left = `${event.clientX + offset}px`;
+          menu.style.top = `${event.clientY + offset}px`;
+          menu.classList.add('is-open');
+
+          const rect = menu.getBoundingClientRect();
+          const maxLeft = window.innerWidth - rect.width - 8;
+          const maxTop = window.innerHeight - rect.height - 8;
+          menu.style.left = `${Math.max(8, Math.min(event.clientX + offset, maxLeft))}px`;
+          menu.style.top = `${Math.max(8, Math.min(event.clientY + offset, maxTop))}px`;
+        });
+
+        menu.addEventListener('click', async (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest('.katex-context-menu__item')) return;
+          if (!activeLatex) return;
+
+          try {
+            await copyText(activeLatex);
+            showCopiedState();
+          } catch {
+            hideMenu();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Element && target.closest('.katex-context-menu')) return;
+          hideMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') hideMenu();
+        });
+        window.addEventListener('resize', hideMenu);
+        window.addEventListener('scroll', hideMenu, true);
+      };
+
+      const syncPostNavTitleOverflow = () => {
+        document.querySelectorAll('[data-post-nav-title]').forEach((titleNode) => {
+          if (!(titleNode instanceof HTMLElement)) return;
+
+          const wrap = titleNode.closest('.post-nav-title-wrap');
+          if (!(wrap instanceof HTMLElement)) return;
+
+          wrap.classList.remove('is-overflowing');
+          wrap.style.removeProperty('--post-nav-title-overflow');
+          wrap.style.removeProperty('--post-nav-title-duration');
+
+          const overflow = Math.max(0, titleNode.scrollWidth - wrap.clientWidth);
+          if (overflow > 2) {
+            const overflowPx = Math.ceil(overflow);
+            const durationMs = Math.min(5200, Math.max(2400, 1800 + overflowPx * 14));
+            wrap.classList.add('is-overflowing');
+            wrap.style.setProperty('--post-nav-title-overflow', `${overflowPx}px`);
+            wrap.style.setProperty('--post-nav-title-duration', `${durationMs}ms`);
+          }
+        });
+      };
+
+      syncKatexOverflow();
+      syncPostNavTitleOverflow();
+      window.addEventListener('load', syncKatexOverflow);
+      window.addEventListener('load', syncPostNavTitleOverflow);
+      window.addEventListener('resize', syncKatexOverflow);
+      window.addEventListener('resize', syncPostNavTitleOverflow);
+      createKatexContextMenu();
+    </script> <!-- Tags --> <div class="mt-8 flex flex-wrap items-center gap-2"> <span class="text-xs uppercase tracking-[0.22em] text-gray-500">Tags</span> <a href="/tags/vlm" class="tag-chip">
+#VLM </a> </div> <!-- Post navigation --> <div class="mt-10 pt-6 border-t border-gray-700"> <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> <a href="/posts/visual-instruction-tuning--llava" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:-translate-x-1"> <div class="text-xs text-gray-400 mb-1">← 上一篇</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Visual Instruction Tuning ( LLaVA)</span> </div> </a> <a href="/blog" class="rounded-xl border border-blue-400/35 bg-blue-500/15 hover:bg-blue-500/25 hover:border-blue-300/60 transition-all p-4 text-center flex items-center justify-center"> <span class="text-sm text-blue-200 font-semibold">返回博客列表</span> </a> <a href="/posts/position-embedding" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 text-right transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:translate-x-1"> <div class="text-xs text-gray-400 mb-1">下一篇 →</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Position Embedding</span> </div> </a> </div> <div class="mt-4 text-center"> <a href="/" class="text-xs text-gray-400 hover:text-white transition-colors">返回首页</a> </div> </div> </article>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+About this site
+</a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
+GitHub
+</a> </div> </div> </footer> </body></html>

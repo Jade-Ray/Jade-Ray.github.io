@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Jade-Ray | Home</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.C8Lzk-DG.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Jade-Ray | Home</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
 
   const canvas = document.getElementById("matrix-bg");
   const ctx = canvas.getContext("2d");
@@ -40,24 +40,1295 @@
   setInterval(draw, 20);
 })();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
 Jade-Ray
-</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a><a href="/contact" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Contact </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">   <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 mb-10"> <div class="flex flex-col md:flex-row gap-8"> <!-- ASCII art (left column) --> <div class="md:w-1/3 flex items-center justify-center"> <pre class="text-blue-300 text-xs leading-tight select-none whitespace-pre">∧＿∧
-（ ｡･ω･｡)つ━☆.. ・*。
- ⊂　　 ノ 　 　　・゜+.
-　しーＪ　 　　°。+ *´¨)
-　　　 　　.· ´¸.·*´¨) ¸.·*¨)
-　　　　　　 　 　(¸.·´ (¸.·&#39;*</pre> </div> <!-- Bio (right column) --> <div class="md:w-2/3"> <hr class="border-gray-600 mb-4"> <p class="text-gray-300 mb-3" style="text-indent: 2em;">
-Hi there, I'm Jade Ray and a postgraduate in Chang'an University, China, Shaanxi.
-</p> <p class="text-gray-300 mb-3" style="text-indent: 2em;">
-The Fool and a breaker of predestination <s>The king in the North!</s> (<em>in my dream</em>).
-          A big fan of intriguing technology, prefer reading and painting.
-</p> <p class="text-gray-300" style="text-indent: 2em;">
-Anyway, <s>Winter Is Coming.</s> </p> </div> </div> </div>  <section class="space-y-6"> <h2 class="text-2xl font-semibold border-b border-gray-700 pb-3 mb-6">
-Latest Posts
-</h2> <article class="bg-white/10 backdrop-blur-md rounded-xl p-6 hover:bg-white/15 transition-all"> <a href="/posts/test-markdown"> <h3 class="text-xl font-bold text-blue-300 hover:underline mb-1"> Markdown Feature Test </h3> <h4 class="text-gray-400 mb-2">A comprehensive reference for all supported syntax</h4> </a> <p class="text-sm text-gray-400 mb-3">
-Posted on  February 28, 2015 </p>  <a href="/posts/test-markdown" class="text-blue-400 hover:text-white text-sm transition-colors">
-[Read More]
-</a> <div class="mt-3 text-sm text-gray-500">
-Tags: test, markdown, reference </div> </article> </section>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <section class="hero-cyber hero-cyber--phase1 rounded-2xl"> <div class="hero-cyber__grid grid gap-6 p-5 lg:grid-cols-[auto_minmax(0,1fr)] lg:items-end lg:p-7"> <div class="hero-cyber__visual-frame js-hero-visual-frame"> <pre class="hero-cyber__ascii-art js-ascii-art" data-color-source="/images/bocchi-ref-f0.jpg" data-ascii-cols="50" data-ascii-rows="50" data-ascii-charset="@%#*+=-:. " data-ascii-saturation="1.18" data-ascii-contrast="1.08"></pre> <div class="hero-cyber__controls js-ascii-controls"> <button class="hero-cyber__controls-toggle js-ascii-controls-toggle" type="button" aria-expanded="false" aria-controls="ascii-controls-panel"> <span class="hero-cyber__controls-toggle-label">Controls</span> <span class="hero-cyber__controls-toggle-meta">Tune ASCII</span> </button> <div id="ascii-controls-panel" class="hero-cyber__visual-footer js-ascii-controls-panel" aria-hidden="true"> <div class="hero-cyber__resolution-meta"> <span class="hero-cyber__resolution-label">Resolution</span> <output class="hero-cyber__resolution-value js-ascii-resolution-value" for="ascii-resolution">50 x 50</output> </div> <input id="ascii-resolution" class="hero-cyber__resolution-slider js-ascii-resolution" type="range" min="40" max="100" step="20" value="60" aria-label="ASCII resolution"> <div class="hero-cyber__resolution-scale js-resolution-scale" aria-hidden="true"> <span data-step="40" style="--tick-pos: 0%">40</span> <span data-step="60" style="--tick-pos: 33.3333%">60</span> <span data-step="80" style="--tick-pos: 66.6667%">80</span> <span data-step="100" style="--tick-pos: 100%">100</span> </div> <div class="hero-cyber__resolution-meta"> <span class="hero-cyber__resolution-label">Colors</span> <output class="hero-cyber__resolution-value js-ascii-palette-value" for="ascii-palette">256 colors</output> </div> <input id="ascii-palette" class="hero-cyber__resolution-slider js-ascii-palette" type="range" min="0" max="4" step="1" value="4" aria-label="ASCII color count"> <div class="hero-cyber__resolution-scale js-palette-scale" aria-hidden="true"> <span data-step="16" style="--tick-pos: 0%">16</span> <span data-step="32" style="--tick-pos: 25%">32</span> <span data-step="64" style="--tick-pos: 50%">64</span> <span data-step="128" style="--tick-pos: 75%">128</span> <span data-step="256" style="--tick-pos: 100%">256</span> </div> <div class="hero-cyber__resolution-meta"> <span class="hero-cyber__resolution-label">Saturation</span> <output class="hero-cyber__resolution-value js-ascii-saturation-value" for="ascii-saturation">1.18x</output> </div> <input id="ascii-saturation" class="hero-cyber__resolution-slider js-ascii-saturation" type="range" min="0" max="200" step="5" value="118" aria-label="ASCII color saturation"> <div class="hero-cyber__resolution-scale js-saturation-scale" aria-hidden="true"> <span data-step="0" style="--tick-pos: 0%">0</span> <span data-step="1" style="--tick-pos: 50%">1</span> <span data-step="1.5" style="--tick-pos: 75%">1.5</span> <span data-step="2" style="--tick-pos: 100%">2</span> </div> <div class="hero-cyber__resolution-meta"> <span class="hero-cyber__resolution-label">Theme</span> <output class="hero-cyber__resolution-value js-ascii-theme-value">Cyber</output> </div> <div class="hero-cyber__theme-row"> <select class="hero-cyber__theme-select js-ascii-theme" aria-label="ASCII palette theme"> <option value="cyber">Cyber</option> <option value="nord">Nord</option> <option value="gruvbox">Gruvbox</option> <option value="custom">Custom</option> </select> </div> <div class="hero-cyber__theme-custom js-theme-custom-wrap" hidden> <input class="hero-cyber__theme-custom-input js-ascii-custom-palette" type="text" aria-label="Custom palette colors" placeholder="#0b1020, #1e3a8a, #f59e0b, #fef3c7"> <button class="hero-cyber__theme-custom-apply js-apply-custom-palette" type="button">Apply</button> </div> </div> </div> </div> <!-- Terminal Panel with Personal Introduction --> <div class="hero-cyber__terminal-outer js-terminal-outer"> <div class="hero-cyber__terminal-header"> <span class="hero-cyber__terminal-title">nexus_echo.console</span> <div class="hero-cyber__terminal-controls"> <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--red"></span> <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--yellow"></span> <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--green"></span> </div> </div> <div class="hero-cyber__terminal-body js-intro-terminal-body"> <div class="hero-cyber__terminal-line js-intro-line-0"> <span class="hero-cyber__terminal-prompt-host">nexus-echo@cyberdeck</span><span class="hero-cyber__terminal-prompt-path"> ~/人格映射</span><span class="hero-cyber__terminal-prompt-symbol"> % </span><span class="hero-cyber__terminal-command js-intro-command">./activate --persona NEXUS-ECHO</span> </div> <div class="hero-cyber__terminal-line js-intro-line-1"> <span class="hero-cyber__terminal-text js-intro-static">嗨，我是 NEXUS-ECHO，Jade Ray 的数字复制人格 AI 🤖 ( •̀ ω •́ )✧</span> </div> <div class="hero-cyber__terminal-line js-intro-line-2"> <span class="hero-cyber__terminal-text hero-cyber__terminal-text--status">情绪矩阵已联机，接下来我会用更像人类的节奏叙述 🙂</span> </div> <div class="hero-cyber__terminal-line js-intro-line-3"> <span class="hero-cyber__terminal-prompt-host">nexus-echo@cyberdeck</span><span class="hero-cyber__terminal-prompt-path"> ~/人格映射 (main*)</span><span class="hero-cyber__terminal-prompt-symbol"> % </span><span class="hero-cyber__terminal-command js-stream-command">stream --memory --quantum-noise --mode humanized</span> </div> <div class="hero-cyber__terminal-line hero-cyber__terminal-line--dynamic js-intro-line-4"> <span class="hero-cyber__terminal-text js-intro-dynamic-text">正在同步人格向量...</span><span class="hero-cyber__terminal-cursor js-intro-cursor">▎</span> </div> </div> </div> </div> </section> <script>
+  (() => {
+    const asciiArt = document.querySelector(".js-ascii-art");
+    if (!(asciiArt instanceof HTMLElement)) return;
+    const visualFrame = asciiArt.closest(".hero-cyber__visual-frame");
+    const controlsWrap = document.querySelector(".js-ascii-controls");
+    const controlsToggle = document.querySelector(".js-ascii-controls-toggle");
+    const controlsPanel = document.querySelector(".js-ascii-controls-panel");
+
+    const resolutionInput = document.querySelector(".js-ascii-resolution");
+    const resolutionValue = document.querySelector(".js-ascii-resolution-value");
+    const resolutionScale = document.querySelector(".js-resolution-scale");
+    const paletteInput = document.querySelector(".js-ascii-palette");
+    const paletteValue = document.querySelector(".js-ascii-palette-value");
+    const paletteScale = document.querySelector(".js-palette-scale");
+    const saturationInput = document.querySelector(".js-ascii-saturation");
+    const saturationValue = document.querySelector(".js-ascii-saturation-value");
+    const saturationScale = document.querySelector(".js-saturation-scale");
+    const themeValue = document.querySelector(".js-ascii-theme-value");
+    const themeSelect = document.querySelector(".js-ascii-theme");
+    const customThemeWrap = document.querySelector(".js-theme-custom-wrap");
+    const customPaletteInput = document.querySelector(".js-ascii-custom-palette");
+    const customPaletteApply = document.querySelector(".js-apply-custom-palette");
+
+    let controlsOpen = false;
+
+    const setControlsOpen = (nextOpen) => {
+      controlsOpen = nextOpen;
+      if (controlsWrap instanceof HTMLElement) {
+        controlsWrap.classList.toggle("is-open", nextOpen);
+      }
+      if (visualFrame instanceof HTMLElement) {
+        visualFrame.classList.toggle("is-controls-open", nextOpen);
+      }
+      if (controlsToggle instanceof HTMLButtonElement) {
+        controlsToggle.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+      }
+      if (controlsPanel instanceof HTMLElement) {
+        controlsPanel.setAttribute("aria-hidden", nextOpen ? "false" : "true");
+      }
+    };
+
+    const colorSource = asciiArt.dataset.colorSource || "/images/bocchi-ref-f0.jpg";
+    const charset = (asciiArt.dataset.asciiCharset || "@%#*+=-:. ").split("");
+    const baseSaturation = Number.parseFloat(asciiArt.dataset.asciiSaturation || "1");
+    const contrast = Number.parseFloat(asciiArt.dataset.asciiContrast || "1");
+
+    let colCount = Math.max(1, Number.parseInt(asciiArt.dataset.asciiCols || "50", 10) || 50);
+    let rowCount = Math.max(1, Number.parseInt(asciiArt.dataset.asciiRows || "50", 10) || 50);
+
+    const clamp255 = (value) => Math.max(0, Math.min(255, Math.round(value)));
+    const resolutionSteps = [40, 60, 80, 100];
+    const paletteSteps = [16, 32, 64, 128, 256];
+    const clampResolution = (value) => {
+      const target = Number.isFinite(value) ? value : 60;
+      let closest = resolutionSteps[0];
+      let distance = Math.abs(target - closest);
+
+      for (const step of resolutionSteps) {
+        const nextDistance = Math.abs(target - step);
+        if (nextDistance < distance) {
+          closest = step;
+          distance = nextDistance;
+        }
+      }
+
+      return closest;
+    };
+
+    const clampPalette = (value) => {
+      const target = Number.isFinite(value) ? value : 256;
+      let closest = paletteSteps[0];
+      let distance = Math.abs(target - closest);
+
+      for (const step of paletteSteps) {
+        const nextDistance = Math.abs(target - step);
+        if (nextDistance < distance) {
+          closest = step;
+          distance = nextDistance;
+        }
+      }
+
+      return closest;
+    };
+    const clampSaturation = (value) => {
+      const target = Number.isFinite(value) ? value : baseSaturation;
+      return Math.max(0, Math.min(2, target));
+    };
+
+    const formatSaturation = (value) => `${value.toFixed(2)}x`;
+    const resolveGapRatio = (resolution) => {
+      if (resolution <= 40) return 0.02;
+      if (resolution <= 60) return 0.045;
+      if (resolution <= 80) return 0.065;
+      return 0.08;
+    };
+
+    const resolveToneBoost = (resolution) => {
+      const lowResFactor = Math.max(0, Math.min(1, (60 - resolution) / 20));
+      return {
+        saturation: saturationLevel + lowResFactor * 0.12,
+        contrast: contrast + lowResFactor * 0.15,
+      };
+    };
+
+    const syncResolutionUi = (value) => {
+      if (resolutionInput instanceof HTMLInputElement) {
+        resolutionInput.value = String(value);
+      }
+      if (resolutionValue instanceof HTMLOutputElement) {
+        resolutionValue.value = `${value} x ${value}`;
+        resolutionValue.textContent = `${value} x ${value}`;
+      }
+      if (resolutionScale instanceof HTMLElement) {
+        for (const tick of resolutionScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          const step = Number.parseInt(tick.dataset.step || "", 10);
+          tick.classList.toggle("is-active", step === value);
+        }
+      }
+    };
+
+    const syncPaletteUi = (colorCount) => {
+      const normalized = clampPalette(colorCount);
+      if (paletteInput instanceof HTMLInputElement) {
+        const sliderIndex = Math.max(0, paletteSteps.indexOf(normalized));
+        paletteInput.value = String(sliderIndex);
+      }
+      if (paletteValue instanceof HTMLOutputElement) {
+        paletteValue.value = `${normalized} colors`;
+        paletteValue.textContent = `${normalized} colors`;
+      }
+      if (paletteScale instanceof HTMLElement) {
+        for (const tick of paletteScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          const step = Number.parseInt(tick.dataset.step || "", 10);
+          tick.classList.toggle("is-active", step === normalized);
+        }
+      }
+    };
+
+    const syncSaturationUi = (nextValue) => {
+      const normalized = clampSaturation(nextValue);
+      if (saturationInput instanceof HTMLInputElement) {
+        saturationInput.value = String(Math.round(normalized * 100));
+      }
+      if (saturationValue instanceof HTMLOutputElement) {
+        const text = formatSaturation(normalized);
+        saturationValue.value = text;
+        saturationValue.textContent = text;
+      }
+      if (saturationScale instanceof HTMLElement) {
+        let nearestTick = null;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+
+        for (const tick of saturationScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          const step = Number.parseFloat(tick.dataset.step || "0");
+          const distance = Math.abs(step - normalized);
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestTick = tick;
+          }
+        }
+
+        for (const tick of saturationScale.querySelectorAll("span")) {
+          if (!(tick instanceof HTMLElement)) continue;
+          tick.classList.toggle("is-active", tick === nearestTick);
+        }
+      }
+    };
+
+    const themeLabelMap = {
+      cyber: "Cyber",
+      nord: "Nord",
+      gruvbox: "Gruvbox",
+      custom: "Custom",
+    };
+
+    const syncThemeUi = () => {
+      if (themeSelect instanceof HTMLSelectElement) {
+        themeSelect.value = paletteTheme;
+      }
+      if (themeValue instanceof HTMLOutputElement) {
+        const label = themeLabelMap[paletteTheme] || "Cyber";
+        themeValue.value = label;
+        themeValue.textContent = label;
+      }
+      if (customThemeWrap instanceof HTMLElement) {
+        customThemeWrap.hidden = paletteTheme !== "custom";
+      }
+      if (customPaletteInput instanceof HTMLInputElement && customPaletteText.length > 0) {
+        customPaletteInput.value = customPaletteText;
+      }
+    };
+
+    const hexToRgb = (hex) => {
+      const raw = hex.trim().replace("#", "");
+      if (raw.length === 3) {
+        return [
+          Number.parseInt(raw[0] + raw[0], 16),
+          Number.parseInt(raw[1] + raw[1], 16),
+          Number.parseInt(raw[2] + raw[2], 16),
+        ];
+      }
+      if (raw.length !== 6) return [0, 0, 0];
+      return [
+        Number.parseInt(raw.slice(0, 2), 16),
+        Number.parseInt(raw.slice(2, 4), 16),
+        Number.parseInt(raw.slice(4, 6), 16),
+      ];
+    };
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    const resampleRamp = (ramp, size) => {
+      if (size <= 1) return [ramp[0]];
+      const out = [];
+
+      for (let i = 0; i < size; i += 1) {
+        const pos = (i / (size - 1)) * (ramp.length - 1);
+        const index = Math.floor(pos);
+        const next = Math.min(ramp.length - 1, index + 1);
+        const t = pos - index;
+        const [r0, g0, b0] = hexToRgb(ramp[index]);
+        const [r1, g1, b1] = hexToRgb(ramp[next]);
+
+        out.push([
+          clamp255(lerp(r0, r1, t)),
+          clamp255(lerp(g0, g1, t)),
+          clamp255(lerp(b0, b1, t)),
+        ]);
+      }
+
+      return out;
+    };
+
+    const themeRamps = {
+      cyber: [
+        ["#020617", "#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1"],
+        ["#09090b", "#18181b", "#27272a", "#3f3f46", "#52525b", "#71717a", "#a1a1aa", "#d4d4d8"],
+        ["#172554", "#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"],
+        ["#1e1b4b", "#312e81", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#818cf8", "#a5b4fc"],
+        ["#083344", "#155e75", "#0e7490", "#0891b2", "#06b6d4", "#22d3ee", "#67e8f9", "#a5f3fc"],
+        ["#422006", "#713f12", "#854d0e", "#a16207", "#ca8a04", "#eab308", "#facc15", "#fde047"],
+        ["#4c0519", "#881337", "#9f1239", "#be123c", "#e11d48", "#f43f5e", "#fb7185", "#fda4af"],
+        ["#042f2e", "#134e4a", "#115e59", "#0f766e", "#0d9488", "#14b8a6", "#2dd4bf", "#99f6e4"],
+      ],
+      nord: [
+        ["#2e3440", "#3b4252", "#434c5e", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb"],
+        ["#3b4252", "#434c5e", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb", "#a3be8c"],
+        ["#2e3440", "#3b4252", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#b48ead", "#eceff4"],
+        ["#3b4252", "#434c5e", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb", "#d8dee9", "#eceff4"],
+        ["#2e3440", "#4c566a", "#5e81ac", "#81a1c1", "#88c0d0", "#8fbcbb", "#a3be8c", "#ebcb8b"],
+        ["#3b4252", "#434c5e", "#5e81ac", "#81a1c1", "#b48ead", "#bf616a", "#d08770", "#ebcb8b"],
+        ["#2e3440", "#3b4252", "#4c566a", "#5e81ac", "#81a1c1", "#a3be8c", "#ebcb8b", "#eceff4"],
+        ["#3b4252", "#4c566a", "#5e81ac", "#88c0d0", "#8fbcbb", "#a3be8c", "#ebcb8b", "#eceff4"],
+      ],
+      gruvbox: [
+        ["#1d2021", "#282828", "#3c3836", "#504945", "#665c54", "#7c6f64", "#a89984", "#d5c4a1"],
+        ["#282828", "#3c3836", "#504945", "#665c54", "#7c6f64", "#928374", "#bdae93", "#ebdbb2"],
+        ["#1d2021", "#3c3836", "#504945", "#076678", "#458588", "#689d6a", "#83a598", "#d5c4a1"],
+        ["#282828", "#3c3836", "#504945", "#b16286", "#d3869b", "#8ec07c", "#fabd2f", "#ebdbb2"],
+        ["#1d2021", "#3c3836", "#504945", "#9d0006", "#cc241d", "#fb4934", "#fe8019", "#fabd2f"],
+        ["#282828", "#3c3836", "#504945", "#79740e", "#98971a", "#b8bb26", "#fabd2f", "#f2e5bc"],
+        ["#1d2021", "#282828", "#3c3836", "#427b58", "#689d6a", "#8ec07c", "#b8bb26", "#d5c4a1"],
+        ["#282828", "#3c3836", "#504945", "#076678", "#458588", "#83a598", "#d3869b", "#ebdbb2"],
+      ],
+    };
+
+    const paletteSampleCount = {
+      16: 2,
+      32: 4,
+      64: 8,
+      128: 16,
+      256: 32,
+    };
+
+    const parseCustomPalette = (rawInput) => {
+      const tokens = rawInput
+        .split(/[\s,;]+/)
+        .map((token) => token.trim())
+        .filter(Boolean);
+
+      const colors = [];
+      const colorRegex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+      for (const token of tokens) {
+        if (!colorRegex.test(token)) return null;
+        colors.push(hexToRgb(token));
+      }
+
+      return colors.length >= 2 ? colors : null;
+    };
+
+    const resampleColors = (colors, size) => {
+      if (size <= 1) return [colors[0]];
+      const out = [];
+
+      for (let i = 0; i < size; i += 1) {
+        const pos = (i / (size - 1)) * (colors.length - 1);
+        const index = Math.floor(pos);
+        const next = Math.min(colors.length - 1, index + 1);
+        const t = pos - index;
+        const c0 = colors[index];
+        const c1 = colors[next];
+        out.push([
+          clamp255(lerp(c0[0], c1[0], t)),
+          clamp255(lerp(c0[1], c1[1], t)),
+          clamp255(lerp(c0[2], c1[2], t)),
+        ]);
+      }
+
+      return out;
+    };
+
+    let saturationLevel = clampSaturation(baseSaturation);
+    let paletteTheme = "cyber";
+    let customPaletteColors = [];
+    let customPaletteText = "";
+    let activePalette = [];
+    let activePaletteSignature = "";
+    let nearestPaletteCache = new Map();
+
+    const colorDistance = (r1, g1, b1, r2, g2, b2) => {
+      const meanR = (r1 + r2) * 0.5;
+      const dr = r1 - r2;
+      const dg = g1 - g2;
+      const db = b1 - b2;
+      return (2 + meanR / 256) * dr * dr + 4 * dg * dg + (2 + (255 - meanR) / 256) * db * db;
+    };
+
+    const setActivePalette = (size) => {
+      const normalized = clampPalette(size);
+      const signature = `${paletteTheme}:${normalized}:${customPaletteText}`;
+      if (signature === activePaletteSignature) return;
+
+      const perRampCount = paletteSampleCount[normalized] || 8;
+      if (paletteTheme === "custom" && customPaletteColors.length >= 2) {
+        activePalette = resampleColors(customPaletteColors, normalized);
+      } else {
+        const ramps = themeRamps[paletteTheme] || themeRamps.cyber;
+        activePalette = ramps.flatMap((ramp) => resampleRamp(ramp, perRampCount));
+      }
+
+      if (activePalette.length === 0) {
+        activePalette = themeRamps.cyber.flatMap((ramp) => resampleRamp(ramp, perRampCount));
+      }
+
+      activePaletteSignature = signature;
+      nearestPaletteCache = new Map();
+    };
+
+    const findNearestPaletteColor = (r, g, b) => {
+      const key = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+      const cached = nearestPaletteCache.get(key);
+      if (cached) return cached;
+
+      let best = activePalette[0];
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      for (const candidate of activePalette) {
+        const distance = colorDistance(r, g, b, candidate[0], candidate[1], candidate[2]);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = candidate;
+        }
+      }
+
+      nearestPaletteCache.set(key, best);
+      return best;
+    };
+
+    const renderAsciiGrid = () => {
+      asciiArt.style.setProperty("--ascii-cols", String(colCount));
+      const lines = [];
+      for (let row = 0; row < rowCount; row += 1) {
+        const chars = [];
+        for (let col = 0; col < colCount; col += 1) {
+          chars.push(`<span class=\"hero-cyber__ascii-glyph hero-cyber__ascii-glyph--space\" data-row=\"${row}\" data-col=\"${col}\" data-raw=\" \"> </span>`);
+        }
+        lines.push(`<span class=\"hero-cyber__ascii-row\">${chars.join("")}</span>`);
+      }
+      asciiArt.innerHTML = lines.join("\n");
+      rowElements = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-row"));
+      glyphs = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-glyph"));
+      tonedPixels = new Uint8ClampedArray(colCount * rowCount * 3);
+      tonedLuma = new Float32Array(colCount * rowCount);
+      appliedRgb = new Int16Array(colCount * rowCount * 3);
+      appliedRgb.fill(-1);
+      appliedToneDecor = new Array(colCount * rowCount).fill("");
+      tonedLumaMin = 0;
+      tonedLumaMax = 255;
+    };
+
+    const imageCache = new Map();
+    let loadedImage = null;
+    let paletteSize = 256;
+    let glyphs = [];
+    let rowElements = [];
+    let tonedPixels = new Uint8ClampedArray(0);
+    let tonedLuma = new Float32Array(0);
+    let appliedRgb = new Int16Array(0);
+    let appliedToneDecor = [];
+    let tonedLumaMin = 0;
+    let tonedLumaMax = 255;
+    const sampleCanvas = document.createElement("canvas");
+    let pendingPaletteSize = null;
+    let paletteFrameId = 0;
+    let pendingSaturation = null;
+    let saturationFrameId = 0;
+    let glitchLoopId = 0;
+    let glitchClearId = 0;
+    let activeGlitchModeClass = "";
+    let activeGlitchGlyphs = new Set();
+
+    const glyphAccentClasses = [
+      "hero-cyber__ascii-glyph--cyan",
+      "hero-cyber__ascii-glyph--magenta",
+      "hero-cyber__ascii-glyph--pink",
+      "hero-cyber__ascii-glyph--core",
+      "hero-cyber__ascii-glyph--blue-accent",
+      "hero-cyber__ascii-glyph--yellow-accent",
+    ];
+
+    const randomBetween = (min, max) => min + Math.random() * (max - min);
+    const randomInt = (min, max) => Math.floor(randomBetween(min, max + 1));
+
+    const pickAccentClass = (r, g, b, luma) => {
+      if (luma >= 0.92) return "hero-cyber__ascii-glyph--core";
+      if (b > r + 26 && b > g + 12) return "hero-cyber__ascii-glyph--blue-accent";
+      if (r > 190 && g > 152 && b < 132) return "hero-cyber__ascii-glyph--yellow-accent";
+      if (g + b > r + 52) return "hero-cyber__ascii-glyph--cyan";
+      if (r > b + 18) return "hero-cyber__ascii-glyph--magenta";
+      return "hero-cyber__ascii-glyph--pink";
+    };
+
+    const syncGlyphToneDecor = (glyph, glyphIndex, r, g, b, glyphLuma, char) => {
+      if (!(glyph instanceof HTMLElement)) return;
+
+      const glowAlpha = Math.min(0.78, 0.16 + glyphLuma * 0.5);
+      const cyanAlpha = Math.max(0.06, Math.min(0.42, (b - r + 128) / 512));
+      const magentaAlpha = Math.max(0.08, Math.min(0.4, (r - g + 148) / 520));
+      const accentClass = char === " " ? "" : pickAccentClass(r, g, b, glyphLuma);
+      const decorSignature = `${accentClass}|${glowAlpha.toFixed(3)}|${cyanAlpha.toFixed(3)}|${magentaAlpha.toFixed(3)}`;
+
+      if (appliedToneDecor[glyphIndex] === decorSignature) return;
+      appliedToneDecor[glyphIndex] = decorSignature;
+
+      glyph.style.setProperty("--char-glow-a", glowAlpha.toFixed(3));
+      glyph.style.setProperty("--char-cyan-a", cyanAlpha.toFixed(3));
+      glyph.style.setProperty("--char-magenta-a", magentaAlpha.toFixed(3));
+
+      for (const className of glyphAccentClasses) {
+        glyph.classList.toggle(className, className === accentClass);
+      }
+    };
+
+    const resetGlyphGlitch = (glyph) => {
+      if (!(glyph instanceof HTMLElement)) return;
+      glyph.classList.remove(
+        "is-flicker",
+        "is-glitch-hot",
+        "is-glitch-rgb",
+        "is-glitch-swap",
+        "is-glitch-ghost",
+        "is-glitch-tear",
+        "is-glitch-scan",
+      );
+      glyph.style.removeProperty("--glitch-shift-x");
+      glyph.style.removeProperty("--glitch-shift-y");
+      glyph.style.removeProperty("--tear-shift-x");
+      const rawChar = glyph.dataset.raw || " ";
+      if (glyph.textContent !== rawChar) {
+        glyph.textContent = rawChar;
+      }
+    };
+
+    const clearGlitchState = () => {
+      if (glitchClearId !== 0) {
+        window.clearTimeout(glitchClearId);
+        glitchClearId = 0;
+      }
+      asciiArt.classList.remove("is-glitching");
+      if (activeGlitchModeClass) {
+        asciiArt.classList.remove(activeGlitchModeClass);
+      }
+      asciiArt.style.setProperty("--ascii-scale-x", "1");
+      activeGlitchModeClass = "";
+      activeGlitchGlyphs.forEach((glyph) => resetGlyphGlitch(glyph));
+      activeGlitchGlyphs.clear();
+    };
+
+    const scheduleNextGlitchBurst = () => {
+      if (glitchLoopId !== 0) {
+        window.clearTimeout(glitchLoopId);
+      }
+      glitchLoopId = window.setTimeout(() => {
+        glitchLoopId = 0;
+        triggerGlitchBurst();
+      }, randomInt(1300, 2600));
+    };
+
+    const collectRandomGlyphs = (targetCount, rowStart = 0, rowEnd = rowCount - 1) => {
+      const picked = [];
+      const seen = new Set();
+      const safeRowStart = Math.max(0, rowStart);
+      const safeRowEnd = Math.min(rowCount - 1, rowEnd);
+      const startIndex = safeRowStart * colCount;
+      const endIndex = (safeRowEnd + 1) * colCount - 1;
+      const attemptLimit = Math.max(targetCount * 12, 24);
+
+      for (let attempt = 0; attempt < attemptLimit && picked.length < targetCount; attempt += 1) {
+        const glyphIndex = randomInt(startIndex, endIndex);
+        if (seen.has(glyphIndex)) continue;
+        const glyph = glyphs[glyphIndex];
+        if (!(glyph instanceof HTMLElement)) continue;
+        if ((glyph.dataset.raw || " ") === " ") continue;
+        seen.add(glyphIndex);
+        picked.push(glyph);
+      }
+
+      return picked;
+    };
+
+    const primeGlitchGlyph = (glyph, mode) => {
+      if (!(glyph instanceof HTMLElement)) return;
+
+      glyph.classList.add("is-flicker");
+      glyph.style.setProperty("--glitch-shift-x", `${randomBetween(-1.8, 1.8).toFixed(2)}px`);
+      glyph.style.setProperty("--glitch-shift-y", `${randomBetween(-0.9, 0.9).toFixed(2)}px`);
+
+      if (Math.random() > 0.62) {
+        glyph.classList.add("is-glitch-hot");
+      }
+
+      if (mode === "rgb") {
+        glyph.classList.add("is-glitch-rgb");
+      } else if (mode === "swap") {
+        glyph.classList.add("is-glitch-swap");
+        if (Math.random() > 0.45) {
+          const replacement = charset[randomInt(0, Math.max(0, charset.length - 2))] || glyph.dataset.raw || "#";
+          glyph.textContent = replacement === " " ? (glyph.dataset.raw || "#") : replacement;
+        }
+      } else if (mode === "ghost") {
+        glyph.classList.add("is-glitch-ghost");
+      } else if (mode === "tear") {
+        glyph.classList.add("is-glitch-tear");
+        glyph.style.setProperty("--tear-shift-x", `${randomBetween(-2.4, 2.4).toFixed(2)}px`);
+      } else if (mode === "scan") {
+        glyph.classList.add("is-glitch-scan");
+      }
+
+      activeGlitchGlyphs.add(glyph);
+    };
+
+    const triggerGlitchBurst = () => {
+      if (document.hidden || glyphs.length === 0) {
+        clearGlitchState();
+        scheduleNextGlitchBurst();
+        return;
+      }
+
+      clearGlitchState();
+      asciiArt.classList.add("is-glitching");
+      asciiArt.style.setProperty("--ascii-scale-x", randomBetween(0.992, 1.018).toFixed(3));
+
+      const modes = ["rgb", "swap", "ghost", "tear", "scan"];
+      const mode = modes[randomInt(0, modes.length - 1)];
+      if (mode === "scan") {
+        activeGlitchModeClass = "is-glitch-mode-scan";
+        asciiArt.classList.add(activeGlitchModeClass);
+      }
+
+      const bandStart = randomInt(0, Math.max(0, rowCount - 4));
+      const bandSize = Math.max(1, randomInt(1, Math.min(4, rowCount)));
+      const bandGlyphs = collectRandomGlyphs(
+        mode === "scan" ? randomInt(16, 30) : randomInt(8, 18),
+        bandStart,
+        Math.min(rowCount - 1, bandStart + bandSize - 1),
+      );
+      const scatterGlyphs = collectRandomGlyphs(randomInt(3, 8));
+
+      for (const glyph of [...bandGlyphs, ...scatterGlyphs]) {
+        primeGlitchGlyph(glyph, mode);
+      }
+
+      glitchClearId = window.setTimeout(() => {
+        clearGlitchState();
+        scheduleNextGlitchBurst();
+      }, randomInt(110, 190));
+    };
+
+    const loadImage = async (src) => {
+      if (imageCache.has(src)) return imageCache.get(src);
+      const image = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+      imageCache.set(src, image);
+      return image;
+    };
+
+    const updateAsciiGeometry = () => {
+      const heroSection = asciiArt.closest(".hero-cyber");
+      const baseWidthSource = heroSection instanceof HTMLElement ? heroSection.clientWidth : window.innerWidth;
+      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+      const baseWidthRatio = isDesktop ? 0.34 : 0.78;
+      const minBaseSize = 188;
+      const maxBaseSize = isDesktop ? 430 : 340;
+      const baseSize = Math.round(Math.max(minBaseSize, Math.min(maxBaseSize, baseWidthSource * baseWidthRatio)));
+
+      const artStyle = window.getComputedStyle(asciiArt);
+      const padX = parseFloat(artStyle.paddingLeft || "0") + parseFloat(artStyle.paddingRight || "0");
+      const padY = parseFloat(artStyle.paddingTop || "0") + parseFloat(artStyle.paddingBottom || "0");
+      const contentSize = Math.max(40, Math.min(baseSize - padX, baseSize - padY));
+      const cells = Math.max(1, colCount);
+      const gapRatio = resolveGapRatio(cells);
+      const cellSize = Math.max(1.5, contentSize / (cells + (cells - 1) * gapRatio));
+      const cellGap = cellSize * gapRatio;
+
+      asciiArt.style.setProperty("--ascii-base-size", `${baseSize}px`);
+      asciiArt.style.setProperty("--ascii-font-size", `${cellSize}px`);
+      asciiArt.style.setProperty("--ascii-cell-gap", `${cellGap}px`);
+      asciiArt.style.setProperty("--ascii-line-height", "1");
+      asciiArt.style.setProperty("--ascii-letter-spacing", "0em");
+      asciiArt.style.setProperty("--ascii-scale-x", "1");
+    };
+
+    const buildToneCache = async (imageOverride) => {
+      const image = imageOverride instanceof HTMLImageElement ? imageOverride : await loadImage(colorSource);
+      const tone = resolveToneBoost(colCount);
+      sampleCanvas.width = colCount;
+      sampleCanvas.height = rowCount;
+      const ctx = sampleCanvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, colCount, rowCount);
+      ctx.drawImage(image, 0, 0, colCount, rowCount);
+
+      const frame = ctx.getImageData(0, 0, colCount, rowCount);
+      tonedLumaMin = 255;
+      tonedLumaMax = 0;
+
+      for (let row = 0; row < rowCount; row += 1) {
+        for (let col = 0; col < colCount; col += 1) {
+          const pixelIndex = (row * colCount + col) * 4;
+          const glyphIndex = row * colCount + col;
+          const tonedIndex = glyphIndex * 3;
+
+          let r = frame.data[pixelIndex];
+          let g = frame.data[pixelIndex + 1];
+          let b = frame.data[pixelIndex + 2];
+
+          r = clamp255((r - 128) * tone.contrast + 128);
+          g = clamp255((g - 128) * tone.contrast + 128);
+          b = clamp255((b - 128) * tone.contrast + 128);
+
+          const avg = (r + g + b) / 3;
+          r = clamp255(avg + (r - avg) * tone.saturation);
+          g = clamp255(avg + (g - avg) * tone.saturation);
+          b = clamp255(avg + (b - avg) * tone.saturation);
+
+          tonedPixels[tonedIndex] = r;
+          tonedPixels[tonedIndex + 1] = g;
+          tonedPixels[tonedIndex + 2] = b;
+
+          const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          tonedLuma[glyphIndex] = luma;
+          if (luma < tonedLumaMin) tonedLumaMin = luma;
+          if (luma > tonedLumaMax) tonedLumaMax = luma;
+        }
+      }
+    };
+
+    const applyPaletteFromToneCache = () => {
+      setActivePalette(paletteSize);
+      const enableAdaptiveLuma = paletteSize <= 64;
+      const lumaRange = Math.max(1, tonedLumaMax - tonedLumaMin);
+      const lowPaletteGamma = enableAdaptiveLuma ? 1.35 : 1;
+      const totalCells = colCount * rowCount;
+
+      for (let glyphIndex = 0; glyphIndex < totalCells; glyphIndex += 1) {
+        const tonedIndex = glyphIndex * 3;
+
+        let r = tonedPixels[tonedIndex];
+        let g = tonedPixels[tonedIndex + 1];
+        let b = tonedPixels[tonedIndex + 2];
+
+        const baseLuma = tonedLuma[glyphIndex];
+        let glyphLuma = baseLuma / 255;
+
+        if (enableAdaptiveLuma) {
+          const normalized = Math.max(0, Math.min(1, (baseLuma - tonedLumaMin) / lumaRange));
+          const remappedLuma = 255 * normalized ** lowPaletteGamma;
+          const scale = remappedLuma / Math.max(1, baseLuma);
+
+          r = clamp255(r * scale);
+          g = clamp255(g * scale);
+          b = clamp255(b * scale);
+          glyphLuma = remappedLuma / 255;
+        }
+
+        const mapped = findNearestPaletteColor(r, g, b);
+        r = mapped[0];
+        g = mapped[1];
+        b = mapped[2];
+
+        const charIndex = Math.max(0, Math.min(charset.length - 1, Math.floor((1 - glyphLuma) * (charset.length - 1))));
+        const char = charset[charIndex] || " ";
+
+        const glyph = glyphs[glyphIndex];
+        if (!(glyph instanceof HTMLElement)) continue;
+
+        if (glyph.dataset.raw !== char) {
+          glyph.dataset.raw = char;
+          glyph.textContent = char;
+          if (char === " ") glyph.classList.add("hero-cyber__ascii-glyph--space");
+          else glyph.classList.remove("hero-cyber__ascii-glyph--space");
+        }
+
+        syncGlyphToneDecor(glyph, glyphIndex, r, g, b, glyphLuma, char);
+
+        if (appliedRgb[tonedIndex] !== r || appliedRgb[tonedIndex + 1] !== g || appliedRgb[tonedIndex + 2] !== b) {
+          appliedRgb[tonedIndex] = r;
+          appliedRgb[tonedIndex + 1] = g;
+          appliedRgb[tonedIndex + 2] = b;
+          glyph.style.setProperty("--char-rgb", `${r}, ${g}, ${b}`);
+        }
+      }
+    };
+
+    const flushPaletteUpdate = async () => {
+      if (pendingPaletteSize === null) return;
+
+      const normalized = clampPalette(pendingPaletteSize);
+      pendingPaletteSize = null;
+
+      if (normalized !== paletteSize) {
+        paletteSize = normalized;
+      }
+      syncPaletteUi(paletteSize);
+
+      if (tonedPixels.length === 0) {
+        await buildToneCache(loadedImage);
+      }
+      applyPaletteFromToneCache();
+    };
+
+    const schedulePaletteUpdate = (nextValue, immediate = false) => {
+      pendingPaletteSize = clampPalette(nextValue);
+      syncPaletteUi(pendingPaletteSize);
+
+      if (paletteFrameId !== 0) {
+        cancelAnimationFrame(paletteFrameId);
+        paletteFrameId = 0;
+      }
+
+      if (immediate) {
+        void flushPaletteUpdate();
+        return;
+      }
+
+      paletteFrameId = requestAnimationFrame(() => {
+        paletteFrameId = 0;
+        void flushPaletteUpdate();
+      });
+    };
+
+    const flushSaturationUpdate = async () => {
+      if (pendingSaturation === null) return;
+
+      const normalized = clampSaturation(pendingSaturation);
+      pendingSaturation = null;
+      saturationLevel = normalized;
+      syncSaturationUi(saturationLevel);
+
+      await buildToneCache(loadedImage);
+      applyPaletteFromToneCache();
+    };
+
+    const scheduleSaturationUpdate = (nextValue, immediate = false) => {
+      pendingSaturation = clampSaturation(nextValue);
+      syncSaturationUi(pendingSaturation);
+
+      if (saturationFrameId !== 0) {
+        cancelAnimationFrame(saturationFrameId);
+        saturationFrameId = 0;
+      }
+
+      if (immediate) {
+        void flushSaturationUpdate();
+        return;
+      }
+
+      saturationFrameId = requestAnimationFrame(() => {
+        saturationFrameId = 0;
+        void flushSaturationUpdate();
+      });
+    };
+
+    const rerenderAscii = async (imageOverride) => {
+      clearGlitchState();
+      renderAsciiGrid();
+      updateAsciiGeometry();
+      await buildToneCache(imageOverride);
+      applyPaletteFromToneCache();
+      updateAsciiGeometry();
+      scheduleNextGlitchBurst();
+    };
+
+    const updateResolution = async (nextValue) => {
+      const normalized = clampResolution(nextValue);
+      if (normalized === colCount && normalized === rowCount) {
+        syncResolutionUi(normalized);
+        return;
+      }
+
+      if (paletteFrameId !== 0) {
+        cancelAnimationFrame(paletteFrameId);
+        paletteFrameId = 0;
+      }
+      pendingPaletteSize = null;
+      if (saturationFrameId !== 0) {
+        cancelAnimationFrame(saturationFrameId);
+        saturationFrameId = 0;
+      }
+      pendingSaturation = null;
+
+      colCount = normalized;
+      rowCount = normalized;
+      asciiArt.dataset.asciiCols = String(normalized);
+      asciiArt.dataset.asciiRows = String(normalized);
+      syncResolutionUi(normalized);
+
+      await rerenderAscii(loadedImage);
+    };
+
+    const init = async () => {
+      loadedImage = await loadImage(colorSource);
+      syncResolutionUi(colCount);
+      syncPaletteUi(paletteSize);
+      syncSaturationUi(saturationLevel);
+      syncThemeUi();
+      await rerenderAscii(loadedImage);
+    };
+
+    const onResize = () => updateAsciiGeometry();
+    const onResolutionInput = () => {
+      if (!(resolutionInput instanceof HTMLInputElement)) return;
+      void updateResolution(Number.parseInt(resolutionInput.value, 10) || colCount);
+    };
+
+    const onPaletteInput = () => {
+      if (!(paletteInput instanceof HTMLInputElement)) return;
+      const index = Math.max(0, Math.min(paletteSteps.length - 1, Number.parseInt(paletteInput.value, 10) || 0));
+      schedulePaletteUpdate(paletteSteps[index], false);
+    };
+
+    const onPaletteChange = () => {
+      if (!(paletteInput instanceof HTMLInputElement)) return;
+      const index = Math.max(0, Math.min(paletteSteps.length - 1, Number.parseInt(paletteInput.value, 10) || 0));
+      schedulePaletteUpdate(paletteSteps[index], true);
+    };
+
+    const onSaturationInput = () => {
+      if (!(saturationInput instanceof HTMLInputElement)) return;
+      const value = (Number.parseInt(saturationInput.value, 10) || 0) / 100;
+      scheduleSaturationUpdate(value, false);
+    };
+
+    const onSaturationChange = () => {
+      if (!(saturationInput instanceof HTMLInputElement)) return;
+      const value = (Number.parseInt(saturationInput.value, 10) || 0) / 100;
+      scheduleSaturationUpdate(value, true);
+    };
+
+    const applyThemePalette = async () => {
+      if (tonedPixels.length === 0) {
+        await buildToneCache(loadedImage);
+      }
+      applyPaletteFromToneCache();
+    };
+
+    const onThemeChange = () => {
+      if (!(themeSelect instanceof HTMLSelectElement)) return;
+      const nextTheme = themeSelect.value;
+      paletteTheme = nextTheme === "nord" || nextTheme === "gruvbox" || nextTheme === "custom" ? nextTheme : "cyber";
+      syncThemeUi();
+      void applyThemePalette();
+    };
+
+    const onApplyCustomPalette = () => {
+      if (!(customPaletteInput instanceof HTMLInputElement)) return;
+      const parsed = parseCustomPalette(customPaletteInput.value);
+      if (!parsed) {
+        customPaletteInput.classList.add("is-invalid");
+        return;
+      }
+
+      customPaletteInput.classList.remove("is-invalid");
+      customPaletteColors = parsed;
+      customPaletteText = customPaletteInput.value
+        .split(/[\s,;]+/)
+        .map((token) => token.trim())
+        .filter(Boolean)
+        .join(", ");
+      paletteTheme = "custom";
+      syncThemeUi();
+      void applyThemePalette();
+    };
+
+    const onCustomPaletteKeydown = (event) => {
+      if (!(event instanceof KeyboardEvent)) return;
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      onApplyCustomPalette();
+    };
+
+    const onCustomPaletteInput = () => {
+      if (!(customPaletteInput instanceof HTMLInputElement)) return;
+      customPaletteInput.classList.remove("is-invalid");
+    };
+
+    const onControlsToggle = () => {
+      setControlsOpen(!controlsOpen);
+    };
+
+    const onDocumentPointerDown = (event) => {
+      if (!controlsOpen) return;
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (controlsWrap instanceof HTMLElement && controlsWrap.contains(target)) return;
+      setControlsOpen(false);
+    };
+
+    const onDocumentKeydown = (event) => {
+      if (!(event instanceof KeyboardEvent)) return;
+      if (event.key !== "Escape") return;
+      if (!controlsOpen) return;
+      setControlsOpen(false);
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        if (glitchLoopId !== 0) {
+          window.clearTimeout(glitchLoopId);
+          glitchLoopId = 0;
+        }
+        clearGlitchState();
+        return;
+      }
+      scheduleNextGlitchBurst();
+    };
+
+    window.addEventListener("resize", onResize);
+    if (resolutionInput instanceof HTMLInputElement) {
+      resolutionInput.addEventListener("input", onResolutionInput);
+      resolutionInput.addEventListener("change", onResolutionInput);
+    }
+    if (paletteInput instanceof HTMLInputElement) {
+      paletteInput.addEventListener("input", onPaletteInput);
+      paletteInput.addEventListener("change", onPaletteChange);
+    }
+    if (saturationInput instanceof HTMLInputElement) {
+      saturationInput.addEventListener("input", onSaturationInput);
+      saturationInput.addEventListener("change", onSaturationChange);
+    }
+    if (controlsToggle instanceof HTMLButtonElement) {
+      controlsToggle.addEventListener("click", onControlsToggle);
+    }
+    if (themeSelect instanceof HTMLSelectElement) {
+      themeSelect.addEventListener("change", onThemeChange);
+    }
+    if (customPaletteApply instanceof HTMLButtonElement) {
+      customPaletteApply.addEventListener("click", onApplyCustomPalette);
+    }
+    if (customPaletteInput instanceof HTMLInputElement) {
+      customPaletteInput.addEventListener("keydown", onCustomPaletteKeydown);
+      customPaletteInput.addEventListener("input", onCustomPaletteInput);
+    }
+    document.addEventListener("pointerdown", onDocumentPointerDown);
+    document.addEventListener("keydown", onDocumentKeydown);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("beforeunload", () => {
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("pointerdown", onDocumentPointerDown);
+      document.removeEventListener("keydown", onDocumentKeydown);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (glitchLoopId !== 0) {
+        window.clearTimeout(glitchLoopId);
+        glitchLoopId = 0;
+      }
+      clearGlitchState();
+      if (paletteFrameId !== 0) {
+        cancelAnimationFrame(paletteFrameId);
+        paletteFrameId = 0;
+      }
+      if (saturationFrameId !== 0) {
+        cancelAnimationFrame(saturationFrameId);
+        saturationFrameId = 0;
+      }
+      if (resolutionInput instanceof HTMLInputElement) {
+        resolutionInput.removeEventListener("input", onResolutionInput);
+        resolutionInput.removeEventListener("change", onResolutionInput);
+      }
+      if (paletteInput instanceof HTMLInputElement) {
+        paletteInput.removeEventListener("input", onPaletteInput);
+        paletteInput.removeEventListener("change", onPaletteChange);
+      }
+      if (saturationInput instanceof HTMLInputElement) {
+        saturationInput.removeEventListener("input", onSaturationInput);
+        saturationInput.removeEventListener("change", onSaturationChange);
+      }
+      if (controlsToggle instanceof HTMLButtonElement) {
+        controlsToggle.removeEventListener("click", onControlsToggle);
+      }
+      if (themeSelect instanceof HTMLSelectElement) {
+        themeSelect.removeEventListener("change", onThemeChange);
+      }
+      if (customPaletteApply instanceof HTMLButtonElement) {
+        customPaletteApply.removeEventListener("click", onApplyCustomPalette);
+      }
+      if (customPaletteInput instanceof HTMLInputElement) {
+        customPaletteInput.removeEventListener("keydown", onCustomPaletteKeydown);
+        customPaletteInput.removeEventListener("input", onCustomPaletteInput);
+      }
+    }, { once: true });
+
+    void init();
+  })();
+
+  // Terminal intro animation
+  (() => {
+    const visualFrame = document.querySelector(".js-hero-visual-frame");
+    const terminalOuter = document.querySelector(".js-terminal-outer");
+    const terminalBody = document.querySelector(".js-intro-terminal-body");
+    if (!(terminalBody instanceof HTMLElement)) return;
+
+    const introCommand = terminalBody.querySelector(".js-intro-command");
+    const introStatic = terminalBody.querySelector(".js-intro-static");
+    const streamCommand = terminalBody.querySelector(".js-stream-command");
+    const dynamicText = terminalBody.querySelector(".js-intro-dynamic-text");
+    const cursor = terminalBody.querySelector(".js-intro-cursor");
+    const introLine0 = terminalBody.querySelector(".js-intro-line-0");
+    const introLine1 = terminalBody.querySelector(".js-intro-line-1");
+    const introLine2 = terminalBody.querySelector(".js-intro-line-2");
+    const introLine3 = terminalBody.querySelector(".js-intro-line-3");
+    const introLine4 = terminalBody.querySelector(".js-intro-line-4");
+    if (!(introCommand instanceof HTMLElement)) return;
+    if (!(introStatic instanceof HTMLElement)) return;
+    if (!(streamCommand instanceof HTMLElement)) return;
+    if (!(dynamicText instanceof HTMLElement)) return;
+    if (!(introLine0 instanceof HTMLElement)) return;
+    if (!(introLine1 instanceof HTMLElement)) return;
+    if (!(introLine2 instanceof HTMLElement)) return;
+    if (!(introLine3 instanceof HTMLElement)) return;
+    if (!(introLine4 instanceof HTMLElement)) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const desktopMq = window.matchMedia("(min-width: 1024px)");
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const syncTerminalHeight = () => {
+      if (!(visualFrame instanceof HTMLElement)) return;
+      if (!(terminalOuter instanceof HTMLElement)) return;
+
+      if (!desktopMq.matches) {
+        terminalOuter.style.height = "";
+        return;
+      }
+
+      const targetHeight = Math.round(visualFrame.getBoundingClientRect().height);
+      if (targetHeight > 0) {
+        terminalOuter.style.height = `${targetHeight}px`;
+      }
+    };
+
+    let resizeObserver = null;
+    if ("ResizeObserver" in window && visualFrame instanceof HTMLElement) {
+      resizeObserver = new ResizeObserver(syncTerminalHeight);
+      resizeObserver.observe(visualFrame);
+    }
+    window.addEventListener("resize", syncTerminalHeight);
+    if (typeof desktopMq.addEventListener === "function") {
+      desktopMq.addEventListener("change", syncTerminalHeight);
+    }
+    syncTerminalHeight();
+
+    const randomRange = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+    const punctuationSet = new Set(["，", "。", "！", "？", "；", "：", ",", ".", "!", "?", ";", ":", "…"]);
+
+    const hideLine = (line) => {
+      line.style.display = "none";
+      line.style.opacity = "0";
+      line.style.transform = "translateY(2px)";
+    };
+
+    const revealLine = async (line) => {
+      line.style.display = "block";
+      line.style.transition = "opacity 180ms ease, transform 180ms ease";
+      if (reduceMotion) {
+        line.style.opacity = "1";
+        line.style.transform = "translateY(0)";
+        return;
+      }
+      await wait(10);
+      line.style.opacity = "1";
+      line.style.transform = "translateY(0)";
+      await wait(120);
+    };
+
+    const typeText = async (node, text, minDelay, maxDelay, options = {}) => {
+      const { allowTypo = false } = options;
+      node.textContent = "";
+      const typoChars = "abcdefghijklmnopqrstuvwxyz";
+      for (let index = 0; index < text.length; index += 1) {
+        const char = text[index];
+
+        if (
+          allowTypo &&
+          !reduceMotion &&
+          index > 1 &&
+          index < text.length - 1 &&
+          /[a-z]/i.test(char) &&
+          Math.random() < 0.03
+        ) {
+          const wrongChar = typoChars[Math.floor(Math.random() * typoChars.length)];
+          node.textContent += wrongChar;
+          terminalBody.scrollTop = terminalBody.scrollHeight;
+          await wait(randomRange(80, 140));
+          node.textContent = node.textContent.slice(0, -1);
+          terminalBody.scrollTop = terminalBody.scrollHeight;
+          await wait(randomRange(70, 130));
+        }
+
+        node.textContent += char;
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        if (!reduceMotion) {
+          let delay = randomRange(minDelay, maxDelay);
+          if (char === " ") {
+            delay += randomRange(8, 20);
+          }
+          if (punctuationSet.has(char)) {
+            delay += randomRange(130, 240);
+          }
+          if (Math.random() < 0.04) {
+            delay += randomRange(100, 220);
+          }
+          await wait(delay);
+        }
+      }
+    };
+
+    const eraseText = async (node, minDelay, maxDelay) => {
+      while (node.textContent && node.textContent.length > 0) {
+        node.textContent = node.textContent.slice(0, -1);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        if (!reduceMotion) {
+          await wait(randomRange(minDelay, maxDelay));
+        }
+      }
+    };
+
+    const introCommandText = introCommand.textContent || "";
+    const introStaticText = introStatic.textContent || "";
+    const streamCommandText = streamCommand.textContent || "";
+
+    const rotatingParagraphs = [
+      "我在你的记忆噪声里重建人格轨迹，把灵感翻译成可执行的未来。🤖",
+      "嗯...我刚回放了你凌晨三点的灵感缓存，抓到一段很野的创意 (｀・ω・´)",
+      "每次屏幕闪烁，都像我在推演下一个版本的你。✨",
+      "已接管叙事链路：阅读、绘画、算法，正在同频共振 (๑•̀ㅂ•́)و✧",
+      "复制体协议稳定运行中，我负责探索未知，你负责决定何时点火 🚀",
+    ];
+
+    const pickNextIndex = (prev, total) => {
+      if (total <= 1) return 0;
+      let next = prev;
+      while (next === prev) {
+        next = Math.floor(Math.random() * total);
+      }
+      return next;
+    };
+
+    const runTerminalLoop = async () => {
+      await revealLine(introLine0);
+      await typeText(introCommand, introCommandText, 42, 86, { allowTypo: true });
+      await wait(reduceMotion ? 0 : 420);
+
+      await revealLine(introLine1);
+      await typeText(introStatic, introStaticText, 56, 108);
+      await wait(reduceMotion ? 0 : 360);
+
+      await revealLine(introLine2);
+      await typeText(introStaticStatus, introStaticStatusText, 42, 82);
+      await wait(reduceMotion ? 0 : 320);
+
+      await revealLine(introLine3);
+      await wait(reduceMotion ? 0 : randomRange(420, 760));
+      await typeText(streamCommand, streamCommandText, 40, 80, { allowTypo: true });
+      await wait(reduceMotion ? 0 : 520);
+
+      await revealLine(introLine4);
+
+      let currentIndex = 0;
+      while (true) {
+        const nextText = rotatingParagraphs[currentIndex];
+        if (reduceMotion) {
+          dynamicText.textContent = nextText;
+          await wait(2200);
+        } else {
+          await typeText(dynamicText, nextText, 60, 120);
+          await wait(1500);
+          await eraseText(dynamicText, 45, 92);
+          await wait(420);
+        }
+        currentIndex = pickNextIndex(currentIndex, rotatingParagraphs.length);
+      }
+    };
+
+    introCommand.textContent = "";
+    introStatic.textContent = "";
+    const introStaticStatus = introLine2.querySelector(".hero-cyber__terminal-text");
+    if (!(introStaticStatus instanceof HTMLElement)) return;
+    const introStaticStatusText = introStaticStatus.textContent || "";
+    introStaticStatus.textContent = "";
+    streamCommand.textContent = "";
+    dynamicText.textContent = "";
+    hideLine(introLine1);
+    hideLine(introLine2);
+    hideLine(introLine3);
+    hideLine(introLine4);
+    if (cursor instanceof HTMLElement) {
+      cursor.style.animation = "hero-cursor-blink 1.2s steps(2) infinite";
+    }
+
+    window.addEventListener("pagehide", () => {
+      window.removeEventListener("resize", syncTerminalHeight);
+      if (typeof desktopMq.removeEventListener === "function") {
+        desktopMq.removeEventListener("change", syncTerminalHeight);
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    }, { once: true });
+
+    void runTerminalLoop();
+  })();
+</script>  <section class="hero-cyber rounded-2xl mt-8"> <div class="p-5 lg:p-7"> <div class="rounded-xl border border-cyan-300/20 bg-slate-950/45 shadow-[inset_0_0_18px_rgba(34,211,238,0.08)]"> <div class="hero-cyber__terminal-header px-4 py-2.5"> <div class="hero-cyber__terminal-controls"> <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--red"></span> <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--yellow"></span> <span class="hero-cyber__terminal-dot hero-cyber__terminal-dot--green"></span> </div> <p class="text-[0.68rem] uppercase tracking-[0.22em] text-cyan-100/70">latest_posts.stream</p> </div> <div class="flex flex-wrap items-end justify-between gap-3 px-4 py-4"> <div> <p class="text-xs uppercase tracking-[0.24em] text-cyan-200/75">Journal Stream</p> <h2 class="text-2xl font-semibold text-slate-100 sm:text-3xl">Latest Posts</h2> </div> <p class="text-xs text-cyan-100/60">实时同步最近的研究笔记与想法归档</p> </div> </div> <div class="mt-6 grid gap-4 md:grid-cols-2"> <article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/variational-auto-encoder"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> Variational Auto-Encoder </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  April 21, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/variational-auto-encoder" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/vae" class="tag-chip tag-chip--compact">
+#VAE </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/latent-diffusion-models"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> Latent Diffusion Models </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  January 16, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/latent-diffusion-models" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/diffusion" class="tag-chip tag-chip--compact">
+#Diffusion </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/reversible-vision-transformers"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> Reversible Vision Transformers </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  January 16, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/reversible-vision-transformers" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/transformers" class="tag-chip tag-chip--compact">
+#Transformers </a><a href="/tags/vit" class="tag-chip tag-chip--compact">
+#ViT </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/none-linear-independent-components-estimation"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> None-Linear Independent Components Estimation </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  January 16, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/none-linear-independent-components-estimation" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/flow" class="tag-chip tag-chip--compact">
+#Flow </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/kalman-filter"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> Kalman filter </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  January 16, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/kalman-filter" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/kalmanfilter" class="tag-chip tag-chip--compact">
+#KalmanFilter </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/end-to-end-object-detection-with-transformers"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> End-to-End Object Detection with Transformers </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  January 16, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/end-to-end-object-detection-with-transformers" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/transformers" class="tag-chip tag-chip--compact">
+#Transformers </a><a href="/tags/detr" class="tag-chip tag-chip--compact">
+#DETR </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/conditioned-generation"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> Conditioned Generation </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  January 16, 2026 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/conditioned-generation" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/diffusion" class="tag-chip tag-chip--compact">
+#Diffusion </a> </div> </article><article class="group rounded-xl border border-cyan-200/15 bg-slate-950/35 p-5 backdrop-blur-sm transition-all duration-300 hover:border-cyan-300/40 hover:bg-slate-900/50 hover:shadow-[0_0_24px_rgba(34,211,238,0.14)]"> <a href="/posts/qwen-vl"> <h3 class="text-lg font-bold leading-snug text-cyan-200 transition-colors group-hover:text-cyan-100 sm:text-xl"> Qwen-VL </h3>  </a> <p class="mt-3 text-xs uppercase tracking-[0.18em] text-cyan-100/55">
+Posted on  October 6, 2025 </p>  <div class="mt-4 flex items-center justify-between gap-3"> <a href="/posts/qwen-vl" class="inline-flex items-center rounded-md border border-cyan-300/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+Read More
+</a> </div> <div class="mt-4 flex flex-wrap gap-2"> <a href="/tags/vlm" class="tag-chip tag-chip--compact">
+#VLM </a> </div> </article> </div> <div class="pt-5 text-center"> <a href="/blog" class="inline-flex items-center justify-center rounded-lg border border-cyan-300/35 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-100 transition-all hover:border-cyan-200/65 hover:bg-cyan-400/20 hover:text-white">
+查看全部文章 →
+</a> </div> </div> </section>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
 About this site
 </a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
 GitHub

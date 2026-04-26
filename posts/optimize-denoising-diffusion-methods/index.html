@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Optimize Denoising Diffusion Methods | Jade-Ray</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+
+  const canvas = document.getElementById("matrix-bg");
+  const ctx = canvas.getContext("2d");
+
+  const txts = bgtext.split("");
+  const fontSize = 12;
+
+  let columns, drops;
+
+  function resize() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    columns = Math.floor(canvas.width / fontSize);
+    // preserve existing drops positions on resize, fill new columns from top
+    const prev = drops ? [...drops] : [];
+    drops = Array.from({ length: columns }, (_, i) => prev[i] ?? 1);
+  }
+
+  function draw() {
+    // fading black overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#490";
+    ctx.font = fontSize + "px arial";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = txts[Math.floor(Math.random() * txts.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.98) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  setInterval(draw, 20);
+})();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
+Jade-Ray
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8"> <!-- Post header --> <header class="mb-8 text-center"> <h1 class="text-3xl font-bold text-blue-300 mb-3">Optimize Denoising Diffusion Methods</h1>  <time class="text-gray-400"> February 1, 2024 </time> </header> <!-- Post body --> <div class="prose prose-invert max-w-none reading-prose
+      prose-headings:text-blue-200
+      prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-white
+      prose-code:text-green-300
+      prose-pre:bg-gray-800
+      prose-blockquote:border-blue-400 prose-blockquote:text-gray-300
+      prose-img:rounded-lg prose-img:mx-auto
+      prose-table:text-sm
+      prose-th:text-blue-200 prose-td:text-gray-300"> <h1 id="loss">Loss</h1>
+<h2 id="min-snr-weighting-stragegy">Min-SNR weighting Stragegy</h2>
+<p><a href="https://arxiv.org/abs/2303.09556">Min-SNR</a>方法认为时间步长间的优化方向存在冲突是去噪扩散模型收敛速度慢的部分原因。因此该方法将扩散训练视为多任务学习问题（每个时间步长内的去噪过程视为单独任务），根据钳位信噪比（<code>SNR</code>）调整时间步长的损失权重，有效平衡时间步长之间的冲突。</p>
+<blockquote>
+<p>However, it’s important to keep in mind that different steps may have vastly different requirements. At each step of a diffusion model, the strength of the denoising varies. For example, easier denoising tasks (when t → 0) may require simple reconstructions of the input in order to achieve lower denoising loss. This strategy, unfortunately, does not work as well for noisier tasks (when t → T ). Thus, it’s extremely important to analyze the correlation between different timesteps.</p>
+</blockquote>
+<p>包含每个时间步长下去噪损失的多任务损失函数中，关于模型参数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span></span></span></span>的收敛方向<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mo lspace="0em" rspace="0em">∗</mo></msup></mrow><annotation encoding="application/x-tex">\delta^{\ast}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0379em;">δ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∗</span></span></span></span></span></span></span></span></span></span></span></span>表示为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msup><mi>δ</mi><mo lspace="0em" rspace="0em">∗</mo></msup><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>w</mi><mi>t</mi></msub><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><msup><mi mathvariant="script">L</mi><mi>t</mi></msup><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\delta^{\ast} = - \sum_{t=1}^{T} w_{t}\nabla_{\theta}\mathcal{L}^{t}(\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7387em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0379em;">δ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7387em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∗</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.0954em;vertical-align:-1.2671em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8829em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2671em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord">∇</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathcal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8436em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mclose">)</span></span></span></span></span>
+<p>其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">w_{t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>表示为不同时间步长对应的权重，因为模型预测目标为噪声，传统多任务优化方法获得权重的方式低效且不稳定。因此该方法通过信噪比加权方式优化，对于任意步长加噪结果<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub><mo>=</mo><msub><mi>α</mi><mi>t</mi></msub><msub><mi>x</mi><mn>0</mn></msub><mo>+</mo><msub><mi>σ</mi><mi>t</mi></msub><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">x_{t}= \alpha_{t}x_{0} + \sigma_{t}\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">ϵ</span></span></span></span>，其加权信噪比为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>t</mi></msub><mo>=</mo><mi>S</mi><mi>N</mi><mi>R</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><msubsup><mi>α</mi><mi>t</mi><mn>2</mn></msubsup><mi mathvariant="normal">/</mi><msubsup><mi>σ</mi><mi>t</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">w_{t}=SNR(t)=\alpha_{t}^{2} / \sigma_{t}^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-2.453em;margin-left:-0.0037em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-2.453em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span>，对于噪声目标它在数值上等价于常加权策略。进一步为了避免模型过多关注小噪声水平，提出<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Min-SNR-</mtext><mi>γ</mi></mrow><annotation encoding="application/x-tex">\text{Min-SNR-}\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Min-SNR-</span></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span></span></span></span> 加权策略<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>t</mi></msub><mo>=</mo><mi>m</mi><mi>i</mi><mi>n</mi><mrow><mo fence="true">{</mo><mi>S</mi><mi>N</mi><mi>R</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>γ</mi><mo fence="true">}</mo></mrow></mrow><annotation encoding="application/x-tex">w_{t} = min \left\{ SNR(t), \gamma \right\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">min</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">{</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mclose delimcenter" style="top:0em;">}</span></span></span></span></span>。</p> </div> <script>
+      const syncKatexOverflow = () => {
+        document.querySelectorAll('.prose .katex-display').forEach((displayNode) => {
+          const katexNode = displayNode.querySelector(':scope > .katex');
+          if (!(katexNode instanceof HTMLElement) || !(displayNode instanceof HTMLElement)) {
+            return;
+          }
+
+          const contentWidth = katexNode.scrollWidth;
+          const containerWidth = displayNode.clientWidth;
+          const isOverflowing = contentWidth - containerWidth > 2;
+
+          displayNode.classList.toggle('is-overflowing', isOverflowing);
+        });
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const fallbackInput = document.createElement('textarea');
+        fallbackInput.value = text;
+        fallbackInput.setAttribute('readonly', 'true');
+        fallbackInput.style.position = 'fixed';
+        fallbackInput.style.left = '-9999px';
+        document.body.appendChild(fallbackInput);
+        fallbackInput.select();
+        document.execCommand('copy');
+        fallbackInput.remove();
+      };
+
+      const createKatexContextMenu = () => {
+        const menu = document.createElement('div');
+        menu.className = 'katex-context-menu';
+        menu.innerHTML = '<button type="button" class="katex-context-menu__item">复制 LaTeX</button>';
+        document.body.appendChild(menu);
+
+        let activeLatex = '';
+        let hideTimer = null;
+
+        const hideMenu = () => {
+          menu.classList.remove('is-open');
+          activeLatex = '';
+        };
+
+        const showCopiedState = () => {
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (!(button instanceof HTMLButtonElement)) return;
+          button.textContent = '已复制';
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            hideMenu();
+            button.textContent = '复制 LaTeX';
+          }, 850);
+        };
+
+        document.addEventListener('contextmenu', (event) => {
+          const trigger = event.target;
+          if (!(trigger instanceof Element)) return;
+
+          const katexNode = trigger.closest('.prose .katex');
+          if (!(katexNode instanceof HTMLElement)) {
+            hideMenu();
+            return;
+          }
+
+          const annotation = katexNode.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+          const latex = annotation?.textContent?.trim();
+          if (!latex) {
+            hideMenu();
+            return;
+          }
+
+          event.preventDefault();
+          activeLatex = latex;
+
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (button instanceof HTMLButtonElement) {
+            button.textContent = '复制 LaTeX';
+          }
+
+          const offset = 8;
+          menu.style.left = `${event.clientX + offset}px`;
+          menu.style.top = `${event.clientY + offset}px`;
+          menu.classList.add('is-open');
+
+          const rect = menu.getBoundingClientRect();
+          const maxLeft = window.innerWidth - rect.width - 8;
+          const maxTop = window.innerHeight - rect.height - 8;
+          menu.style.left = `${Math.max(8, Math.min(event.clientX + offset, maxLeft))}px`;
+          menu.style.top = `${Math.max(8, Math.min(event.clientY + offset, maxTop))}px`;
+        });
+
+        menu.addEventListener('click', async (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest('.katex-context-menu__item')) return;
+          if (!activeLatex) return;
+
+          try {
+            await copyText(activeLatex);
+            showCopiedState();
+          } catch {
+            hideMenu();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Element && target.closest('.katex-context-menu')) return;
+          hideMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') hideMenu();
+        });
+        window.addEventListener('resize', hideMenu);
+        window.addEventListener('scroll', hideMenu, true);
+      };
+
+      const syncPostNavTitleOverflow = () => {
+        document.querySelectorAll('[data-post-nav-title]').forEach((titleNode) => {
+          if (!(titleNode instanceof HTMLElement)) return;
+
+          const wrap = titleNode.closest('.post-nav-title-wrap');
+          if (!(wrap instanceof HTMLElement)) return;
+
+          wrap.classList.remove('is-overflowing');
+          wrap.style.removeProperty('--post-nav-title-overflow');
+          wrap.style.removeProperty('--post-nav-title-duration');
+
+          const overflow = Math.max(0, titleNode.scrollWidth - wrap.clientWidth);
+          if (overflow > 2) {
+            const overflowPx = Math.ceil(overflow);
+            const durationMs = Math.min(5200, Math.max(2400, 1800 + overflowPx * 14));
+            wrap.classList.add('is-overflowing');
+            wrap.style.setProperty('--post-nav-title-overflow', `${overflowPx}px`);
+            wrap.style.setProperty('--post-nav-title-duration', `${durationMs}ms`);
+          }
+        });
+      };
+
+      syncKatexOverflow();
+      syncPostNavTitleOverflow();
+      window.addEventListener('load', syncKatexOverflow);
+      window.addEventListener('load', syncPostNavTitleOverflow);
+      window.addEventListener('resize', syncKatexOverflow);
+      window.addEventListener('resize', syncPostNavTitleOverflow);
+      createKatexContextMenu();
+    </script> <!-- Tags -->  <!-- Post navigation --> <div class="mt-10 pt-6 border-t border-gray-700"> <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> <a href="/posts/test-markdown" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:-translate-x-1"> <div class="text-xs text-gray-400 mb-1">← 上一篇</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Markdown Feature Test</span> </div> </a> <a href="/blog" class="rounded-xl border border-blue-400/35 bg-blue-500/15 hover:bg-blue-500/25 hover:border-blue-300/60 transition-all p-4 text-center flex items-center justify-center"> <span class="text-sm text-blue-200 font-semibold">返回博客列表</span> </a> <a href="/posts/stochastic-differential-equation-in-diffusion" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 text-right transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:translate-x-1"> <div class="text-xs text-gray-400 mb-1">下一篇 →</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Stochastic Differential Equation in Diffusion</span> </div> </a> </div> <div class="mt-4 text-center"> <a href="/" class="text-xs text-gray-400 hover:text-white transition-colors">返回首页</a> </div> </div> </article>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+About this site
+</a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
+GitHub
+</a> </div> </div> </footer> </body></html>

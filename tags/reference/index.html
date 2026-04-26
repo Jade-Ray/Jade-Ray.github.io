@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>#reference | Jade-Ray</title><meta name="description" content="Posts tagged with reference"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+
+  const canvas = document.getElementById("matrix-bg");
+  const ctx = canvas.getContext("2d");
+
+  const txts = bgtext.split("");
+  const fontSize = 12;
+
+  let columns, drops;
+
+  function resize() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    columns = Math.floor(canvas.width / fontSize);
+    // preserve existing drops positions on resize, fill new columns from top
+    const prev = drops ? [...drops] : [];
+    drops = Array.from({ length: columns }, (_, i) => prev[i] ?? 1);
+  }
+
+  function draw() {
+    // fading black overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#490";
+    ctx.font = fontSize + "px arial";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = txts[Math.floor(Math.random() * txts.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.98) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  setInterval(draw, 20);
+})();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
+Jade-Ray
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <div class="space-y-6"> <header class="space-y-3 rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-500/10 via-sky-500/8 to-transparent p-6"> <div class="flex flex-wrap items-center gap-3"> <span class="tag-chip tag-chip--active">#reference</span> <span class="text-sm text-gray-400">第 1 / 1 页</span> </div> <p class="text-sm text-gray-400">按发布时间倒序排列，点击标签可切换到其它专题。</p> <div class="flex flex-wrap gap-2 pt-2"> <a href="/blog" class="tag-chip tag-chip--compact">全部文章</a> <a href="/tags/3dobjectdetection" class="tag-chip tag-chip--compact">
+#3dObjectDetection </a><a href="/tags/attention" class="tag-chip tag-chip--compact">
+#Attention </a><a href="/tags/clip" class="tag-chip tag-chip--compact">
+#CLIP </a><a href="/tags/detr" class="tag-chip tag-chip--compact">
+#DETR </a><a href="/tags/diffusion" class="tag-chip tag-chip--compact">
+#Diffusion </a><a href="/tags/fine-tuning" class="tag-chip tag-chip--compact">
+#Fine-tuning </a><a href="/tags/flow" class="tag-chip tag-chip--compact">
+#Flow </a><a href="/tags/kalmanfilter" class="tag-chip tag-chip--compact">
+#KalmanFilter </a><a href="/tags/llm" class="tag-chip tag-chip--compact">
+#LLM </a><a href="/tags/markdown" class="tag-chip tag-chip--compact">
+#markdown </a><a href="/tags/pretraining" class="tag-chip tag-chip--compact">
+#pretraining </a><a href="/tags/reference" class="tag-chip tag-chip--compact tag-chip--active">
+#reference </a><a href="/tags/s4" class="tag-chip tag-chip--compact">
+#S4 </a><a href="/tags/sde" class="tag-chip tag-chip--compact">
+#SDE </a><a href="/tags/test" class="tag-chip tag-chip--compact">
+#test </a><a href="/tags/transformers" class="tag-chip tag-chip--compact">
+#Transformers </a><a href="/tags/vae" class="tag-chip tag-chip--compact">
+#VAE </a><a href="/tags/vit" class="tag-chip tag-chip--compact">
+#ViT </a><a href="/tags/vlm" class="tag-chip tag-chip--compact">
+#VLM </a> </div> </header> <ul class="space-y-3"> <li> <article class="group rounded-xl border border-white/8 bg-white/5 p-4 transition-all duration-300 hover:border-blue-400/25 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-950/20"> <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4"> <time class="shrink-0 text-sm text-gray-500"> Feb 28, 2015 </time> <div class="min-w-0 flex-1 space-y-2"> <a href="/posts/test-markdown" class="block min-w-0"> <span class="text-base font-semibold text-blue-300 transition-colors group-hover:text-blue-200 group-hover:underline"> Markdown Feature Test </span> </a> <p class="text-sm text-gray-400">A comprehensive reference for all supported syntax</p> <div class="flex flex-wrap gap-2"> <a href="/tags/test" class="tag-chip tag-chip--compact">
+#test </a><a href="/tags/markdown" class="tag-chip tag-chip--compact">
+#markdown </a><a href="/tags/reference" class="tag-chip tag-chip--compact tag-chip--active">
+#reference </a> </div> </div> </div> </article> </li> </ul>  </div>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+About this site
+</a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
+GitHub
+</a> </div> </div> </footer> </body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Markdown Feature Test | Jade-Ray</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.C8Lzk-DG.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Markdown Feature Test | Jade-Ray</title><meta name="description" content="个人技术博客"><link rel="stylesheet" href="/_astro/RootLayout.BCSI4jTL.css"></head> <!-- 全局Tailwind样式：深色背景、最小高度、文字颜色 --> <body class="bg-gray-900 text-white min-h-screen flex flex-col"> <!-- Matrix 字符雨背景（底层） --> <canvas id="matrix-bg" class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas> <script>(function(){const bgtext = "αβγδεζηθικλμνξοπρστυφχψω∷∫∮∝∞∧∨∑∏∪∩∈∵∴⊥‖∠⌒⊙≌√§";
 
   const canvas = document.getElementById("matrix-bg");
   const ctx = canvas.getContext("2d");
@@ -40,7 +40,7 @@
   setInterval(draw, 20);
 })();</script> <!-- 3D 星空背景（备用，如需启用可取消注释） -->  <!-- 头部导航（内容层） --> <header class="relative z-10 bg-gray-800/70 backdrop-blur-md shadow-lg"> <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between items-center"> <!-- 站点标题 --> <a href="/" class="text-2xl font-bold text-blue-400 mb-4 md:mb-0">
 Jade-Ray
-</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a><a href="/contact" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Contact </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8"> <!-- Post header --> <header class="mb-8 text-center"> <h1 class="text-3xl font-bold text-blue-300 mb-3">Markdown Feature Test</h1> <p class="text-xl text-gray-400 mb-3">A comprehensive reference for all supported syntax</p> <time class="text-gray-400"> February 28, 2015 </time> </header> <!-- Post body --> <div class="prose prose-invert max-w-none
+</a> <!-- 导航菜单 --> <nav class="flex gap-6"> <a href="/" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Home </a><a href="/blog" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> Blog </a><a href="/about" class="text-gray-300 hover:text-blue-400 transition-colors text-lg"> About </a> </nav> </div> </header> <!-- 页面主体内容（居中容器，Tailwind响应式） --> <main class="relative z-10 flex-grow max-w-4xl mx-auto px-4 py-8 w-full">  <article class="bg-white/10 backdrop-blur-md rounded-xl p-8"> <!-- Post header --> <header class="mb-8 text-center"> <h1 class="text-3xl font-bold text-blue-300 mb-3">Markdown Feature Test</h1> <p class="text-xl text-gray-400 mb-3">A comprehensive reference for all supported syntax</p> <time class="text-gray-400"> February 28, 2015 </time> </header> <!-- Post body --> <div class="prose prose-invert max-w-none reading-prose
       prose-headings:text-blue-200
       prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
       prose-strong:text-white
@@ -243,10 +243,160 @@ Jade-Ray
 <hr>
 <h2 id="long-form-paragraph">Long-form Paragraph</h2>
 <p>This section tests prose readability — line length, spacing, and overall legibility against the dark backdrop of this site. A well-configured <code>prose prose-invert</code> class from Tailwind Typography should make this comfortable to read without any additional tweaking.</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula enim vitae sem tincidunt, at consequat nisi ultrices. Donec aliquam libero ac felis fermentum, at malesuada nisl efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p> </div> <!-- Tags --> <div class="mt-8 flex flex-wrap gap-2"> <span class="text-gray-400 text-sm">Tags:</span> <span class="px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-300">
-#test </span><span class="px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-300">
-#markdown </span><span class="px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-300">
-#reference </span> </div> <!-- Back link --> <div class="mt-10 pt-6 border-t border-gray-700"> <a href="/" class="text-blue-400 hover:text-white transition-colors">← Back to Home</a> </div> </article>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula enim vitae sem tincidunt, at consequat nisi ultrices. Donec aliquam libero ac felis fermentum, at malesuada nisl efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p> </div> <script>
+      const syncKatexOverflow = () => {
+        document.querySelectorAll('.prose .katex-display').forEach((displayNode) => {
+          const katexNode = displayNode.querySelector(':scope > .katex');
+          if (!(katexNode instanceof HTMLElement) || !(displayNode instanceof HTMLElement)) {
+            return;
+          }
+
+          const contentWidth = katexNode.scrollWidth;
+          const containerWidth = displayNode.clientWidth;
+          const isOverflowing = contentWidth - containerWidth > 2;
+
+          displayNode.classList.toggle('is-overflowing', isOverflowing);
+        });
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const fallbackInput = document.createElement('textarea');
+        fallbackInput.value = text;
+        fallbackInput.setAttribute('readonly', 'true');
+        fallbackInput.style.position = 'fixed';
+        fallbackInput.style.left = '-9999px';
+        document.body.appendChild(fallbackInput);
+        fallbackInput.select();
+        document.execCommand('copy');
+        fallbackInput.remove();
+      };
+
+      const createKatexContextMenu = () => {
+        const menu = document.createElement('div');
+        menu.className = 'katex-context-menu';
+        menu.innerHTML = '<button type="button" class="katex-context-menu__item">复制 LaTeX</button>';
+        document.body.appendChild(menu);
+
+        let activeLatex = '';
+        let hideTimer = null;
+
+        const hideMenu = () => {
+          menu.classList.remove('is-open');
+          activeLatex = '';
+        };
+
+        const showCopiedState = () => {
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (!(button instanceof HTMLButtonElement)) return;
+          button.textContent = '已复制';
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            hideMenu();
+            button.textContent = '复制 LaTeX';
+          }, 850);
+        };
+
+        document.addEventListener('contextmenu', (event) => {
+          const trigger = event.target;
+          if (!(trigger instanceof Element)) return;
+
+          const katexNode = trigger.closest('.prose .katex');
+          if (!(katexNode instanceof HTMLElement)) {
+            hideMenu();
+            return;
+          }
+
+          const annotation = katexNode.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+          const latex = annotation?.textContent?.trim();
+          if (!latex) {
+            hideMenu();
+            return;
+          }
+
+          event.preventDefault();
+          activeLatex = latex;
+
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (button instanceof HTMLButtonElement) {
+            button.textContent = '复制 LaTeX';
+          }
+
+          const offset = 8;
+          menu.style.left = `${event.clientX + offset}px`;
+          menu.style.top = `${event.clientY + offset}px`;
+          menu.classList.add('is-open');
+
+          const rect = menu.getBoundingClientRect();
+          const maxLeft = window.innerWidth - rect.width - 8;
+          const maxTop = window.innerHeight - rect.height - 8;
+          menu.style.left = `${Math.max(8, Math.min(event.clientX + offset, maxLeft))}px`;
+          menu.style.top = `${Math.max(8, Math.min(event.clientY + offset, maxTop))}px`;
+        });
+
+        menu.addEventListener('click', async (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest('.katex-context-menu__item')) return;
+          if (!activeLatex) return;
+
+          try {
+            await copyText(activeLatex);
+            showCopiedState();
+          } catch {
+            hideMenu();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Element && target.closest('.katex-context-menu')) return;
+          hideMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') hideMenu();
+        });
+        window.addEventListener('resize', hideMenu);
+        window.addEventListener('scroll', hideMenu, true);
+      };
+
+      const syncPostNavTitleOverflow = () => {
+        document.querySelectorAll('[data-post-nav-title]').forEach((titleNode) => {
+          if (!(titleNode instanceof HTMLElement)) return;
+
+          const wrap = titleNode.closest('.post-nav-title-wrap');
+          if (!(wrap instanceof HTMLElement)) return;
+
+          wrap.classList.remove('is-overflowing');
+          wrap.style.removeProperty('--post-nav-title-overflow');
+          wrap.style.removeProperty('--post-nav-title-duration');
+
+          const overflow = Math.max(0, titleNode.scrollWidth - wrap.clientWidth);
+          if (overflow > 2) {
+            const overflowPx = Math.ceil(overflow);
+            const durationMs = Math.min(5200, Math.max(2400, 1800 + overflowPx * 14));
+            wrap.classList.add('is-overflowing');
+            wrap.style.setProperty('--post-nav-title-overflow', `${overflowPx}px`);
+            wrap.style.setProperty('--post-nav-title-duration', `${durationMs}ms`);
+          }
+        });
+      };
+
+      syncKatexOverflow();
+      syncPostNavTitleOverflow();
+      window.addEventListener('load', syncKatexOverflow);
+      window.addEventListener('load', syncPostNavTitleOverflow);
+      window.addEventListener('resize', syncKatexOverflow);
+      window.addEventListener('resize', syncPostNavTitleOverflow);
+      createKatexContextMenu();
+    </script> <!-- Tags --> <div class="mt-8 flex flex-wrap items-center gap-2"> <span class="text-xs uppercase tracking-[0.22em] text-gray-500">Tags</span> <a href="/tags/test" class="tag-chip">
+#test </a><a href="/tags/markdown" class="tag-chip">
+#markdown </a><a href="/tags/reference" class="tag-chip">
+#reference </a> </div> <!-- Post navigation --> <div class="mt-10 pt-6 border-t border-gray-700"> <div class="grid grid-cols-1 md:grid-cols-3 gap-3"> <div class="rounded-xl border border-gray-700/60 bg-white/5 p-4 text-gray-500"> <div class="text-xs mb-1">← 上一篇</div> <div class="text-sm">已经是最早文章</div> </div> <a href="/blog" class="rounded-xl border border-blue-400/35 bg-blue-500/15 hover:bg-blue-500/25 hover:border-blue-300/60 transition-all p-4 text-center flex items-center justify-center"> <span class="text-sm text-blue-200 font-semibold">返回博客列表</span> </a> <a href="/posts/optimize-denoising-diffusion-methods" class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 text-right transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:translate-x-1"> <div class="text-xs text-gray-400 mb-1">下一篇 →</div> <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200"> <span class="post-nav-title-track" data-post-nav-title>Optimize Denoising Diffusion Methods</span> </div> </a> </div> <div class="mt-4 text-center"> <a href="/" class="text-xs text-gray-400 hover:text-white transition-colors">返回首页</a> </div> </div> </article>  </main> <!-- 底部Footer（新增！Tailwind样式） --> <footer class="relative z-10 bg-gray-800/70 backdrop-blur-md py-6 mt-10"> <div class="max-w-4xl mx-auto px-4 text-center text-gray-400"> <p class="mb-2">©Jade Ray 2026</p> <div class="flex justify-center gap-6"> <a href="/about" class="text-blue-400 hover:text-white transition-colors">
 About this site
 </a> <a href="https://github.com/Jade-Ray" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white transition-colors">
 GitHub
