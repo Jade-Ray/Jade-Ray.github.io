@@ -2,19 +2,63 @@
 import type { CollectionEntry } from "astro:content";
 import RootLayout from "../../layouts/RootLayout.astro";
 import { getCollection, render } from "astro:content";
+import { getTagHref } from "../../utils/tags";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("posts");
-  return posts.map((post) => ({
+  const posts = (await getCollection("posts")).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+
+  const toNavPost = (entry: CollectionEntry<"posts"> | undefined) => {
+    if (!entry) return null;
+    return { id: entry.id, title: entry.data.title };
+  };
+
+  return posts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      prevPost: toNavPost(posts[index + 1]),
+      nextPost: toNavPost(posts[index - 1]),
+    },
   }));
+}
+
+interface NavPost {
+  id: string;
+  title: string;
 }
 
 interface Props {
   post: CollectionEntry<"posts">;
+  prevPost: NavPost | null;
+  nextPost: NavPost | null;
 }
-const { post } = Astro.props;
+const { post, prevPost: rawPrevPost, nextPost: rawNextPost } = Astro.props as Props;
+
+let prevPost = rawPrevPost;
+let nextPost = rawNextPost;
+
+const hasSuspiciousNav =
+  (prevPost === null && nextPost === null) ||
+  prevPost?.id === post.id ||
+  nextPost?.id === post.id;
+
+if (hasSuspiciousNav) {
+  const posts = (await getCollection("posts")).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+  const currentIndex = posts.findIndex((entry) => entry.id === post.id);
+
+  if (currentIndex >= 0) {
+    const older = posts[currentIndex + 1];
+    const newer = posts[currentIndex - 1];
+
+    prevPost = older ? { id: older.id, title: older.data.title } : null;
+    nextPost = newer ? { id: newer.id, title: newer.data.title } : null;
+  }
+}
+
 const { Content } = await render(post);
 ---
 
@@ -32,7 +76,7 @@ const { Content } = await render(post);
     </header>
 
     <!-- Post body -->
-    <div class="prose prose-invert max-w-none
+    <div class="prose prose-invert max-w-none reading-prose
       prose-headings:text-blue-200
       prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
       prose-strong:text-white
@@ -45,23 +89,227 @@ const { Content } = await render(post);
       <Content />
     </div>
 
+    <script is:inline>
+      const syncKatexOverflow = () => {
+        document.querySelectorAll('.prose .katex-display').forEach((displayNode) => {
+          const katexNode = displayNode.querySelector(':scope > .katex');
+          if (!(katexNode instanceof HTMLElement) || !(displayNode instanceof HTMLElement)) {
+            return;
+          }
+
+          const contentWidth = katexNode.scrollWidth;
+          const containerWidth = displayNode.clientWidth;
+          const isOverflowing = contentWidth - containerWidth > 2;
+
+          displayNode.classList.toggle('is-overflowing', isOverflowing);
+        });
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const fallbackInput = document.createElement('textarea');
+        fallbackInput.value = text;
+        fallbackInput.setAttribute('readonly', 'true');
+        fallbackInput.style.position = 'fixed';
+        fallbackInput.style.left = '-9999px';
+        document.body.appendChild(fallbackInput);
+        fallbackInput.select();
+        document.execCommand('copy');
+        fallbackInput.remove();
+      };
+
+      const createKatexContextMenu = () => {
+        const menu = document.createElement('div');
+        menu.className = 'katex-context-menu';
+        menu.innerHTML = '<button type="button" class="katex-context-menu__item">复制 LaTeX</button>';
+        document.body.appendChild(menu);
+
+        let activeLatex = '';
+        let hideTimer = null;
+
+        const hideMenu = () => {
+          menu.classList.remove('is-open');
+          activeLatex = '';
+        };
+
+        const showCopiedState = () => {
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (!(button instanceof HTMLButtonElement)) return;
+          button.textContent = '已复制';
+          window.clearTimeout(hideTimer);
+          hideTimer = window.setTimeout(() => {
+            hideMenu();
+            button.textContent = '复制 LaTeX';
+          }, 850);
+        };
+
+        document.addEventListener('contextmenu', (event) => {
+          const trigger = event.target;
+          if (!(trigger instanceof Element)) return;
+
+          const katexNode = trigger.closest('.prose .katex');
+          if (!(katexNode instanceof HTMLElement)) {
+            hideMenu();
+            return;
+          }
+
+          const annotation = katexNode.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+          const latex = annotation?.textContent?.trim();
+          if (!latex) {
+            hideMenu();
+            return;
+          }
+
+          event.preventDefault();
+          activeLatex = latex;
+
+          const button = menu.querySelector('.katex-context-menu__item');
+          if (button instanceof HTMLButtonElement) {
+            button.textContent = '复制 LaTeX';
+          }
+
+          const offset = 8;
+          menu.style.left = `${event.clientX + offset}px`;
+          menu.style.top = `${event.clientY + offset}px`;
+          menu.classList.add('is-open');
+
+          const rect = menu.getBoundingClientRect();
+          const maxLeft = window.innerWidth - rect.width - 8;
+          const maxTop = window.innerHeight - rect.height - 8;
+          menu.style.left = `${Math.max(8, Math.min(event.clientX + offset, maxLeft))}px`;
+          menu.style.top = `${Math.max(8, Math.min(event.clientY + offset, maxTop))}px`;
+        });
+
+        menu.addEventListener('click', async (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest('.katex-context-menu__item')) return;
+          if (!activeLatex) return;
+
+          try {
+            await copyText(activeLatex);
+            showCopiedState();
+          } catch {
+            hideMenu();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (target instanceof Element && target.closest('.katex-context-menu')) return;
+          hideMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') hideMenu();
+        });
+        window.addEventListener('resize', hideMenu);
+        window.addEventListener('scroll', hideMenu, true);
+      };
+
+      const syncPostNavTitleOverflow = () => {
+        document.querySelectorAll('[data-post-nav-title]').forEach((titleNode) => {
+          if (!(titleNode instanceof HTMLElement)) return;
+
+          const wrap = titleNode.closest('.post-nav-title-wrap');
+          if (!(wrap instanceof HTMLElement)) return;
+
+          wrap.classList.remove('is-overflowing');
+          wrap.style.removeProperty('--post-nav-title-overflow');
+          wrap.style.removeProperty('--post-nav-title-duration');
+
+          const overflow = Math.max(0, titleNode.scrollWidth - wrap.clientWidth);
+          if (overflow > 2) {
+            const overflowPx = Math.ceil(overflow);
+            const durationMs = Math.min(5200, Math.max(2400, 1800 + overflowPx * 14));
+            wrap.classList.add('is-overflowing');
+            wrap.style.setProperty('--post-nav-title-overflow', `${overflowPx}px`);
+            wrap.style.setProperty('--post-nav-title-duration', `${durationMs}ms`);
+          }
+        });
+      };
+
+      syncKatexOverflow();
+      syncPostNavTitleOverflow();
+      window.addEventListener('load', syncKatexOverflow);
+      window.addEventListener('load', syncPostNavTitleOverflow);
+      window.addEventListener('resize', syncKatexOverflow);
+      window.addEventListener('resize', syncPostNavTitleOverflow);
+      createKatexContextMenu();
+    </script>
+
     <!-- Tags -->
     {
       post.data.tags && post.data.tags.length > 0 && (
-        <div class="mt-8 flex flex-wrap gap-2">
-          <span class="text-gray-400 text-sm">Tags:</span>
+        <div class="mt-8 flex flex-wrap items-center gap-2">
+          <span class="text-xs uppercase tracking-[0.22em] text-gray-500">Tags</span>
           {post.data.tags.map((tag: string) => (
-            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-300">
+            <a
+              href={getTagHref(tag)}
+              class="tag-chip"
+            >
               #{tag}
-            </span>
+            </a>
           ))}
         </div>
       )
     }
 
-    <!-- Back link -->
+    <!-- Post navigation -->
     <div class="mt-10 pt-6 border-t border-gray-700">
-      <a href="/" class="text-blue-400 hover:text-white transition-colors">← Back to Home</a>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {
+          prevPost ? (
+            <a
+              href={`/posts/${prevPost.id}`}
+              class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:-translate-x-1"
+            >
+              <div class="text-xs text-gray-400 mb-1">← 上一篇</div>
+              <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200">
+                <span class="post-nav-title-track" data-post-nav-title>{prevPost.title}</span>
+              </div>
+            </a>
+          ) : (
+            <div class="rounded-xl border border-gray-700/60 bg-white/5 p-4 text-gray-500">
+              <div class="text-xs mb-1">← 上一篇</div>
+              <div class="text-sm">已经是最早文章</div>
+            </div>
+          )
+        }
+
+        <a
+          href="/blog"
+          class="rounded-xl border border-blue-400/35 bg-blue-500/15 hover:bg-blue-500/25 hover:border-blue-300/60 transition-all p-4 text-center flex items-center justify-center"
+        >
+          <span class="text-sm text-blue-200 font-semibold">返回博客列表</span>
+        </a>
+
+        {
+          nextPost ? (
+            <a
+              href={`/posts/${nextPost.id}`}
+              class="group rounded-xl border border-gray-700/70 bg-white/5 p-4 text-right transition-all duration-300 ease-out hover:bg-white/10 hover:border-blue-400/40 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-0.5 md:hover:translate-x-1"
+            >
+              <div class="text-xs text-gray-400 mb-1">下一篇 →</div>
+              <div class="post-nav-title-wrap text-sm text-blue-300 group-hover:text-blue-200">
+                <span class="post-nav-title-track" data-post-nav-title>{nextPost.title}</span>
+              </div>
+            </a>
+          ) : (
+            <div class="rounded-xl border border-gray-700/60 bg-white/5 p-4 text-gray-500 text-right">
+              <div class="text-xs mb-1">下一篇 →</div>
+              <div class="text-sm">已经是最新文章</div>
+            </div>
+          )
+        }
+      </div>
+
+      <div class="mt-4 text-center">
+        <a href="/" class="text-xs text-gray-400 hover:text-white transition-colors">返回首页</a>
+      </div>
     </div>
   </article>
 </RootLayout>

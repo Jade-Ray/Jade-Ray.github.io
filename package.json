@@ -11,18 +11,28 @@
     "preview": "astro preview",
     "astro": "astro",
     "clean": "rm -rf .astro/data-store.json dist/",
-    "deploy": "npm run build && gh-pages -d dist --dotfiles"
+    "deploy": "npm run build && gh-pages -d dist --dotfiles",
+    "sync:obsidian": "node scripts/sync_obsidian_to_blog.cjs",
+    "sync:obsidian:all": "node scripts/sync_obsidian_to_blog.cjs",
+    "sync:obsidian:target": "node scripts/sync_obsidian_to_blog.cjs",
+    "sync:obsidian:dry-run": "node scripts/sync_obsidian_to_blog.cjs --dry-run"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.7",
+    "katex": "^0.16.45",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
     "remark-github-alerts": "^0.1.1",
+    "remark-math": "^6.0.0",
     "tailwindcss": "^4.2.2",
     "three": "^0.184.0"
   },
   "devDependencies": {
     "@types/three": "^0.184.0",
-    "gh-pages": "^6.3.0"
+    "fs-extra": "^11.3.4",
+    "gh-pages": "^6.3.0",
+    "gray-matter": "^4.0.3"
   }
 }

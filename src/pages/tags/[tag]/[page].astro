@@ -1,0 +1,168 @@
+---
+import RootLayout from "../../../layouts/RootLayout.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { getTagHref, getTagPageHref, slugifyTag } from "../../../utils/tags";
+
+interface TagPageProps {
+  tag: string;
+  posts: CollectionEntry<"posts">[];
+  allTags: string[];
+  currentPage: number;
+  totalPages: number;
+}
+
+export async function getStaticPaths() {
+  const PAGE_SIZE = 10;
+  const posts = (await getCollection("posts")).sort(
+    (a: CollectionEntry<"posts">, b: CollectionEntry<"posts">) =>
+      b.data.date.getTime() - a.data.date.getTime(),
+  );
+
+  const tagMap = new Map<string, { tag: string; posts: CollectionEntry<"posts">[] }>();
+
+  posts.forEach((post) => {
+    post.data.tags?.forEach((tag) => {
+      const slug = slugifyTag(tag);
+      const existing = tagMap.get(slug);
+      if (existing) {
+        existing.posts.push(post);
+        return;
+      }
+
+      tagMap.set(slug, { tag, posts: [post] });
+    });
+  });
+
+  const allTags = Array.from(tagMap.values())
+    .map((entry) => entry.tag)
+    .sort((a, b) => a.localeCompare(b));
+
+  const paths: Array<{ params: { tag: string; page: string }; props: TagPageProps }> = [];
+
+  tagMap.forEach((entry, slug) => {
+    const totalPages = Math.max(1, Math.ceil(entry.posts.length / PAGE_SIZE));
+    for (let page = 2; page <= totalPages; page += 1) {
+      const start = (page - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      paths.push({
+        params: { tag: slug, page: String(page) },
+        props: {
+          tag: entry.tag,
+          posts: entry.posts.slice(start, end),
+          allTags,
+          currentPage: page,
+          totalPages,
+        },
+      });
+    }
+  });
+
+  return paths;
+}
+
+const { tag, posts, allTags, currentPage, totalPages } = Astro.props as TagPageProps;
+const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+const prevHref = getTagPageHref(tag, currentPage - 1);
+const nextHref = currentPage < totalPages ? getTagPageHref(tag, currentPage + 1) : null;
+---
+
+<RootLayout title={`#${tag} | Page ${currentPage} | Jade-Ray`} description={`Posts tagged with ${tag}, page ${currentPage}`}>
+  <div class="space-y-6">
+    <header class="space-y-3 rounded-2xl border border-blue-400/20 bg-gradient-to-r from-blue-500/10 via-sky-500/8 to-transparent p-6">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="tag-chip tag-chip--active">#{tag}</span>
+        <span class="text-sm text-gray-400">第 {currentPage} / {totalPages} 页</span>
+      </div>
+      <p class="text-sm text-gray-400">按发布时间倒序排列，点击标签可切换到其它专题。</p>
+      <div class="flex flex-wrap gap-2 pt-2">
+        <a href="/blog" class="tag-chip tag-chip--compact">全部文章</a>
+        {allTags.map((item) => (
+          <a
+            href={getTagHref(item)}
+            class:list={["tag-chip", "tag-chip--compact", slugifyTag(item) === slugifyTag(tag) && "tag-chip--active"]}
+          >
+            #{item}
+          </a>
+        ))}
+      </div>
+    </header>
+
+    <ul class="space-y-3">
+      {
+        posts.map((post) => (
+          <li>
+            <article class="group rounded-xl border border-white/8 bg-white/5 p-4 transition-all duration-300 hover:border-blue-400/25 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-950/20">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+                <time class="shrink-0 text-sm text-gray-500">
+                  {post.data.date.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <a href={`/posts/${post.id}`} class="block min-w-0">
+                    <span class="text-base font-semibold text-blue-300 transition-colors group-hover:text-blue-200 group-hover:underline">
+                      {post.data.title}
+                    </span>
+                  </a>
+                  {post.data.subtitle && <p class="text-sm text-gray-400">{post.data.subtitle}</p>}
+                  {
+                    post.data.tags && post.data.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2">
+                        {post.data.tags.map((item) => (
+                          <a
+                            href={getTagHref(item)}
+                            class:list={["tag-chip", "tag-chip--compact", slugifyTag(item) === slugifyTag(tag) && "tag-chip--active"]}
+                          >
+                            #{item}
+                          </a>
+                        ))}
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+
+    <nav class="mt-8 flex flex-wrap items-center justify-center gap-2 text-sm">
+      <a
+        href={prevHref}
+        class="px-3 py-1 rounded-lg bg-white/10 text-gray-200 hover:bg-white/20 transition-all"
+      >
+        上一页
+      </a>
+      {
+        pageNumbers.map((page) => (
+          page === currentPage ? (
+            <span class="px-3 py-1 rounded-lg bg-blue-500/35 text-white font-semibold">{page}</span>
+          ) : (
+            <a
+              href={getTagPageHref(tag, page)}
+              class="px-3 py-1 rounded-lg bg-white/10 text-gray-200 hover:bg-white/20 transition-all"
+            >
+              {page}
+            </a>
+          )
+        ))
+      }
+      {
+        nextHref ? (
+          <a
+            href={nextHref}
+            class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 hover:text-white transition-all"
+          >
+            下一页
+          </a>
+        ) : (
+          <span class="px-3 py-1 rounded-lg bg-white/5 text-gray-500">最后一页</span>
+        )
+      }
+    </nav>
+  </div>
+</RootLayout>

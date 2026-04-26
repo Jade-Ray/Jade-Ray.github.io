@@ -1190,6 +1190,9 @@ h6,
 }
 
 .hero-cyber__terminal-outer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border-radius: 0.85rem;
   border: 1px solid rgba(34, 211, 238, 0.3);
   background: linear-gradient(160deg, rgba(7, 20, 38, 0.88), rgba(4, 11, 24, 0.76));
@@ -1232,8 +1235,7 @@ h6,
 }
 
 .hero-cyber__terminal-body {
-  min-height: 240px;
-  max-height: 420px;
+  flex: 1;
   padding: 0.8rem 1rem 1rem;
   color: rgba(186, 230, 253, 0.88);
   font-family: "Courier New", "Lucida Console", monospace;
@@ -1346,8 +1348,11 @@ h6,
 }
 
 @media (max-width: 768px) {
-  .hero-cyber__visual-frame,
-  .hero-cyber__terminal-body {
+  .hero-cyber__visual-frame {
+    min-height: 240px;
+  }
+
+  .hero-cyber__terminal-outer {
     min-height: 240px;
   }
 
@@ -1372,6 +1377,12 @@ h6,
   .hero-cyber__terminal-body {
     font-size: 0.86rem;
     line-height: 1.56;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-cyber__terminal-outer {
+    min-height: 300px;
   }
 }
 
