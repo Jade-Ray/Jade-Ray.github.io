@@ -111,15 +111,15 @@
     </div>
 
     <div class="space-y-4 rounded-xl border border-cyan-200/20 bg-slate-950/30 p-5">
-      <p class="text-xs uppercase tracking-[0.24em] text-cyan-200/80">Step 2</p>
-      <h1 class="text-3xl font-semibold leading-tight text-slate-100 sm:text-4xl">ASCII Resolution Control</h1>
+      <p class="text-xs uppercase tracking-[0.24em] text-cyan-200/80">Step 3</p>
+      <h1 class="text-3xl font-semibold leading-tight text-slate-100 sm:text-4xl">ASCII Dynamic Effects</h1>
       <p class="text-sm leading-relaxed text-slate-300/90 sm:text-base">
-        当前阶段在已经稳定的字符画基线上加入分辨率与颜色数量滑钮，用于测试采样密度与调色板量化的组合效果。
+        当前阶段在稳定的分辨率、色盘与主题控制基础上，开始为字符画加入轻量的动态扫描、故障偏移与局部闪烁，强化赛博终端质感。
       </p>
       <ul class="list-disc space-y-1 pl-5 text-sm text-slate-300/80">
-        <li>目标：分辨率变化时保持 1:1 方格比例与居中布局</li>
-        <li>目标：滑钮切换后快速完成重采样与重新缩放</li>
-        <li>目标：颜色数量变化时保留明暗结构并验证低色盘观感</li>
+        <li>目标：动态效果不影响现有分辨率与色盘交互流畅度</li>
+        <li>目标：故障动画保持局部、短促，不破坏主体可读性</li>
+        <li>目标：桌面与移动端都能维持稳定且可控的视觉节奏</li>
       </ul>
     </div>
   </div>
@@ -509,11 +509,13 @@
         lines.push(`<span class=\"hero-cyber__ascii-row\">${chars.join("")}</span>`);
       }
       asciiArt.innerHTML = lines.join("\n");
+      rowElements = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-row"));
       glyphs = Array.from(asciiArt.querySelectorAll(".hero-cyber__ascii-glyph"));
       tonedPixels = new Uint8ClampedArray(colCount * rowCount * 3);
       tonedLuma = new Float32Array(colCount * rowCount);
       appliedRgb = new Int16Array(colCount * rowCount * 3);
       appliedRgb.fill(-1);
+      appliedToneDecor = new Array(colCount * rowCount).fill("");
       tonedLumaMin = 0;
       tonedLumaMax = 255;
     };
@@ -522,9 +524,11 @@
     let loadedImage = null;
     let paletteSize = 256;
     let glyphs = [];
+    let rowElements = [];
     let tonedPixels = new Uint8ClampedArray(0);
     let tonedLuma = new Float32Array(0);
     let appliedRgb = new Int16Array(0);
+    let appliedToneDecor = [];
     let tonedLumaMin = 0;
     let tonedLumaMax = 255;
     const sampleCanvas = document.createElement("canvas");
@@ -532,6 +536,187 @@
     let paletteFrameId = 0;
     let pendingSaturation = null;
     let saturationFrameId = 0;
+    let glitchLoopId = 0;
+    let glitchClearId = 0;
+    let activeGlitchModeClass = "";
+    let activeGlitchGlyphs = new Set();
+
+    const glyphAccentClasses = [
+      "hero-cyber__ascii-glyph--cyan",
+      "hero-cyber__ascii-glyph--magenta",
+      "hero-cyber__ascii-glyph--pink",
+      "hero-cyber__ascii-glyph--core",
+      "hero-cyber__ascii-glyph--blue-accent",
+      "hero-cyber__ascii-glyph--yellow-accent",
+    ];
+
+    const randomBetween = (min, max) => min + Math.random() * (max - min);
+    const randomInt = (min, max) => Math.floor(randomBetween(min, max + 1));
+
+    const pickAccentClass = (r, g, b, luma) => {
+      if (luma >= 0.92) return "hero-cyber__ascii-glyph--core";
+      if (b > r + 26 && b > g + 12) return "hero-cyber__ascii-glyph--blue-accent";
+      if (r > 190 && g > 152 && b < 132) return "hero-cyber__ascii-glyph--yellow-accent";
+      if (g + b > r + 52) return "hero-cyber__ascii-glyph--cyan";
+      if (r > b + 18) return "hero-cyber__ascii-glyph--magenta";
+      return "hero-cyber__ascii-glyph--pink";
+    };
+
+    const syncGlyphToneDecor = (glyph, glyphIndex, r, g, b, glyphLuma, char) => {
+      if (!(glyph instanceof HTMLElement)) return;
+
+      const glowAlpha = Math.min(0.78, 0.16 + glyphLuma * 0.5);
+      const cyanAlpha = Math.max(0.06, Math.min(0.42, (b - r + 128) / 512));
+      const magentaAlpha = Math.max(0.08, Math.min(0.4, (r - g + 148) / 520));
+      const accentClass = char === " " ? "" : pickAccentClass(r, g, b, glyphLuma);
+      const decorSignature = `${accentClass}|${glowAlpha.toFixed(3)}|${cyanAlpha.toFixed(3)}|${magentaAlpha.toFixed(3)}`;
+
+      if (appliedToneDecor[glyphIndex] === decorSignature) return;
+      appliedToneDecor[glyphIndex] = decorSignature;
+
+      glyph.style.setProperty("--char-glow-a", glowAlpha.toFixed(3));
+      glyph.style.setProperty("--char-cyan-a", cyanAlpha.toFixed(3));
+      glyph.style.setProperty("--char-magenta-a", magentaAlpha.toFixed(3));
+
+      for (const className of glyphAccentClasses) {
+        glyph.classList.toggle(className, className === accentClass);
+      }
+    };
+
+    const resetGlyphGlitch = (glyph) => {
+      if (!(glyph instanceof HTMLElement)) return;
+      glyph.classList.remove(
+        "is-flicker",
+        "is-glitch-hot",
+        "is-glitch-rgb",
+        "is-glitch-swap",
+        "is-glitch-ghost",
+        "is-glitch-tear",
+        "is-glitch-scan",
+      );
+      glyph.style.removeProperty("--glitch-shift-x");
+      glyph.style.removeProperty("--glitch-shift-y");
+      glyph.style.removeProperty("--tear-shift-x");
+      const rawChar = glyph.dataset.raw || " ";
+      if (glyph.textContent !== rawChar) {
+        glyph.textContent = rawChar;
+      }
+    };
+
+    const clearGlitchState = () => {
+      if (glitchClearId !== 0) {
+        window.clearTimeout(glitchClearId);
+        glitchClearId = 0;
+      }
+      asciiArt.classList.remove("is-glitching");
+      if (activeGlitchModeClass) {
+        asciiArt.classList.remove(activeGlitchModeClass);
+      }
+      asciiArt.style.setProperty("--ascii-scale-x", "1");
+      activeGlitchModeClass = "";
+      activeGlitchGlyphs.forEach((glyph) => resetGlyphGlitch(glyph));
+      activeGlitchGlyphs.clear();
+    };
+
+    const scheduleNextGlitchBurst = () => {
+      if (glitchLoopId !== 0) {
+        window.clearTimeout(glitchLoopId);
+      }
+      glitchLoopId = window.setTimeout(() => {
+        glitchLoopId = 0;
+        triggerGlitchBurst();
+      }, randomInt(1300, 2600));
+    };
+
+    const collectRandomGlyphs = (targetCount, rowStart = 0, rowEnd = rowCount - 1) => {
+      const picked = [];
+      const seen = new Set();
+      const safeRowStart = Math.max(0, rowStart);
+      const safeRowEnd = Math.min(rowCount - 1, rowEnd);
+      const startIndex = safeRowStart * colCount;
+      const endIndex = (safeRowEnd + 1) * colCount - 1;
+      const attemptLimit = Math.max(targetCount * 12, 24);
+
+      for (let attempt = 0; attempt < attemptLimit && picked.length < targetCount; attempt += 1) {
+        const glyphIndex = randomInt(startIndex, endIndex);
+        if (seen.has(glyphIndex)) continue;
+        const glyph = glyphs[glyphIndex];
+        if (!(glyph instanceof HTMLElement)) continue;
+        if ((glyph.dataset.raw || " ") === " ") continue;
+        seen.add(glyphIndex);
+        picked.push(glyph);
+      }
+
+      return picked;
+    };
+
+    const primeGlitchGlyph = (glyph, mode) => {
+      if (!(glyph instanceof HTMLElement)) return;
+
+      glyph.classList.add("is-flicker");
+      glyph.style.setProperty("--glitch-shift-x", `${randomBetween(-1.8, 1.8).toFixed(2)}px`);
+      glyph.style.setProperty("--glitch-shift-y", `${randomBetween(-0.9, 0.9).toFixed(2)}px`);
+
+      if (Math.random() > 0.62) {
+        glyph.classList.add("is-glitch-hot");
+      }
+
+      if (mode === "rgb") {
+        glyph.classList.add("is-glitch-rgb");
+      } else if (mode === "swap") {
+        glyph.classList.add("is-glitch-swap");
+        if (Math.random() > 0.45) {
+          const replacement = charset[randomInt(0, Math.max(0, charset.length - 2))] || glyph.dataset.raw || "#";
+          glyph.textContent = replacement === " " ? (glyph.dataset.raw || "#") : replacement;
+        }
+      } else if (mode === "ghost") {
+        glyph.classList.add("is-glitch-ghost");
+      } else if (mode === "tear") {
+        glyph.classList.add("is-glitch-tear");
+        glyph.style.setProperty("--tear-shift-x", `${randomBetween(-2.4, 2.4).toFixed(2)}px`);
+      } else if (mode === "scan") {
+        glyph.classList.add("is-glitch-scan");
+      }
+
+      activeGlitchGlyphs.add(glyph);
+    };
+
+    const triggerGlitchBurst = () => {
+      if (document.hidden || glyphs.length === 0) {
+        clearGlitchState();
+        scheduleNextGlitchBurst();
+        return;
+      }
+
+      clearGlitchState();
+      asciiArt.classList.add("is-glitching");
+      asciiArt.style.setProperty("--ascii-scale-x", randomBetween(0.992, 1.018).toFixed(3));
+
+      const modes = ["rgb", "swap", "ghost", "tear", "scan"];
+      const mode = modes[randomInt(0, modes.length - 1)];
+      if (mode === "scan") {
+        activeGlitchModeClass = "is-glitch-mode-scan";
+        asciiArt.classList.add(activeGlitchModeClass);
+      }
+
+      const bandStart = randomInt(0, Math.max(0, rowCount - 4));
+      const bandSize = Math.max(1, randomInt(1, Math.min(4, rowCount)));
+      const bandGlyphs = collectRandomGlyphs(
+        mode === "scan" ? randomInt(16, 30) : randomInt(8, 18),
+        bandStart,
+        Math.min(rowCount - 1, bandStart + bandSize - 1),
+      );
+      const scatterGlyphs = collectRandomGlyphs(randomInt(3, 8));
+
+      for (const glyph of [...bandGlyphs, ...scatterGlyphs]) {
+        primeGlitchGlyph(glyph, mode);
+      }
+
+      glitchClearId = window.setTimeout(() => {
+        clearGlitchState();
+        scheduleNextGlitchBurst();
+      }, randomInt(110, 190));
+    };
 
     const loadImage = async (src) => {
       if (imageCache.has(src)) return imageCache.get(src);
@@ -664,6 +849,8 @@
           else glyph.classList.remove("hero-cyber__ascii-glyph--space");
         }
 
+        syncGlyphToneDecor(glyph, glyphIndex, r, g, b, glyphLuma, char);
+
         if (appliedRgb[tonedIndex] !== r || appliedRgb[tonedIndex + 1] !== g || appliedRgb[tonedIndex + 2] !== b) {
           appliedRgb[tonedIndex] = r;
           appliedRgb[tonedIndex + 1] = g;
@@ -743,11 +930,13 @@
     };
 
     const rerenderAscii = async (imageOverride) => {
+      clearGlitchState();
       renderAsciiGrid();
       updateAsciiGeometry();
       await buildToneCache(imageOverride);
       applyPaletteFromToneCache();
       updateAsciiGeometry();
+      scheduleNextGlitchBurst();
     };
 
     const updateResolution = async (nextValue) => {
@@ -882,6 +1071,18 @@
       setControlsOpen(false);
     };
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        if (glitchLoopId !== 0) {
+          window.clearTimeout(glitchLoopId);
+          glitchLoopId = 0;
+        }
+        clearGlitchState();
+        return;
+      }
+      scheduleNextGlitchBurst();
+    };
+
     window.addEventListener("resize", onResize);
     if (resolutionInput instanceof HTMLInputElement) {
       resolutionInput.addEventListener("input", onResolutionInput);
@@ -910,10 +1111,17 @@
     }
     document.addEventListener("pointerdown", onDocumentPointerDown);
     document.addEventListener("keydown", onDocumentKeydown);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     window.addEventListener("beforeunload", () => {
       window.removeEventListener("resize", onResize);
       document.removeEventListener("pointerdown", onDocumentPointerDown);
       document.removeEventListener("keydown", onDocumentKeydown);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (glitchLoopId !== 0) {
+        window.clearTimeout(glitchLoopId);
+        glitchLoopId = 0;
+      }
+      clearGlitchState();
       if (paletteFrameId !== 0) {
         cancelAnimationFrame(paletteFrameId);
         paletteFrameId = 0;
